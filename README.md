@@ -4,6 +4,12 @@
 
 ## 서비스 소개
 
+# V1.0.0
+
+<전체를 뒤엎을 변화>,<기능 수정, 기능 추가>,<버그, 내부 적 코드 보완>
+
+# IV1.0.0
+
 > (프로젝트이름)
 
 - 물류 자동화 시스템
@@ -19,8 +25,8 @@
 - 채문희 (팀원) : IoT 개발
 - 서강운 (팀원) : IoT 개발
 
-| 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@john0513](https://github.com/john0513) | 권도현 [@yup8229](https://github.com/yup8229)          |
-| --------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------ |
+| 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@john0513](https://github.com/john0513) | 권도현 [@yup8229](https://github.com/yup8229)                                 |
+| --------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |
 | <img width="200" src="ProfileImage/TalkMedia_i_04zl50.jpg.jpg"> | <img width="200" src="ProfileImage/사진.jpg">   | <img width="200" src="/uploads/dbc89fa66ec7bf0c267a297cf659bf2f/Profile.jpg"> |
 
 | 이승혁 [@skymoon0228](https://github.com/skymoon0228)                                                  | 채문희 [@enduser0](https://github.com/enduser0)     | 서강운 [@sku379829](https://github.com/sku379829) |
@@ -109,7 +115,7 @@
 - ERDCloud
 - API 명세서
 - 아키텍처
-<img src="ProfileImage/아키텍처.drawio.png">
+  <img src="ProfileImage/아키텍처.drawio.png">
 
 <br>
 
