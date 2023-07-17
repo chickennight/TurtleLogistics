@@ -21,7 +21,7 @@
 
 | 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@john0513](https://github.com/john0513) | 권도현 [@yup8229](https://github.com/yup8229)          |
 | --------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------ |
-| <img width="200" src="ProfileImage/TalkMedia_i_04zl50.jpg.jpg"> | <img width="200" src="ProfileImage/사진.jpg">   | <img width="200" src="/uploads/dbc89fa66ec7bf0c267a297cf659bf2f/Profile.jpg"> |
+| <img width="200" src="ProfileImage/TalkMedia_i_04zl50.jpg.jpg"> | <img width="200" src="ProfileImage/사진.jpg">   | <img width="200" src="ProfileImage/Profile.jpg"> |
 
 | 이승혁 [@skymoon0228](https://github.com/skymoon0228)                                                  | 채문희 [@enduser0](https://github.com/enduser0)     | 서강운 [@sku379829](https://github.com/sku379829) |
 | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------- |
