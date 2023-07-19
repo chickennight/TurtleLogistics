@@ -19,6 +19,11 @@ public class Customer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    //기본생성자
+    public Customer() {
+    }
+
+    //getters and setters
     public Long getNum() {
         return num;
     }

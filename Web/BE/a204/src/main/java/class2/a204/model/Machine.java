@@ -14,6 +14,11 @@ public class Machine {
 
     private Boolean broken = false;
 
+    //기본생성자
+    public Machine() {
+    }
+
+    //getters and setters
     public Integer getId() {
         return id;
     }
