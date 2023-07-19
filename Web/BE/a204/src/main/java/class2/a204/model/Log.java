@@ -21,6 +21,11 @@ public class Log {
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
+    //기본생성자
+    public Log() {
+    }
+
+    //getters and setters
     public Long getNum() {
         return num;
     }
