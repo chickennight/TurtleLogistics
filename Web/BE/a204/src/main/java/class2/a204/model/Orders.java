@@ -18,6 +18,11 @@ public class Orders {
 
     private String address;
 
+    //기본생성자
+    public Orders() {
+    }
+
+    //getters and setters
     public String getOrderNum() {
         return orderNum;
     }

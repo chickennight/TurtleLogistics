@@ -15,6 +15,11 @@ public class OrderNow {
     @JoinColumn(name = "order_num", nullable = false)
     private Orders orders;
 
+    //기본생성자
+    public OrderNow() {
+    }
+
+    //getters and setters
     public String getOrderNum() {
         return orderNum;
     }

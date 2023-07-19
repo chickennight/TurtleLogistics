@@ -14,6 +14,11 @@ public class Admin {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    //기본생성자
+    public Admin() {
+    }
+
+    //getters and setters
     public String getId() {
         return id;
     }
