@@ -20,6 +20,11 @@ public class OrderDetail {
     @JoinColumn(name = "order_num")
     private Orders orders;
 
+    //기본생성자
+    public OrderDetail() {
+    }
+
+    //getters and setters
     public Long getId() {
         return id;
     }

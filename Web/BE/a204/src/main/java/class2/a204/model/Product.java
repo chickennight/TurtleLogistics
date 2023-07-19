@@ -15,6 +15,11 @@ public class Product {
     private String detail;
     private Integer price;
 
+    //기본생성자
+    public Product() {
+    }
+
+    //getters and setters
     public Long getNum() {
         return num;
     }
