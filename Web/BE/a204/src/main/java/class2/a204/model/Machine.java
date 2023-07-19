@@ -3,33 +3,38 @@ package class2.a204.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "machine")
 public class Machine {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "machine_id")
+    private Integer id;
 
-    private String name;
+    @Column(name = "machine_detail")
+    private String detail;
 
-    // 기본 생성자 필요
-    public Machine() {
-    }
+    private Boolean broken = false;
 
-    // getter and setters
-
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public Boolean getBroken() {
+        return broken;
+    }
+
+    public void setBroken(Boolean broken) {
+        this.broken = broken;
     }
 }
