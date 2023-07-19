@@ -45,7 +45,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `mydb`.`log`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`log` (
-  `log_num` INT NOT NULL,
+  `log_num` INT NOT NULL AUTO_INCREMENT,
   `error_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `error_message` VARCHAR(255) NULL DEFAULT NULL,
   `machine_id` INT NOT NULL,
@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
   `order_num` CHAR(12) NOT NULL,
   `order_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_num` INT NOT NULL,
+  `address` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`order_num`),
   INDEX `customer_key_idx` (`customer_num` ASC) ,
   CONSTRAINT `customer_key`
@@ -78,7 +79,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
-
 
 -- -----------------------------------------------------
 -- Table `mydb`.`product`
