@@ -1,4 +1,4 @@
-package class2.a204.service;
+package class2.a204.util;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
