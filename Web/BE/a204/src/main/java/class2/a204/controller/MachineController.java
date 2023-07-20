@@ -2,9 +2,7 @@ package class2.a204.controller;
 
 import class2.a204.model.Log;
 import class2.a204.model.Machine;
-import class2.a204.repository.LogRepository;
-import class2.a204.repository.MachineRepository;
-import class2.a204.service.ErrorHandler;
+import class2.a204.util.ErrorHandler;
 import class2.a204.service.MachineService;
 import class2.a204.service.MqttService;
 import io.swagger.annotations.Api;
