@@ -1,6 +1,9 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -9,36 +12,39 @@ public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_num")
-    private Long num;
+    @NotNull
+    private Integer logNum;
 
     @Column(name = "error_date")
-    private Date errorDate;
+    @NotNull
+    private Timestamp errorDate;
 
     @Column(name = "error_message")
     private String errorMessage;
 
     @ManyToOne
     @JoinColumn(name = "machine_id")
+    @NotNull
     private Machine machine;
-
     //기본생성자
     public Log() {
     }
 
     //getters and setters
-    public Long getNum() {
-        return num;
+
+    public Integer getLogNum() {
+        return logNum;
     }
 
-    public void setNum(Long num) {
-        this.num = num;
+    public void setLogNum(Integer logNum) {
+        this.logNum = logNum;
     }
 
-    public Date getErrorDate() {
+    public Timestamp getErrorDate() {
         return errorDate;
     }
 
-    public void setErrorDate(Date errorDate) {
+    public void setErrorDate(Timestamp errorDate) {
         this.errorDate = errorDate;
     }
 
