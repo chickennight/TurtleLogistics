@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orderdetail` (
   `order_detail_id` INT NOT NULL AUTO_INCREMENT,
   `amount` INT NOT NULL DEFAULT 1,
   `product_num` INT NOT NULL,
-  `order_num` CHAR(12) NOT NULL,
+  `order_num` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`order_detail_id`),
   INDEX `order_key_idx` (`order_num` ASC) ,
   INDEX `product_key_idx` (`product_num` ASC) ,
@@ -125,7 +125,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `mydb`.`ordernow`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`ordernow` (
-  `order_num` CHAR(12) NOT NULL,
+  `order_num` INT UNSIGNED NOT NULL,
   `status` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`order_num`),
   CONSTRAINT `FK_Orders_TO_OrderNow_1`
