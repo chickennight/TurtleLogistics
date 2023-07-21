@@ -9,12 +9,15 @@ import javax.persistence.*;
 public class Admin {
     @Id
     @Column(name = "admin_id")
-    private String id;
+    @NotNull
+    private String adminId;
 
+    @Column(name = "password")
     @NotNull
     private String password;
 
     @Column(name = "phone_number")
+    @NotNull
     private String phoneNumber;
 
     //기본생성자
@@ -22,24 +25,25 @@ public class Admin {
     }
 
     //getters and setters
-    public String getId() {
-        return id;
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {

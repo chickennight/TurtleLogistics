@@ -1,46 +1,52 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "ordernow")
 public class OrderNow {
     @Id
-    private String orderNum;
+    @Column(name = "order_num")
+    @NotNull
+    private Integer orderNum;
 
-    private Boolean status;
+    @Column(name = "status")
+    @NotNull
+    private byte status;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "order_num", nullable = false)
-    private Orders orders;
+    private Order order;
 
     //기본생성자
     public OrderNow() {
     }
 
     //getters and setters
-    public String getOrderNum() {
+
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(String orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
-    public Boolean getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
-    public Orders getOrders() {
-        return orders;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

@@ -108,9 +108,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orderdetail` (
   INDEX `product_key_idx` (`product_num` ASC) ,
   CONSTRAINT `order_key`
     FOREIGN KEY (`order_num`)
-    REFERENCES `mydb`.`orders` (`order_num`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `mydb`.`orders` (`order_num`),
   CONSTRAINT `product_key`
     FOREIGN KEY (`product_num`)
     REFERENCES `mydb`.`product` (`product_num`)
