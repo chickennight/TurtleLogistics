@@ -48,7 +48,7 @@ public class MachineService {
 
     public List<Log> lastBrokenLogs(List<Integer> list) {
         List<Log> lastBrokenLogList = new ArrayList<>();
-        for (Integer n : list) lastBrokenLogList.add(LR.findByMachineId(n).get(0));
+//        for (Integer n : list) lastBrokenLogList.add(LR.findByMachineId(n).get(0));
         return lastBrokenLogList;
     }
 
