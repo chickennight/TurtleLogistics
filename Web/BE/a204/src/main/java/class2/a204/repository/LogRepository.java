@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Long> {
 //    @Query("SELECT l FROM Log l WHERE l.machine = :machine_id ORDER BY l.errorDate DESC")
-    @Query("SELECT Log FROM Log WHERE ")
-    List<Log> findByMachineId(Integer machine_id);
+//    List<Log> findByMachineId(int machineId);
 
 }
