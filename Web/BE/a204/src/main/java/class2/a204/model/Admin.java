@@ -1,5 +1,7 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +11,7 @@ public class Admin {
     @Column(name = "admin_id")
     private String id;
 
+    @NotNull
     private String password;
 
     @Column(name = "phone_number")
