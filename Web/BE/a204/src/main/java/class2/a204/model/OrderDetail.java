@@ -16,7 +16,7 @@ public class OrderDetail {
     @Column(name = "amount")
     @NotNull
     private Integer amount;
-
+;
     @ManyToOne
     @JoinColumn(name = "product_num")
     @NotNull
