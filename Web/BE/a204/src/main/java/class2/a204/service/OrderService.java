@@ -1,6 +1,6 @@
 package class2.a204.service;
 
-import class2.a204.model.Orders;
+import class2.a204.model.Order;
 import class2.a204.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public List<Orders> findAllOrders() {
+    public List<Order> findAllOrders() {
         return orderRepository.findAll();
     }
 }
