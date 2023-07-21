@@ -2,9 +2,9 @@ package class2.a204.controller;
 
 import class2.a204.model.Log;
 import class2.a204.model.Machine;
+import class2.a204.service.MqttService;
 import class2.a204.util.ErrorHandler;
 import class2.a204.service.MachineService;
-import class2.a204.service.MqttService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,7 +86,7 @@ public class MachineController {
     }
 
     @PostMapping("/control")
-    public ResponseEntity<?> MachineControl(String order) {
+    public ResponseEntity<?> MachineControl(@RequestParam String order) {
         try {
             String topic = "Sup";
             mqtt.publish(topic, order);
