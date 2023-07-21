@@ -36,7 +36,7 @@ public class MachineService {
 
     public List<Integer> brokenMachine(List<Machine> list) {
         List<Integer> brokenList = new ArrayList<>();
-        for (Machine m : list) if (m.getBroken()) brokenList.add(m.getId());
+        for (Machine m : list) if (m.getBroken()) brokenList.add(m.getMachineId());
         return brokenList;
     }
 
