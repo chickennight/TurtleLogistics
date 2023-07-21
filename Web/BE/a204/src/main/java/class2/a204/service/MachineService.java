@@ -47,13 +47,7 @@ public class MachineService {
     }
 
     public void updateMachine(Machine machine){
-        Machine m = MR.findById(machine.getId());
-        m = machine;
-        MR.save(m);
-    }
-
-    public void mqttSend(String order) {
-
+        MR.save(machine);
     }
 
 }

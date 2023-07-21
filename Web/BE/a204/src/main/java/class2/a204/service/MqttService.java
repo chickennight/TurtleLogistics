@@ -17,15 +17,15 @@ public class MqttService {
     static String awsSecretAccessKey = "tyqF1GutVFg5eONlu8yM4uB/kPEPO1yB7KTXqHEa";
 
 
-    public void publish(String topic, String payload) throws AWSIotException, JsonProcessingException {
+    public void publish(String topic, String message) throws AWSIotException, JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("order", "이것은 테스트 메세지 입니다.");
 //        String jsonString = objectMapper.writeValueAsString(map);
-        String jsonString = objectMapper.writeValueAsString(payload);
+        String jsonString = objectMapper.writeValueAsString(message);
         AWSIotMqttClient client = new AWSIotMqttClient(clientEndpoint, clientId, awsAccessKeyId, awsSecretAccessKey, null);
         client.connect();
-        client.publish(topic,jsonString);
+        client.publish(topic, jsonString);
         client.disconnect();
     }
 }
