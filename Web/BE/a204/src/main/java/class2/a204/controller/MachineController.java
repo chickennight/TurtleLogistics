@@ -2,6 +2,7 @@ package class2.a204.controller;
 
 import class2.a204.model.Log;
 import class2.a204.model.Machine;
+import class2.a204.model.Payload;
 import class2.a204.service.MqttService;
 import class2.a204.util.ErrorHandler;
 import class2.a204.service.MachineService;
@@ -86,10 +87,9 @@ public class MachineController {
     }
 
     @PostMapping("/control")
-    public ResponseEntity<?> MachineControl(@RequestParam String order) {
+    public ResponseEntity<?> MachineControl(@RequestBody Payload payload) {
         try {
-            String topic = "Sup";
-            mqtt.publish(topic, order);
+            mqtt.publish(payload.getTopic(), payload.getMessage());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);
