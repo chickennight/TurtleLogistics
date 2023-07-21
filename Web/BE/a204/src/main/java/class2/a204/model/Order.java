@@ -1,8 +1,6 @@
 package class2.a204.model;
 
 import com.sun.istack.NotNull;
-import org.hibernate.annotations.Cascade;
-import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +12,7 @@ public class Order {
     @Id
     @Column(name = "order_num")
     @NotNull
-    private String orderNum;
+    private Integer orderNum;
 
     @Column(name = "order_date")
     @NotNull
@@ -38,11 +36,11 @@ public class Order {
 
     //getters and setters
 
-    public String getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(String orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
