@@ -65,7 +65,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `mydb`.`orders`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
-  `order_num` CHAR(12) NOT NULL,
+  `order_num` INT UNSIGNED NOT NULL,
   `order_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_num` INT NOT NULL,
   `address` VARCHAR(100) NOT NULL,
@@ -108,7 +108,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orderdetail` (
   INDEX `product_key_idx` (`product_num` ASC) ,
   CONSTRAINT `order_key`
     FOREIGN KEY (`order_num`)
-    REFERENCES `mydb`.`orders` (`order_num`),
+    REFERENCES `mydb`.`orders` (`order_num`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `product_key`
     FOREIGN KEY (`product_num`)
     REFERENCES `mydb`.`product` (`product_num`)
