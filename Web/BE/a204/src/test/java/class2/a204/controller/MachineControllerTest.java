@@ -3,11 +3,14 @@ package class2.a204.controller;
 import class2.a204.repository.MachineRepository;
 import class2.a204.service.MqttService;
 import com.amazonaws.services.iot.client.AWSIotException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.spring.web.json.Json;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -44,8 +47,11 @@ class MachineControllerTest {
     }
 
     @Test
-    void machineControl() throws AWSIotException {
-        mqtt.publish("Sup","hello");
+    void machineControl() throws AWSIotException, JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString("hello");
+        System.out.println(jsonString);
+        mqtt.publish("Sup",jsonString);
     }
 
     @Test
