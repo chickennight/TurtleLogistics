@@ -1,6 +1,10 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -9,36 +13,47 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_num")
-    private Long num;
+    @NotNull
+    private Integer customerNum;
 
-    @Column(name = "customer_id")
-    private String id;
+    @Column(name = "customer_id",unique = true)
+    @NotNull
+    private String customerId;
 
+    @Column(name = "password")
+    @NotNull
     private String password;
+
+    @Column(name = "address")
+    @NotNull
     private String address;
 
     @Column(name = "phone_number")
+    @NotNull
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "customer")
+    private List<Order> orders;
     //기본생성자
     public Customer() {
     }
 
     //getters and setters
-    public Long getNum() {
-        return num;
+
+    public Integer getCustomerNum() {
+        return customerNum;
     }
 
-    public void setNum(Long num) {
-        this.num = num;
+    public void setCustomerNum(Integer customerNum) {
+        this.customerNum = customerNum;
     }
 
-    public String getId() {
-        return id;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getPassword() {
@@ -63,5 +78,13 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
