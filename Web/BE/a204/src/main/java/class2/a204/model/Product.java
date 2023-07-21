@@ -1,31 +1,47 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_num")
-    private Long num;
+    @Column(name = "product_num", nullable = false)
+    private Integer productNum;
 
+    @Column(name = "name")
+    @NotNull
     private String name;
+
+    @Column(name = "stock")
+    @NotNull
     private Integer stock;
+
+    @Column(name = "detail")
     private String detail;
+
+    @Column(name = "price")
+    @NotNull
     private Integer price;
 
+    @OneToMany(mappedBy = "product")
+    private List<OrderDetail> orderDetails;
     //기본생성자
     public Product() {
     }
 
     //getters and setters
-    public Long getNum() {
-        return num;
+
+    public Integer getProductNum() {
+        return productNum;
     }
 
-    public void setNum(Long num) {
-        this.num = num;
+    public void setProductNum(Integer productNum) {
+        this.productNum = productNum;
     }
 
     public String getName() {
@@ -58,5 +74,13 @@ public class Product {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 }

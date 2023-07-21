@@ -1,4 +1,4 @@
-package class2.a204.Service;
+package class2.a204.service;
 
 import class2.a204.model.Admin;
 import class2.a204.repository.AdminRepository;
@@ -30,23 +30,23 @@ public class AdminServiceTest {
     public void findAdminByIdTest() {
         // given
         Admin admin = new Admin();
-        admin.setId("admin");
+        admin.setAdminId("admin");
         admin.setPassword("password");
         admin = adminRepository.save(admin);
 
         // when
-        Admin foundAdmin = adminService.findAdminById(admin.getId());
+        Admin foundAdmin = adminService.findAdminById(admin.getAdminId());
 
         // then
         assertThat(foundAdmin).isNotNull();
-        assertThat(foundAdmin.getId()).isEqualTo(admin.getId());
+        assertThat(foundAdmin.getAdminId()).isEqualTo(admin.getAdminId());
     }
 
     @Test
     public void saveAdminTest() {
         // given
         Admin admin = new Admin();
-        admin.setId("admin");
+        admin.setAdminId("admin");
         admin.setPassword("password");
 
         // when
@@ -61,12 +61,12 @@ public class AdminServiceTest {
     public void loginTest() {
         // given
         Admin admin = new Admin();
-        admin.setId("admin");
+        admin.setAdminId("admin");
         admin.setPassword("password");
         admin = adminService.saveAdmin(admin);
 
         // when
-        boolean result = adminService.login(admin.getId(), "password");
+        boolean result = adminService.login(admin.getAdminId(), "password");
 
         // then
         assertThat(result).isTrue();
