@@ -1,7 +1,23 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
-<script setup>
-  //
+<script>
+
+
+export default {
+  name: 'App',
+
+  data: () => ({
+    //
+  }),
+}
 </script>
+
+<style>
+
+
+
+</style>
