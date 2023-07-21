@@ -1,7 +1,7 @@
 package class2.a204.service;
 
-import class2.a204.model.Log;
-import class2.a204.model.Machine;
+import class2.a204.entity.Log;
+import class2.a204.entity.Machine;
 import class2.a204.repository.LogRepository;
 import class2.a204.repository.MachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,10 @@ public class MachineService {
         return MR.findAll();
     }
 
+    public Machine findMachineById(Integer machine_id) {
+        return MR.findByMachineId(machine_id);
+    }
+
     public List<Log> findLogAll() {
         return LR.findAll();
     }
@@ -36,7 +40,9 @@ public class MachineService {
 
     public List<Integer> brokenMachine(List<Machine> list) {
         List<Integer> brokenList = new ArrayList<>();
-        for (Machine m : list) if (m.getBroken()) brokenList.add(m.getMachineId());
+        for (Machine m : list)
+            if (m.getBroken())
+                brokenList.add(m.getMachineId());
         return brokenList;
     }
 
@@ -46,7 +52,7 @@ public class MachineService {
         return lastBrokenLogList;
     }
 
-    public void updateMachine(Machine machine){
+    public void updateMachine(Machine machine) {
         MR.save(machine);
     }
 
