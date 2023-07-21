@@ -8,17 +8,19 @@ import javax.persistence.*;
 @Table(name = "ordernow")
 public class OrderNow {
     @Id
-    @Column(name = "order_num")
+    @Column(name = "id")
     @NotNull
-    private Integer orderNum;
+    private Integer id;
+
+    @OneToOne
+    @JoinColumn(name = "order_num")
+    @NotNull
+    private Order orderNum;
 
     @Column(name = "status")
     @NotNull
     private byte status;
 
-    @OneToOne
-    @MapsId
-    private Order order;
 
     //기본생성자
     public OrderNow() {
@@ -26,11 +28,20 @@ public class OrderNow {
 
     //getters and setters
 
-    public Integer getOrderNum() {
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Order getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(Order orderNum) {
         this.orderNum = orderNum;
     }
 
@@ -40,13 +51,5 @@ public class OrderNow {
 
     public void setStatus(byte status) {
         this.status = status;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }
