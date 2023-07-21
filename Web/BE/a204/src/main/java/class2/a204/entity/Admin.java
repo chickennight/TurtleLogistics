@@ -1,4 +1,4 @@
-package class2.a204.model;
+package class2.a204.entity;
 
 import com.sun.istack.NotNull;
 
@@ -23,6 +23,8 @@ public class Admin {
     //기본생성자
     public Admin() {
     }
+
+
 
     //getters and setters
 
