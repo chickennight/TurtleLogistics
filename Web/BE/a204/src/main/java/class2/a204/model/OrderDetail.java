@@ -1,5 +1,7 @@
 package class2.a204.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,29 +10,35 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
-    private Long id;
+    @NotNull
+    private Integer orderDetailId;
 
+    @Column(name = "amount")
+    @NotNull
     private Integer amount;
-
+;
     @ManyToOne
     @JoinColumn(name = "product_num")
+    @NotNull
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "order_num")
-    private Orders orders;
+    @NotNull
+    private Order order;
 
     //기본생성자
     public OrderDetail() {
     }
 
     //getters and setters
-    public Long getId() {
-        return id;
+
+    public Integer getOrderDetailId() {
+        return orderDetailId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrderDetailId(Integer orderDetailId) {
+        this.orderDetailId = orderDetailId;
     }
 
     public Integer getAmount() {
@@ -49,11 +57,11 @@ public class OrderDetail {
         this.product = product;
     }
 
-    public Orders getOrders() {
-        return orders;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }
