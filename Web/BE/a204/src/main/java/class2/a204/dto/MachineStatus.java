@@ -1,20 +1,23 @@
 package class2.a204.dto;
 
-public class Status {
-    private Long order_num;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class MachineStatus {
+    @JsonProperty("order_num")
+    private Long orderNum;
 
     private int type;
     private int result;
 
-    public Status() {
+    public MachineStatus() {
     }
 
-    public Long getOrder_num() {
-        return order_num;
+    public Long getOrderNum() {
+        return orderNum;
     }
 
-    public void setOrder_num(Long order_num) {
-        this.order_num = order_num;
+    public void setOrderNum(Long order_num) {
+        this.orderNum = order_num;
     }
 
     public int getType() {

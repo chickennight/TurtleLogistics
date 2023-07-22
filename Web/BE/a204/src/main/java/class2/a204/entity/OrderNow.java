@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ordernow")
 public class OrderNow {
+
     @Id
     @Column(name = "id")
     @NotNull
