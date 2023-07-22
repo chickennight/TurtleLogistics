@@ -1,8 +1,8 @@
 package class2.a204.controller;
 
-import class2.a204.model.Log;
-import class2.a204.model.Machine;
-import class2.a204.model.Payload;
+import class2.a204.entity.Log;
+import class2.a204.entity.Machine;
+import class2.a204.dto.Payload;
 import class2.a204.service.MqttService;
 import class2.a204.util.ErrorHandler;
 import class2.a204.service.MachineService;
@@ -32,11 +32,13 @@ public class MachineController {
 
     @GetMapping
     public ResponseEntity<?> getMachineStatus() {
+        System.out.println("DDDDDDDDDDD");
         try {
             List<Machine> machineList = MS.findMachineAll();
             if (machineList.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
+                System.out.println("DDDDDDDDDDD");
                 List<Integer> brokenList = MS.brokenMachine(machineList);
                 if (brokenList.isEmpty())
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
@@ -76,10 +78,13 @@ public class MachineController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateMachine(@RequestBody Machine machine) {
+    @PutMapping("/{machine_id}")
+    public ResponseEntity<?> updateMachine(@RequestParam int machine_id,@RequestBody Machine machine) {
         try {
-            MS.updateMachine(machine);
+            Machine m = MS.findMachineById(machine_id);
+            m.setMachineDetail(machine.getMachineDetail());
+            m.setBroken(machine.getBroken());
+            MS.updateMachine(m);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);

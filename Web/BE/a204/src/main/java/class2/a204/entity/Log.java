@@ -1,10 +1,9 @@
-package class2.a204.model;
+package class2.a204.entity;
 
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 @Table(name = "log")
@@ -28,6 +27,9 @@ public class Log {
     private Machine machine;
     //기본생성자
     public Log() {
+    }
+
+    public Log(Machine machine2, String logForBrokenMachine) {
     }
 
     //getters and setters
