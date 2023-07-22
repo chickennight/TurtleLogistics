@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface LogRepository extends JpaRepository<Log, Long> {
-//    @Query("SELECT l FROM Log l WHERE l.machine = :machine_id ORDER BY l.errorDate DESC")
-//    List<Log> findByMachineId(int machineId);
+    @Query(value = "SELECT * FROM machine WHERE machine_id = ?1",nativeQuery = true)
+    List<Log> findByMachineId(int machineId);
 
 }
