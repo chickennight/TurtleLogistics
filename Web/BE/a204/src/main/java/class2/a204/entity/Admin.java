@@ -10,7 +10,12 @@ import javax.persistence.*;
 public class Admin {
     @JsonProperty("admin_id")
     @Id
-    @Column(name = "admin_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_num")
+    @NotNull
+    private int adminNum;
+
+    @Column(name = "admin_id", unique = true)
     @NotNull
     private String adminId;
 
@@ -27,9 +32,16 @@ public class Admin {
     public Admin() {
     }
 
-
-
     //getters and setters
+
+
+    public int getAdminNum() {
+        return adminNum;
+    }
+
+    public void setAdminNum(int adminNum) {
+        this.adminNum = adminNum;
+    }
 
     public String getAdminId() {
         return adminId;

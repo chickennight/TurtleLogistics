@@ -28,7 +28,7 @@ public class AdminController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
         try {
-            AS.saveAdmin(admin);
+            AS.registerAdmin(admin);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return Handler.errorMessage(e);
