@@ -1,26 +1,27 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "log")
 public class Log {
+    @JsonProperty("log_num")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_num")
     @NotNull
     private Integer logNum;
 
+    @JsonProperty("error_date")
     @Column(name = "error_date", insertable = false)
     @NotNull
     private LocalDateTime errorDate;
 
+    @JsonProperty("error_message")
     @Column(name = "error_message")
     private String errorMessage;
 
