@@ -1,4 +1,4 @@
-package class2.a204.model;
+package class2.a204.dto;
 
 public class Payload {
     private String topic;

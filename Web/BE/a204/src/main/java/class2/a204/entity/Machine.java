@@ -1,7 +1,6 @@
-package class2.a204.model;
+package class2.a204.entity;
 
 import com.sun.istack.NotNull;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,6 +27,28 @@ public class Machine {
 
     //기본생성자
     public Machine() {
+    }
+
+    public Machine(Integer machineId, String machineDetail, Boolean broken, List<Log> logs) {
+        this.machineId = machineId;
+        this.machineDetail = machineDetail;
+        this.broken = broken;
+        this.logs = logs;
+    }
+
+    public Machine(Integer machineId, String machineDetail, Boolean broken) {
+        this.machineId = machineId;
+        this.machineDetail = machineDetail;
+        this.broken = broken;
+    }
+
+    public Machine(Integer machineId, String machineDetail) {
+        this.machineId = machineId;
+        this.machineDetail = machineDetail;
+    }
+
+    public Machine(Boolean broken) {
+        this.broken = broken;
     }
 
     //getters and setters

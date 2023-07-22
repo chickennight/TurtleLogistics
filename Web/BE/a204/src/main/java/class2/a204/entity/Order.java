@@ -1,4 +1,4 @@
-package class2.a204.model;
+package class2.a204.entity;
 
 import com.sun.istack.NotNull;
 
@@ -12,7 +12,7 @@ public class Order {
     @Id
     @Column(name = "order_num")
     @NotNull
-    private Integer orderNum;
+    private Long orderNum;
 
     @Column(name = "order_date")
     @NotNull
@@ -36,11 +36,11 @@ public class Order {
 
     //getters and setters
 
-    public Integer getOrderNum() {
+    public Long getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
     }
 

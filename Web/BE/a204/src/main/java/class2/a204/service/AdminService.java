@@ -1,9 +1,8 @@
 package class2.a204.service;
 
-import class2.a204.model.Admin;
+import class2.a204.entity.Admin;
 import class2.a204.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

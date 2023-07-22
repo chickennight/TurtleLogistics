@@ -1,6 +1,6 @@
 package class2.a204.repository;
 
-import class2.a204.model.Order;
+import class2.a204.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

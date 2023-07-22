@@ -117,9 +117,10 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- Table `mydb`.`ordernow`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`ordernow` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `order_num` INT UNSIGNED NOT NULL,
   `status` TINYINT NOT NULL DEFAULT '1',
-  PRIMARY KEY (`order_num`),
+  PRIMARY KEY (`id`),
   CONSTRAINT `FK_Orders_TO_OrderNow_1`
     FOREIGN KEY (`order_num`)
     REFERENCES `mydb`.`orders` (`order_num`))
