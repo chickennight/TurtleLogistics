@@ -1,5 +1,6 @@
 package class2.a204.controller;
 
+import class2.a204.dto.LogDto;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.dto.Payload;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,20 +34,21 @@ public class MachineController {
 
     @GetMapping
     public ResponseEntity<?> getMachineStatus() {
-        System.out.println("DDDDDDDDDDD");
         try {
+
             List<Machine> machineList = MS.findMachineAll();
-            if (machineList.isEmpty())
+            if (machineList.size() == 0)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
-                System.out.println("DDDDDDDDDDD");
                 List<Integer> brokenList = MS.brokenMachine(machineList);
-                if (brokenList.isEmpty())
+                if (brokenList.size() == 0)
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
                 else {
                     HashMap<String, List<?>> map = new HashMap<>();
                     map.put("status", machineList);
-                    List<Log> errorLogs = MS.lastBrokenLogs(brokenList);
+                    List<Log> temp = MS.lastBrokenLogs(brokenList);
+                    List<LogDto> errorLogs = new ArrayList<>();
+                    for (Log l : temp) errorLogs.add(new LogDto(l));
                     map.put("logs", errorLogs);
                     return new ResponseEntity<>(map, HttpStatus.OK);
                 }
@@ -58,7 +61,9 @@ public class MachineController {
     @GetMapping("/log")
     public ResponseEntity<?> getLogs() {
         try {
-            List<Log> logList = MS.findLogAll();
+            List<Log> temp = MS.findLogAll();
+            List<LogDto> logList = new ArrayList<>();
+            for (Log l : temp) logList.add(new LogDto(l));
             if (logList.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else
@@ -69,22 +74,22 @@ public class MachineController {
     }
 
     @PostMapping("/log")
-    public ResponseEntity<?> createLog(@RequestBody Log log) {
+    public ResponseEntity<?> createLog(@RequestBody LogDto logDto) {
         try {
-            MS.addLog(log);
+            Log input = new Log();
+            input.setErrorMessage(logDto.getErrorMessage());
+            input.setMachine(MS.findMachine(logDto.getMachineId()));
+            MS.addLog(input);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);
         }
     }
 
-    @PutMapping("/{machine_id}")
-    public ResponseEntity<?> updateMachine(@RequestParam int machine_id,@RequestBody Machine machine) {
+    @PutMapping
+    public ResponseEntity<?> updateMachine(@RequestBody Machine machine) {
         try {
-            Machine m = MS.findMachineById(machine_id);
-            m.setMachineDetail(machine.getMachineDetail());
-            m.setBroken(machine.getBroken());
-            MS.updateMachine(m);
+            MS.updateMachine(machine);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);

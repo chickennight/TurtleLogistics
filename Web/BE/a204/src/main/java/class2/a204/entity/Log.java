@@ -1,9 +1,12 @@
 package class2.a204.entity;
 
 import com.sun.istack.NotNull;
+import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "log")
@@ -14,9 +17,9 @@ public class Log {
     @NotNull
     private Integer logNum;
 
-    @Column(name = "error_date")
+    @Column(name = "error_date", insertable = false)
     @NotNull
-    private Timestamp errorDate;
+    private LocalDateTime errorDate;
 
     @Column(name = "error_message")
     private String errorMessage;
@@ -25,6 +28,7 @@ public class Log {
     @JoinColumn(name = "machine_id")
     @NotNull
     private Machine machine;
+
     //기본생성자
     public Log() {
     }
@@ -42,11 +46,11 @@ public class Log {
         this.logNum = logNum;
     }
 
-    public Timestamp getErrorDate() {
+    public LocalDateTime getErrorDate() {
         return errorDate;
     }
 
-    public void setErrorDate(Timestamp errorDate) {
+    public void setErrorDate(LocalDateTime errorDate) {
         this.errorDate = errorDate;
     }
 

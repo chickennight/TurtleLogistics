@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MachineService {
@@ -24,10 +26,6 @@ public class MachineService {
 
     public List<Machine> findMachineAll() {
         return MR.findAll();
-    }
-
-    public Machine findMachineById(Integer machine_id) {
-        return MR.findByMachineId(machine_id);
     }
 
     public List<Log> findLogAll() {
@@ -46,9 +44,9 @@ public class MachineService {
         return brokenList;
     }
 
-    public List<Log> lastBrokenLogs(List<Integer> list) {
+    public List<Log> lastBrokenLogs(List<Integer> brokenList) {
         List<Log> lastBrokenLogList = new ArrayList<>();
-//        for (Integer n : list) lastBrokenLogList.add(LR.findByMachineId(n).get(0));
+        for (Integer n : brokenList) lastBrokenLogList.add(LR.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
         return lastBrokenLogList;
     }
 
@@ -56,4 +54,7 @@ public class MachineService {
         MR.save(machine);
     }
 
+    public Machine findMachine(Integer machineId) {
+        return MR.findByMachineId(machineId);
+    }
 }

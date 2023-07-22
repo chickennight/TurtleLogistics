@@ -1,9 +1,11 @@
 package class2.a204.entity;
 
 import com.sun.istack.NotNull;
+import jdk.jfr.Unsigned;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,9 +14,10 @@ public class Order {
     @Id
     @Column(name = "order_num")
     @NotNull
-    private Long orderNum;
+    @Unsigned
+    private Integer orderNum;
 
-    @Column(name = "order_date")
+    @Column(name = "order_date", insertable = false)
     @NotNull
     private LocalDateTime orderData;
 
@@ -36,11 +39,11 @@ public class Order {
 
     //getters and setters
 
-    public Long getOrderNum() {
+    public Integer getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Long orderNum) {
+    public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
     }
 
