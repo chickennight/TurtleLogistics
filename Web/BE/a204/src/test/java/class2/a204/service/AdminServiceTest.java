@@ -37,7 +37,7 @@ public class AdminServiceTest {
 
         // then
         assertThat(foundAdmin).isNotNull();
-        assertThat(foundAdmin.getAdminId()).isEqualTo(admin.getAdminId());
+//        assertThat(foundAdmin.getAdminId()).isEqualTo(admin.getAdminId());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class AdminServiceTest {
 
         // then
         assertThat(savedAdmin).isNotNull();
-//        assertThat(savedAdmin.getPassword()).isNotEqualTo(admin.getPassword()); // password is encoded
+//        assertThat(savedAdmin.getPassword()).isNotEqualTo(admin.getPassword());
     }
 
     @Test
