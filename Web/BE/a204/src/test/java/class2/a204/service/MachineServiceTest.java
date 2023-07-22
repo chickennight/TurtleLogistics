@@ -40,10 +40,10 @@ public class MachineServiceTest {
     @InjectMocks
     private MachineService machineService;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
+//    @BeforeEach //deprecated API
+//    public void setup() {
+//        MockitoAnnotations.initMocks(this);
+//    }
 
     @Test
     public void testFindMachineAll() {
