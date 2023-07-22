@@ -1,5 +1,6 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Machine {
     private Boolean broken;
 
     @OneToMany(mappedBy = "machine")
+    @JsonIgnore
     private List<Log> logs;
 
     //기본생성자
