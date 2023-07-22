@@ -14,46 +14,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    private final AdminService adminService;
-    private final OrderService orderService;
-    private final ErrorHandler errorHandler;
+    private final AdminService AS;
+    private final OrderService OS;
+    private final ErrorHandler Handler;
 
     @Autowired
-    public AdminController(AdminService adminService, OrderService orderService, ErrorHandler errorHandler) {
-        this.adminService = adminService;
-        this.orderService = orderService;
-        this.errorHandler = errorHandler;
+    public AdminController(AdminService as, OrderService os, ErrorHandler handler) {
+        this.AS = as;
+        this.OS = os;
+        this.Handler = handler;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
         try {
-            adminService.saveAdmin(admin);
+            AS.registerAdmin(admin);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+            return Handler.errorMessage(e);
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String id, @RequestParam String password) {
         try {
-            if (adminService.login(id, password)) {
+            if (AS.login(id, password)) {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+            return Handler.errorMessage(e);
         }
     }
 
     @GetMapping("/orders")
     public ResponseEntity<?> getOrders() {
         try {
-            List<?> orders = orderService.findAllOrders();
+            List<?> orders = OS.findAllOrders();
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+            return Handler.errorMessage(e);
         }
     }
 }
