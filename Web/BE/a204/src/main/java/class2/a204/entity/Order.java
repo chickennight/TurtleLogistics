@@ -1,22 +1,23 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import jdk.jfr.Unsigned;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+
+    @JsonProperty("order_num")
     @Id
     @Column(name = "order_num")
     @NotNull
-    @Unsigned
-    private Integer orderNum;
+    private Long orderNum;
 
+    @JsonProperty("order_date")
     @Column(name = "order_date", insertable = false)
     @NotNull
     private LocalDateTime orderData;
@@ -25,6 +26,7 @@ public class Order {
     @NotNull
     private String address;
 
+    @JsonProperty("customer_num")
     @ManyToOne
     @JoinColumn(name = "customer_num")
     @NotNull
@@ -39,11 +41,11 @@ public class Order {
 
     //getters and setters
 
-    public Integer getOrderNum() {
+    public Long getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
     }
 

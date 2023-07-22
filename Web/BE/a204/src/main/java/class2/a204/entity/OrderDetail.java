@@ -1,5 +1,6 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -7,16 +8,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "orderdetail")
 public class OrderDetail {
+
+    @JsonProperty("order_detail_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
-    @NotNull
-    private Integer orderDetailId;
+    private Long orderDetailId;
 
     @Column(name = "amount")
     @NotNull
     private Integer amount;
-;
+
     @ManyToOne
     @JoinColumn(name = "product_num")
     @NotNull
@@ -33,11 +35,11 @@ public class OrderDetail {
 
     //getters and setters
 
-    public Integer getOrderDetailId() {
+    public Long getOrderDetailId() {
         return orderDetailId;
     }
 
-    public void setOrderDetailId(Integer orderDetailId) {
+    public void setOrderDetailId(Long orderDetailId) {
         this.orderDetailId = orderDetailId;
     }
 

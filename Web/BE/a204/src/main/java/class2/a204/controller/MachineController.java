@@ -1,17 +1,17 @@
 package class2.a204.controller;
 
 import class2.a204.dto.LogDto;
+import class2.a204.dto.Payload;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
-import class2.a204.dto.Payload;
+import class2.a204.service.MachineService;
 import class2.a204.service.MqttService;
 import class2.a204.util.ErrorHandler;
-import class2.a204.service.MachineService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +80,7 @@ public class MachineController {
             input.setErrorMessage(logDto.getErrorMessage());
             input.setMachine(MS.findMachine(logDto.getMachineId()));
             MS.addLog(input);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return Handler.errorMessage(e);
         }
@@ -90,7 +90,7 @@ public class MachineController {
     public ResponseEntity<?> updateMachine(@RequestBody Machine machine) {
         try {
             MS.updateMachine(machine);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return Handler.errorMessage(e);
         }
