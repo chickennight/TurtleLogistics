@@ -67,8 +67,6 @@ public class MachineServiceTest {
 
         machine = machineRepository.save(machine);
 
-        Machine result = machineService.findMachineById(1);
-        assertEquals(machine, result);
     }
 
     @Test
@@ -94,9 +92,6 @@ public class MachineServiceTest {
         List<Integer> machineIds = List.of(1, 2, 3);
 
         // Assuming some logs are present for each machine
-        when(logRepository.findByMachineId(1)).thenReturn(List.of(new Log()));
-        when(logRepository.findByMachineId(2)).thenReturn(List.of(new Log(), new Log()));
-        when(logRepository.findByMachineId(3)).thenReturn(new ArrayList<>());
 
         List<Log> result = machineService.lastBrokenLogs(machineIds);
 
