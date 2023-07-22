@@ -5,32 +5,26 @@
 // 4. MQTT -> Sub : /ord/res(OrderNo,Result), /div/res(OrderNo,Result), /web/power(on,off)
 
 #include <secrets.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
-#include <time.h>
-#include <WiFiClientSecure.h>
-#include <PubSubClient.h>
 
 #define THINGNAME "Supervisor"
 // PUBLISH TOPIC
-#define TOPIC_SCH "/sup/add"
 #define TOPIC_INIT "/sup/init"
-#define TOPIC_TOVERI "/sup/div/info"
+#define TOPIC_ORD_SCH "/sup/add"
+#define TOPIC_ORD_VERI "/sup/ord/veri"
+#define TOPIC_DIV_VERI "/sup/div/veri"
 
 // SUBSCRIBE TOPIC
-#define TOPIC_ORDERRES "/order/res"
-#define TOPIC_DIVRES "/div/res"
+#define TOPIC_ORDER_RES "/order/res"
+#define TOPIC_DIV_RES "/div/res"
 #define TOPIC_POWER "/web/power"
 
-// POST URL
-#define POST_URL "1"
-
-int order_motor=0,div_motor=0;
+int order_motor=-1,div_motor=-1;
 unsigned long previousMillis = 0;
 const long interval = 60000; // 1min
 
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
+HTTPClient http;
 
 void setupWifi(){
   WiFi.mode(WIFI_STA);
@@ -43,48 +37,6 @@ void setupWifi(){
     Serial.println("Connecting...");
   }
   Serial.println("WiFi Connect Success!");
-}
-
-void syncTimeWithNTP()
-{
-  configTime(9 * 3600, 0, "pool.ntp.org"); // GMT+9 (한국 표준시)로 설정, 원하는 시간대로 변경 가능
-  Serial.print("Waiting for time sync...");
-  while (time(nullptr) < 1610880000) // 기준 시간 (Unix timestamp) 이전까지 대기 (2021년 1월 17일 00:00:00)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println();
-
-  time_t now = time(nullptr);
-  struct tm timeinfo;
-  gmtime_r(&now, &timeinfo);
-
-  Serial.print("Current time: ");
-  Serial.println(asctime(&timeinfo));
-}
-
-void postRes(byte *payload){
-  HTTPClient http;
-  http.begin(POST_URL);
-  http.addHeader("Content-Type","application/json");
-  Serial.println((String)payload[0]);
-
-
-  StaticJsonDocument<200> data;
-  data["type"]=(String)payload[0];
-  data["result"]=(String)payload[1];
-  String postData;
-  serializeJson(data,postData);
-
-  int httpResponseCodePost = http.POST(postData);
-
-  if(httpResponseCodePost>0){
-    String response = http.getString();
-    Serial.print("HTTP POST Response:");
-    Serial.println(response);
-  }
-  http.end();
 }
 
 void connectAWS()
@@ -110,36 +62,130 @@ void connectAWS()
     return;
   }
   // Subscribe to a topic
-  mqttClient.subscribe(TOPIC_ORDERRES);
-  mqttClient.subscribe(TOPIC_DIVRES);
+  mqttClient.subscribe(TOPIC_ORDER_RES);
+  mqttClient.subscribe(TOPIC_DIV_RES);
   mqttClient.subscribe(TOPIC_POWER);
  
   Serial.println("AWS IoT Connected!");
 }
-// When Sup Sub
+
+
+void GETorder(){
+  if (WiFi.status() == WL_CONNECTED) 
+  {
+    http.begin(GET_URL);
+    int httpCode = http.GET();
+    Serial.print("HttpCODE:"
+    Serial.print(httpCode);
+    Serial.print(" From:");
+    Serial.print(GET_URL);
+    Serial.println();
+
+    if (httpCode > 0) 
+    {
+      String response = http.getString();
+
+      DynamicJsonDocument jsonDoc(1024);
+      DeserializationError error = deserializeJson(jsonDoc, response);
+
+      if (error) {
+              Serial.print("Error parsing JSON: ");
+              Serial.println(error.c_str());
+      } 
+      else {
+        if (jsonDoc.is<JsonArray>()){
+            JsonArray ordersArray = jsonDoc.as<JsonArray>();
+            if(!ordersArray.isNull() && ordersArray.size() > 0){
+                for(JsonObject order:ordersArray){
+                  StaticJsonDocument<200> Data;
+                  Data["orderno"] = order["order_num"];
+                  Data["ProductA"] = order["productA"];
+                  Data["ProductB"] = order["productB"];
+                  Data["ProductC"] = order["productC"];
+
+                  char buf1[200];
+                  serializeJson(Data,buf1);
+
+                  mqttClient.publish(TOPIC_ORD_SCH, buf1);
+                  mqttClient.publish(TOPIC_ORD_VERI, buf1);
+
+                  StaticJsonDocument<100> Data2;
+                  Data2["orderno"] = order["order_num"];
+                  Data2["address"] = order["adderess"];
+                  
+                  char buf2[100];
+                  serializeJson(Data2,buf2);
+                  mqttClient.publish(TOPIC_DIV_VERI,buf2);
+
+                  if(order_motor==-1){
+                    order_motor=1;
+                    StaticJsonDocument<10> Motor;
+                    Motor["type"]="1";
+                    char buf3[12];
+                    serializeJson(Motor,buf3); 
+                    mqttClient.publish(TOPIC_INIT,buf3);                                     
+                  } 
+                }
+              }
+            }
+        }
+      }
+    http.end(); 
+  }
+  else{
+    Serial.println("Wifi is not connected!");
+  }
+}
+
+void POSTres(const char* jsonData){
+  http.begin(POST_URL);
+  http.addHeader("Content-Type","application/json");
+
+  int httpResponseCodePost = http.POST(jsonData);
+
+  if(httpResponseCodePost>0){
+    String response = http.getString();
+    Serial.print("HTTP POST Response:");
+    Serial.println(response);
+  }
+  http.end();
+}
+
 void messageReceived(char *topic, byte *payload, unsigned int length)
 {
 
-  if(strcmp(topic,TOPIC_ORDERRES)==0){ // orderno, res
+  StaticJsonDocument<200> doc;
+  DeserializationError error = deserializeJson(doc, payload, length);
+  char res[100];
+  serializeJson(doc,res);
+  
+
+  if(strcmp(topic,TOPIC_ORDER_RES)==0){ // orderno, res
       Serial.println(topic);
-      postRes(payload);
+      Serial.println(res);
+      POSTres(res);
   }
-  else if(strcmp(topic,TOPIC_DIVRES)==0){ // orderno, res
+  else if(strcmp(topic,TOPIC_DIV_RES)==0){ // orderno, res
       Serial.println(topic);
-      postRes(payload);
+      Serial.println(res);
+      POSTres(res);
   }
   else if(strcmp(topic,TOPIC_POWER)==0){ // type : 0(on),1(off)
       Serial.println(topic);
-      StaticJsonDocument<200> data;
-      deserializeJson(data, payload);
-      StaticJsonDocument<100> temp;
-      temp["type"] = data["type"];
-      char jsonBuffer[512];
-      serializeJson(temp, jsonBuffer);
-      Serial.println(jsonBuffer);
+      Serial.println(res);
+      int val = doc["type"].as<int>();
 
-      mqttClient.publish("/d", jsonBuffer);
-  } 
+      if((val!=order_motor) && (val!=div_motor)){
+        order_motor*=-1;
+        div_motor*=-1;
+        StaticJsonDocument<20> temp;
+        char buffer[20];
+        temp["type"] = val;
+        serializeJson(temp,buffer);
+        mqttClient.publish("/div/motor", buffer);
+        mqttClient.publish("/ord/motor", buffer);
+      }
+  }
 }
 
 void setup() 
@@ -155,70 +201,7 @@ void loop()
   unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    getOrder();
+    GETorder();
     // 3초마다 실행할 작업
   }
 }
-
-void getOrder(){
-  if (WiFi.status() == WL_CONNECTED) 
-  {
-    HTTPClient http; //Object of class HTTPClient
-    http.begin("http://jsonplaceholder.typicode.com/users/1");
-    int httpCode = http.GET();
-    Serial.println(httpCode);
-    if (httpCode > 0) 
-    {
-      Serial.println("JSON PARSING...");
-
-      String response = http.getString();
-
-      DynamicJsonDocument jsonDoc(1024);
-      DeserializationError error = deserializeJson(jsonDoc, response);
-
-      if (error) {
-              Serial.print("Error parsing JSON: ");
-              Serial.println(error.c_str());
-      } 
-      else {
-        if (jsonDoc.is<JsonArray>()){
-            JsonArray ordersArray = jsonDoc.as<JsonArray>();
-            if(!ordersArray.isNull() && ordersArray.size() > 0){
-                for(JsonObject order:ordersArray){
-                  // MQTT pulish data 1,2,3 to Sch
-                  StaticJsonDocument<200> Sch;
-                  Sch["ProductA"] = order["productA"];
-                  Sch["ProductB"] = order["productB"];
-                  Sch["ProductC"] = order["productC"];
-                  char buf1[512];
-                  serializeJson(Sch,buf1);
-                  mqttClient.publish(TOPIC_SCH, buf1);
-                  StaticJsonDocument<200> Verifier;
-                  Verifier["orderno"] = order["order_num"];
-                  Verifier["ProductA"] = order["productA"];
-                  Verifier["ProductB"] = order["productB"];
-                  Verifier["ProductC"] = order["productC"];
-                  char buf2[512];
-                  serializeJson(Verifier,buf2);
-                  mqttClient.publish(TOPIC_TOVERI,buf2);
-                  if(!order_motor){
-                    StaticJsonDocument<10> motor;
-                    motor["type"]="1";
-                    char buf[12];
-                    serializeJson(motor,buf); 
-                    mqttClient.publish(TOPIC_INIT,buf);                                     
-                  } 
-                }
-              }
-            }
-        }
-      }
-    http.end(); //Close connection
-  }
-  else{
-    Serial.println("Wifi is not connected!");
-  }
-}
-
-
-
