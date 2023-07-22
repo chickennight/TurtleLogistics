@@ -1,6 +1,6 @@
 package class2.a204.controller;
 
-import class2.a204.model.Admin;
+import class2.a204.entity.Admin;
 import class2.a204.service.AdminService;
 import class2.a204.service.OrderService;
 import class2.a204.util.ErrorHandler;
