@@ -20,7 +20,7 @@ public class OrderNow {
 
     @Column(name = "status")
     @NotNull
-    private byte status;
+    private Integer status;
 
 
     //기본생성자
@@ -46,11 +46,11 @@ public class OrderNow {
         this.orderNum = orderNum;
     }
 
-    public byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

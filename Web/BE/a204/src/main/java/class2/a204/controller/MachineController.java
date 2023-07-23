@@ -6,6 +6,7 @@ import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.service.MachineService;
 import class2.a204.service.MqttService;
+import class2.a204.service.OrderService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +25,19 @@ public class MachineController {
     private final MachineService MS;
     private final MqttService mqtt;
     private final ErrorHandler Handler;
+    private final OrderService OS;
 
     @Autowired
-    public MachineController(MachineService ms, MqttService mqtt, ErrorHandler handler) {
+    public MachineController(MachineService ms, MqttService mqtt, ErrorHandler handler, OrderService os) {
         this.MS = ms;
         this.mqtt = mqtt;
         this.Handler = handler;
+        OS = os;
     }
 
     @GetMapping
     public ResponseEntity<?> getMachineStatus() {
         try {
-
             List<Machine> machineList = MS.findMachineAll();
             if (machineList.size() == 0)
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -50,6 +52,8 @@ public class MachineController {
                     List<LogDto> errorLogs = new ArrayList<>();
                     for (Log l : temp) errorLogs.add(new LogDto(l));
                     map.put("logs", errorLogs);
+                    List<Log> orderError = OS.findOrderError();
+                    map.put("orderErrors", orderError);
                     return new ResponseEntity<>(map, HttpStatus.OK);
                 }
             }
@@ -90,7 +94,7 @@ public class MachineController {
     public ResponseEntity<?> updateMachine(@RequestBody Machine machine) {
         try {
             MS.updateMachine(machine);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return Handler.errorMessage(e);
         }
