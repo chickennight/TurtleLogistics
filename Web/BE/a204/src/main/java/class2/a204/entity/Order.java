@@ -20,7 +20,7 @@ public class Order {
     @JsonProperty("order_date")
     @Column(name = "order_date", insertable = false)
     @NotNull
-    private LocalDateTime orderData;
+    private LocalDateTime orderDate;
 
     @Column(name = "address")
     @NotNull
@@ -49,12 +49,12 @@ public class Order {
         this.orderNum = orderNum;
     }
 
-    public LocalDateTime getOrderData() {
-        return orderData;
+    public LocalDateTime getOrderDate() {
+        return orderDate;
     }
 
-    public void setOrderData(LocalDateTime orderData) {
-        this.orderData = orderData;
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getAddress() {
@@ -79,5 +79,16 @@ public class Order {
 
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderNum=" + orderNum +
+                ", orderDate=" + orderDate +
+                ", address='" + address + '\'' +
+                ", customer=" + customer +
+                ", orderDetails=" + orderDetails +
+                '}';
     }
 }

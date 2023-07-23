@@ -11,6 +11,9 @@ public class OrderUpdateDto {
 
     private Integer result;
 
+    public OrderUpdateDto() {
+    }
+
     public OrderUpdateDto(Long orderNum, Integer type, Integer result) {
         this.orderNum = orderNum;
         this.type = type;

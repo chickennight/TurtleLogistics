@@ -47,13 +47,13 @@ public class MachineController {
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
                 else {
                     HashMap<String, List<?>> map = new HashMap<>();
-                    map.put("status", machineList);
+                    map.put("상태", machineList);
                     List<Log> temp = MS.lastBrokenLogs(brokenList);
                     List<LogDto> errorLogs = new ArrayList<>();
                     for (Log l : temp) errorLogs.add(new LogDto(l));
-                    map.put("logs", errorLogs);
+                    map.put("로그", errorLogs);
                     List<Log> orderError = OS.findOrderError();
-                    map.put("orderErrors", orderError);
+                    map.put("인식 오류 로그", orderError);
                     return new ResponseEntity<>(map, HttpStatus.OK);
                 }
             }
