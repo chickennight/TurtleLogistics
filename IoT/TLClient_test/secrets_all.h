@@ -1,9 +1,6 @@
 #include <pgmspace.h>
 
 #define SECRET
-
-const char WIFI_SSID[] = "AndroidHotspot2463";               //change this
-const char WIFI_PASSWORD[] = "12341234";           //change this
 const char AWS_IOT_ENDPOINT[] = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com";       //change this
 
 /*
