@@ -1,11 +1,11 @@
-// Div_Servo3(ESP8266)
+// Div_Servo2(ESP12F)
 // Pub : Supervisor(/div/res) {orderno, result}
 // Sub : Div_Veri(/div/info) {orderno}
 
 #include <secrets.h>
 // #include <Servo.h>
 
-#define THINGNAME "Div_Servo3"
+#define THINGNAME "Div_Servo2"
 // PUBLISH TOPIC
 #define TOPIC_DIV_RES "/div/res"
 // SUBSCRIBE TOPIC
