@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> newOrder(NewOrderDto newOrderDto) {
+    public ResponseEntity<?> newOrder(@RequestBody NewOrderDto newOrderDto) {
         try {
             OS.addNewOrder(newOrderDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -53,41 +53,45 @@ public class OrderController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> orderUpdate(OrderUpdateDto orderUpdateDto) {
+    public ResponseEntity<?> orderUpdate(@RequestBody OrderUpdateDto orderUpdateDto) {
         try {
             OrderNow orderNow = OS.findByOrderNum(orderUpdateDto.getOrderNum());
-
+            if(OS.findByOrderNum(orderUpdateDto.getOrderNum()) ==null) return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
             if (orderUpdateDto.getType() == 0) {
                 if (orderUpdateDto.getResult() == 1) {
                     orderNow.setStatus(0);
                     Log l = new Log();
-                    l.setErrorMessage(orderUpdateDto.getOrderNum() + " 포장이상");
+                    l.setErrorMessage(orderUpdateDto.getOrderNum() + " 포장 문제발 생");
+                    l.setMachine(MS.findMachine(0));
                     MS.addLog(l);
-                    return new ResponseEntity<>("문제기록 완료", HttpStatus.ACCEPTED);
+                    return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
-                if (orderNow.getStatus() != 1) {
+                if (orderNow.getStatus() == 1) {
                     orderNow.setStatus(3);
                     OS.updateStatus(orderNow);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
                     orderNow.setStatus(3);
-                    return new ResponseEntity<>("과정 누락 확인 필요", HttpStatus.ACCEPTED);
+                    OS.updateStatus(orderNow);
+                    return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
             } else if (orderUpdateDto.getType() == 1) {
                 if (orderUpdateDto.getResult() == 1) {
                     orderNow.setStatus(0);
                     Log l = new Log();
-                    l.setErrorMessage(orderUpdateDto.getOrderNum() + " 분류이상");
+                    l.setErrorMessage(orderUpdateDto.getOrderNum() + " 분류 문제 발생");
+                    l.setMachine(MS.findMachine(0));
                     MS.addLog(l);
-                    return new ResponseEntity<>("문제기록 완료", HttpStatus.ACCEPTED);
+                    return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
-                if (orderNow.getStatus() != 3) {
+                if (orderNow.getStatus() == 3) {
                     orderNow.setStatus(4);
                     OS.updateStatus(orderNow);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
                     orderNow.setStatus(4);
-                    return new ResponseEntity<>("과정 누락 확인 필요", HttpStatus.ACCEPTED);
+                    OS.updateStatus(orderNow);
+                    return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
             } else
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
