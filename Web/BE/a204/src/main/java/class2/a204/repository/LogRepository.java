@@ -9,4 +9,6 @@ import java.util.List;
 public interface LogRepository extends JpaRepository<Log, Integer> {
     List<Log> findAllByMachine_MachineIdOrderByErrorDateDesc(int machineId);
 
+    List<Log> findAllByMachine_MachineId(int machineId);
+
 }
