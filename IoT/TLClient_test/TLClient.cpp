@@ -1,26 +1,48 @@
 #include "Arduino.h"
 #include "TLClient.h"
 
+//String DEVICE_NAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
+//String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };
+/*
+String convert_name_to_value(String name)
+{
+  for(int i =0; i<9; i++){
+    if(DEVICE_NAME_LIST[i] == name){
+       return DEVICE_VALUE_LIST[i];
+    }
+  }
+  return "NULLDEVICE";
+}
+*/
+
 TLClient::TLClient(const char* THINGNAME)
 {
-  this->_THINGNAME = THINGNAME;
-  this->_mqttClient = NULL;
+  //this->_wifiClient = new WiFiClientSecure();
+  //this->_mqttClient = new PubSubClient(*this->_wifiClient);
   this->_wifiClient = NULL;
+  this->_mqttClient = NULL;
+  this->_THINGNAME = THINGNAME;
   this->_lastMillis = 0;
   this->_previousMillis = 0;
-  //this->_interval;
   
-  this->_CA = NULL;
-  this->_CERT = NULL;
-  this->_PRIVATEKEY = NULL;
+  this->_CA = AWS_CERT_CA;
+  this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
+  this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
   this->_now = NULL;
   this->_nowish = 1510592825;
 
+  this->_WIFI_SSID = NULL;
+  this->_WIFI_PASSWORD = NULL;
+  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, AWS_IOT_ENDPOINT);
 }
+
+
 
 void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
   ESP8266WiFiClass WiFi;
   //WiFiClass WiFi;
+  this->_WIFI_SSID = SSID;
+  this->_WIFI_PASSWORD = PASSWORD;
   WiFi.begin(SSID, PASSWORD);
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -33,7 +55,9 @@ void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
 }
 
 void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT){
-
+  
+  this->connect_WiFi(this->_WIFI_SSID, this->_WIFI_PASSWORD);
+  
   Serial.print("Setting time using SNTP");
   int8_t TIME_ZONE = 9;
   configTime(TIME_ZONE * 3600, 0 * 3600, "pool.ntp.org", "time.nist.gov");
@@ -42,6 +66,7 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   {
     delay(500);
     Serial.print(".");
+    Serial.println(this->_now);
     this->_now = time(nullptr);
   }
   Serial.println("done!");
@@ -49,6 +74,7 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   gmtime_r(&this->_now, &timeinfo);
   Serial.print("Current time: ");
   Serial.print(asctime(&timeinfo));
+  
 
   BearSSL::X509List cert(CA);
   BearSSL::X509List client_crt(CERT);
@@ -86,6 +112,7 @@ boolean TLClient::mqttLoop(){
 boolean TLClient::subscribe(const char* topic){
   return this->_mqttClient->subscribe(topic);
 }
+
 
 boolean TLClient::publish(const char* topic, const char* payload){
   return this->_mqttClient->publish(topic, payload);

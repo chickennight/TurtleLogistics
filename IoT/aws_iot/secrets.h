@@ -1,7 +1,7 @@
 #include <pgmspace.h>
 #define SECRET
 #define THINGNAME "Arduino_D1"
-int8_t TIME_ZONE = -5;
+int8_t TIME_ZONE = 9;
 const char WIFI_SSID[] = "seogau";
 const char WIFI_PASSWORD[] = "1234567890";
 const char AWS_IOT_ENDPOINT[] = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com";
