@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -27,6 +28,7 @@ public class AdminController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
+        System.out.println(admin.getAdminId());
         try {
             AS.registerAdmin(admin);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -36,13 +38,17 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String id, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
+
         try {
-            if (AS.login(id, password)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            String id = Info.get("admin_id");
+            String password = Info.get("password");
+            String token = AS.login(id, password);
+            if(token != null){
+                return new ResponseEntity<>(token,HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
+        } catch (Exception e){
             return Handler.errorMessage(e);
         }
     }
