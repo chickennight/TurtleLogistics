@@ -2,7 +2,7 @@
 #define TLClient_h
 
 #include "Arduino.h"
-#include "secrets_all.h"
+#include "secrets.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
@@ -18,10 +18,12 @@ class TLClient
   public:
     //TLClient();
     TLClient(const char* THINGNAME);  
+    /*
     ~TLClient() {
       delete this->_mqttClient;
       delete this->_wifiClient;
     }
+    */
     void connect_WiFi(const char* SSID, const char* PASSWORD);
     void connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT);
 

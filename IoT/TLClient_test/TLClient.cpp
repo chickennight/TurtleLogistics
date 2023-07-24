@@ -25,15 +25,17 @@ TLClient::TLClient(const char* THINGNAME)
   this->_lastMillis = 0;
   this->_previousMillis = 0;
   
-  this->_CA = AWS_CERT_CA;
-  this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
-  this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
+  this->_CA = NULL;
+  this->_CERT = NULL;
+  this->_PRIVATEKEY = NULL;
+  //this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
+  //this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
   this->_now = NULL;
   this->_nowish = 1510592825;
 
   this->_WIFI_SSID = NULL;
   this->_WIFI_PASSWORD = NULL;
-  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, AWS_IOT_ENDPOINT);
+  //this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, AWS_IOT_ENDPOINT);
 }
 
 
