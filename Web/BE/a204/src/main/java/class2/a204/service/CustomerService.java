@@ -1,6 +1,8 @@
 package class2.a204.service;
 
 import class2.a204.entity.Customer;
+import class2.a204.jwt.JwtTokenProvider;
+import class2.a204.jwt.Role;
 import class2.a204.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,11 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
     private final CustomerRepository CR;
+
+    private final JwtTokenProvider JP;
     private final PasswordEncoder encoder;
 
     @Autowired
-    public CustomerService(CustomerRepository cr, PasswordEncoder encoder){
+    public CustomerService(CustomerRepository cr,JwtTokenProvider jp, PasswordEncoder encoder){
         this.CR = cr;
+        this.JP = jp;
         this.encoder = encoder;
     }
 
@@ -24,12 +29,14 @@ public class CustomerService {
     }
 
     //로그인
-    public boolean login(String id, String password){
+    public String login(String id, String password){
         Customer customer = CR.findByCustomerId(id).get();
-        if(customer != null){
-            return encoder.matches(password, customer.getPassword());
+        if(customer != null && encoder.matches(password, customer.getPassword())){
+            String token = JP.createToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
+
+            return token;
         }
-        return false;
+        return null;
     }
 
 }
