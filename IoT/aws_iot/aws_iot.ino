@@ -6,7 +6,8 @@
 #include <ArduinoJson.h>
 #include "secrets.h"
 
-#define AWS_IOT_SUBSCRIBE_TOPIC1 "Order/Sch"
+#define SUB_TOPIC_01 "/sup/add"
+#define PUB_TOPIC_01 "/sch/test"
 
 //for scheduler
 #include <cppQueue.h>
@@ -51,6 +52,7 @@ void push_piston(int piston_num){
 WiFiClientSecure wifiClient;
 PubSubClient client(wifiClient);
 
+
 unsigned long lastMillis = 0;
 unsigned long previousMillis = 0;
 const long interval = 5000;
@@ -82,6 +84,8 @@ BearSSL::X509List client_crt(AWS_CERT_CRT);
 BearSSL::PrivateKey key(AWS_CERT_PRIVATE);
 
 void connectWiFi(){
+  delay(3000);
+  WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) 
   {
@@ -131,12 +135,12 @@ void messageReceived(char *topic, byte *payload, unsigned int length)
   add_order(order_list);
 
   Serial.println();
-
-
+  client.publish(PUB_TOPIC_01, "hello");
 }
  
 void connectAWS()
 {
+  connectWiFi();
   NTPConnect();
   // Set AWS configuration
   wifiClient.setTrustAnchors(&cert);  
@@ -146,12 +150,11 @@ void connectAWS()
   client.setCallback(messageReceived);
  
   Serial.println("Connecting to AWS IOT");
- 
-  while (!client.connected())
+  
+  while (!client.connect(THINGNAME))
   {
     Serial.print(".");
     delay(1000);
-    client.connect(THINGNAME);
   }
  
   if (!client.connected()) {
@@ -159,17 +162,15 @@ void connectAWS()
     return;
   }
   // Subscribe to a topic
-  client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC1);
+  client.subscribe(SUB_TOPIC_01);
   //client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC2);
   //client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC3);
-  
   Serial.println("AWS IoT Connected!");
 }
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  connectWiFi();
   connectAWS();
 
   piston1.attach(PISTON_SERVO1);
@@ -181,7 +182,8 @@ void setup() {
 
 void loop() {
   now = time(nullptr);
- 
+  delay(1000);
+  
   if (!client.connected())
   {
     connectAWS();
@@ -192,9 +194,11 @@ void loop() {
     if (millis() - lastMillis > 5000)
     {
       lastMillis = millis();
+      //client.publish(PUB_TOPIC_01, "hello");
+      
     }
   }
-
+  
   while(!order_q.isEmpty()){
     order_list now_order;
     order_q.pop(&now_order);

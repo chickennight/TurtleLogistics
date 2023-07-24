@@ -1,18 +1,26 @@
 #include "TLClient.h"
-
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
-TLClient order_scheduler("Arduino_D1");
 
-const char* WIFI_SSID = "seogau";
-const char* WIFI_PASSWORD = "1234567890";
-//const char AWS_IOT_ENDPOINT[] = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com";
+TLClient order_scheduler("Arduino_D1");
+//TLClient order_scheduler(wifiClient, mqttClient, "Arduino_D1", AWS_CERT_CRT, AWS_CERT_PRIVATE);
 
 unsigned long lastMillis = 0;
 unsigned long previousMillis = 0;
 
 #define SUB_TOPIC_01 "/sup/add"
 #define PUB_TOPIC_01 "/sch/test"
+
+void messageServing(int orderno,int flag){
+  StaticJsonDocument<200> temp;
+  temp["order_num"] = orderno;
+  temp["result"] = flag;
+  char buf[200];
+  serializeJson(temp,buf,sizeof(buf));
+  Serial.println(buf); 
+  order_scheduler.publish(PUB_TOPIC_01,buf);
+  //mqttClient.publish("/sch/test",buf);
+}
 
 void messageReceived(char *topic, byte *payload, unsigned int length){
   StaticJsonDocument<200> doc;
@@ -34,16 +42,7 @@ void messageReceived(char *topic, byte *payload, unsigned int length){
     Serial.println(error.f_str());
     return;
   }
-}
-
-void messageServing(int orderno,int flag){
-  StaticJsonDocument<200> temp;
-  temp["order_num"] = orderno;
-  temp["result"] = flag;
-  char buf[200];
-  serializeJson(temp,buf,sizeof(buf));
-  Serial.println(buf); 
-  order_scheduler.publish("/sch/test",buf);
+  messageServing(1, 1);
 }
 
 void setup() {
@@ -52,16 +51,16 @@ void setup() {
   order_scheduler.setMqttClient(mqttClient);
   order_scheduler.setWifiClient(wifiClient);
   order_scheduler.setCallback(messageReceived);
+  order_scheduler.subscribe(SUB_TOPIC_01);
+  order_scheduler.publish(PUB_TOPIC_01);
 
   order_scheduler.connect_WiFi(WIFI_SSID, WIFI_PASSWORD);
   order_scheduler.connect_AWS(AWS_CERT_CA, AWS_CERT_CRT, AWS_CERT_PRIVATE, AWS_IOT_ENDPOINT);
-  order_scheduler.subscribe("/sup/add");
-  messageServing(1, 1);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  //mqttClient.loop();
   order_scheduler.mqttLoop();
-
-
+  delay(100);
 }
