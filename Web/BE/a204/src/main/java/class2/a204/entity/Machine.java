@@ -1,6 +1,7 @@
 package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -10,12 +11,14 @@ import java.util.List;
 @Table(name = "machine")
 public class Machine {
 
+    @JsonProperty("machine_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "machine_id")
     @NotNull
     private Integer machineId;
 
+    @JsonProperty("machine_detail")
     @Column(name = "machine_detail")
     @NotNull
     private String machineDetail;
