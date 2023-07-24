@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Api(tags = "Machine")
@@ -46,14 +47,16 @@ public class MachineController {
                 if (brokenList.size() == 0)
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
                 else {
-                    HashMap<String, List<?>> map = new HashMap<>();
+                    Map<String, List<?>> map = new HashMap<>();
                     map.put("상태", machineList);
                     List<Log> temp = MS.lastBrokenLogs(brokenList);
                     List<LogDto> errorLogs = new ArrayList<>();
                     for (Log l : temp) errorLogs.add(new LogDto(l));
                     map.put("로그", errorLogs);
                     List<Log> orderError = OS.findOrderError();
-                    map.put("인식 오류 로그", orderError);
+                    List<LogDto> processErrorLogs = new ArrayList<>();
+                    for (Log l : orderError) processErrorLogs.add(new LogDto(l));
+                    map.put("인식 오류 로그", processErrorLogs);
                     return new ResponseEntity<>(map, HttpStatus.OK);
                 }
             }
