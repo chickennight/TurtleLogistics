@@ -2,10 +2,10 @@
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
 
-const char* WIFI_SSID = "seogau";
-const char* WIFI_PASSWORD = "1234567890";
+//const char* WIFI_SSID = "seogau";
+//const char* WIFI_PASSWORD = "1234567890";
 
-TLClient order_scheduler("Ord_Sch");
+TLClient order_scheduler("Arduino_D1");
 //TLClient order_scheduler(wifiClient, mqttClient, "Arduino_D1", AWS_CERT_CRT, AWS_CERT_PRIVATE);
 
 unsigned long lastMillis = 0;
@@ -22,7 +22,7 @@ void messageServing(int orderno,int flag){
   serializeJson(temp,buf,sizeof(buf));
   Serial.println(buf); 
   order_scheduler.publish(PUB_TOPIC_01,buf);
-  //mqttClient.publish("/sch/test",buf);
+  mqttClient.publish("/sch/test",buf);
 }
 
 void messageReceived(char *topic, byte *payload, unsigned int length){
@@ -56,7 +56,7 @@ void setup() {
   order_scheduler.setCallback(messageReceived);
   //order_scheduler.connect_WiFi(WIFI_SSID, WIFI_PASSWORD);
   //order_scheduler.connect_AWS(AWS_CERT_CA, AWS_CERT_CRT, AWS_CERT_PRIVATE, AWS_IOT_ENDPOINT);
-  order_scheduler.connect_AWS(AWS_IOT_ENDPOINT);
+  order_scheduler.connect_AWS();
   order_scheduler.subscribe(SUB_TOPIC_01);
   order_scheduler.publish(PUB_TOPIC_01, "hello");
 }

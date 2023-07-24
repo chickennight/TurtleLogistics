@@ -2,7 +2,7 @@
 #define TLClient_h
 
 #include "Arduino.h"
-#include "secrets_all.h"
+#include "secrets.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
@@ -26,7 +26,7 @@ class TLClient
     
     void connect_WiFi(const char* SSID, const char* PASSWORD);
     void connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT);
-    void connect_AWS(const char* ENDPOINT);
+    void connect_AWS();
 
     bool mqttConnected();
     boolean mqttLoop();

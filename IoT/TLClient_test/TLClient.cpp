@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "TLClient.h"
-
+/*
 String DEVICE_NAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
 String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };
 
@@ -13,7 +13,7 @@ String convert_name_to_value(String name)
   }
   return "NULLDEVICE";
 }
-
+*/
 
 TLClient::TLClient(const char* THINGNAME)
 {
@@ -25,20 +25,21 @@ TLClient::TLClient(const char* THINGNAME)
   this->_lastMillis = 0;
   this->_previousMillis = 0;
   
-  this->_CA = NULL;
+  this->_CA = AWS_CERT_CA;
   //this->_CERT = NULL;
   //this->_PRIVATEKEY = NULL;
-  this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
-  this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
+  //this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
+  //this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
+  this->_CERT = AWS_CERT_CRT;
+  this->_PRIVATEKEY = AWS_CERT_PRIVATE;
   this->_now = NULL;
   this->_nowish = 1510592825;
 
   this->_WIFI_SSID = "seogau";
   this->_WIFI_PASSWORD = "1234567890";
-  
-  //this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, AWS_IOT_ENDPOINT);
-}
+  this->_AWS_IOT_ENDPOINT = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com";
 
+}
 
 
 void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
@@ -56,8 +57,8 @@ void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
-void TLClient::connect_AWS(const char* ENDPOINT){
-  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, ENDPOINT);
+void TLClient::connect_AWS(){
+  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, this->_AWS_IOT_ENDPOINT);
 }
 void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT){
   
@@ -92,7 +93,7 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
 
   Serial.println("Connecting to AWS IoT");
 
-  this->_mqttClient->begin(ENDPOINT, this->_wifiClient);
+  //this->_mqttClient->begin(ENDPOINT, this->_wifiClient);
 
   this->_mqttClient->connect(_THINGNAME);
   while(!(this->_mqttClient->connected()))
