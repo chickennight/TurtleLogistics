@@ -8,13 +8,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "admin")
 public class Admin {
-    @JsonProperty("admin_id")
+    @JsonProperty("admin_num")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_num")
     @NotNull
     private int adminNum;
 
+    @JsonProperty("admin_id")
     @Column(name = "admin_id", unique = true)
     @NotNull
     private String adminId;

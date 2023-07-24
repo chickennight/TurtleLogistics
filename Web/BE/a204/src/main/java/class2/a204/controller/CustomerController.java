@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -36,10 +38,13 @@ public class CustomerController {
     
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String id, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
         try {
-            if (CS.login(id, password)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            String id = Info.get("customer_id");
+            String password = Info.get("password");
+            String token = CS.login(id,password);
+            if (token != null) {
+                return new ResponseEntity<>(token,HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
