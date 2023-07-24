@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,13 +40,12 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
-
         try {
             String id = Info.get("admin_id");
             String password = Info.get("password");
-            String token = AS.login(id, password);
-            if(token != null){
-                return new ResponseEntity<>(token,HttpStatus.OK);
+            Map<String, String> tokens = AS.login(id, password);
+            if(tokens != null){
+                return new ResponseEntity<>(tokens, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e){
@@ -60,6 +60,19 @@ public class AdminController {
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> tokenMap) {
+        try {
+            String refreshToken = tokenMap.get("refreshToken");
+            String newAccessToken = AS.refreshAccessToken(refreshToken);
+            Map<String, String> response = new HashMap<>();
+            response.put("accessToken", newAccessToken);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

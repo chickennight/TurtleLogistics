@@ -6,13 +6,15 @@ import class2.a204.repository.AdminRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,9 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Transactional
+@AutoConfigureMockMvc
 public class AdminServiceTest {
 
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
 
     private final AdminService AS;
     private final AdminRepository AR;
@@ -32,7 +35,8 @@ public class AdminServiceTest {
     private final JwtTokenProvider JP;
 
     @Autowired
-    AdminServiceTest(AdminService as, AdminRepository ar, OrderService os, JwtTokenProvider jp) {
+    AdminServiceTest(MockMvc mockMvc, AdminService as, AdminRepository ar, OrderService os, JwtTokenProvider jp) {
+        this.mockMvc = mockMvc;
         this.AS = as;
         this.AR = ar;
         this.OS = os;
@@ -84,7 +88,7 @@ public class AdminServiceTest {
         AS.registerAdmin(admin);
 
         // when
-        String token = AS.login(admin.getAdminId(), "1234");
+        Map<String, String> token = AS.login(admin.getAdminId(), "1234");
 
         // then
         assertThat(token).isNotNull();
@@ -101,24 +105,40 @@ public class AdminServiceTest {
         AS.registerAdmin(admin);
 
         //when
-        String token = AS.login(admin.getAdminId(), "1234");
+        Map<String, String> tokens = AS.login(admin.getAdminId(), "1234");
+        String accessToken = tokens.get("accessToken");
 
         //then
-        boolean isVaildToken = JP.validateToken(token);
+        boolean isVaildToken = JP.validateToken(accessToken);
         assertThat(isVaildToken).isTrue();
 
         //토큰에서 사용자 가져오기
-        String adminId = JP.getUserID(token);
-        System.out.println("토큰으로 사용자 아이디 가져오기");
-        System.out.println(adminId);
+        String adminId = JP.getUserID(accessToken);
         assertThat(admin.getAdminId()).isEqualTo(adminId);
 
-
         //토큰에서 권한 정보 가져오기
-        String Role = JP.getRoleFromToken(token);
-        System.out.println(Role);
+        String Role = JP.getRoleFromToken(accessToken);
         assertThat(Role).isEqualTo("ROLE_ADMIN");
+    }
 
+    //주문정보 불러오기
+    @Test
+    public void getOrdersTest() throws Exception{
+        //given
+        Admin admin = new Admin();
+        admin.setAdminId("test");
+        admin.setPassword("1234");
+        admin.setPhoneNumber("01011111111");
+        AS.registerAdmin(admin);
+
+        //when
+        Map<String, String> tokens = AS.login(admin.getAdminId(), "1234");
+        String accessToken = tokens.get("accessToken");
+
+        //then
+        mockMvc.perform(get("/admin/orders")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andExpect(status().isOk());
     }
 }
 
