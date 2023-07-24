@@ -2,17 +2,18 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import MainView from "../views/MainView.vue";
 import AdminView from "../views/AdminView.vue";
-import AdminMainView from "../components/Admin/AdminMainView.vue";
+import CustomerView from "../views/CustomerView.vue";
+// import AdminMainView from "../components/Admin/AdminMainView.vue";
 // import MainBluePrint from "../components/BluePrint/MainBluePrint.vue";
 // import MainGraph from "../components/graph/MainGraph.vue";
 // import LoginView from "../views/LoginView.vue";
-// import AdminLogin from "../components/Login/AdminLogin.vue";
-// import CustomerLogin from "../components/Login/CustomerLogin.vue";
+import AdminLogin from "../components/Login/AdminLogin.vue";
+import CustomerLogin from "../components/Login/CustomerLogin.vue";
 // import MainLogistics from "../components/Logistics/MainLogistics.vue";
 // import MainMachine from "../components/Machine/MainMachine.vue";
 // import OrderByDate from "../components/Order/OrderByDate.vue";
 // import OrderByRegion from "../components/Order/OrderByRegion.vue";
-// import AdminRegist from "../components/Regist/AdminRegist.vue";
+import AdminRegist from "../components/Regist/AdminRegist.vue";
 // import CustomerRegist from "../components/Regist/CustomerRegist.vue";
 
 // 라우터 설계
@@ -26,11 +27,26 @@ const routes = [
         path: '/admin',
         name: 'AdminView',
         component: AdminView,
-        children: {
-            path: '/',
-            name: 'AdminMainView',
-            component: AdminMainView,
-        }
+    },
+    {
+        path: '/adminLogin',
+        name: 'AdminLogin',
+        component: AdminLogin,
+    },
+    {
+        path: '/customerLogin',
+        name: 'CustomerLogin',
+        component: CustomerLogin,
+    },
+    {
+        path: '/customer',
+        name: 'CustomerView',
+        component: CustomerView,
+    },
+    {
+        path: '/adminRegist',
+        name: 'AdminRegist',
+        component: AdminRegist,
     }
 ]
 

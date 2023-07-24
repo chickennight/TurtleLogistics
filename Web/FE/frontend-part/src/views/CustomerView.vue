@@ -1,5 +1,5 @@
 <template>
-  
+  <div>주문할거임</div>
 </template>
 
 <script>
