@@ -28,9 +28,7 @@ public class AdminService {
 //    }
 
     public Admin registerAdmin(Admin admin) {
-        admin.setAdminId(admin.getAdminId());
         admin.setPassword(encoder.encode(admin.getPassword()));
-        admin.setPhoneNumber(admin.getPhoneNumber());
         return AR.save(admin);
     }
 
