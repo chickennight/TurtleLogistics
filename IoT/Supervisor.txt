@@ -7,3 +7,5 @@ Supervisor
 : 계속 Sub
 	-> 결과(/+/res) 수신 -> 바로 Post(완)
 	-> 제어(/web/power)수신 -> Pub (완)
+
+POST/GET 테스트 필요
