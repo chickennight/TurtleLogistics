@@ -2,7 +2,7 @@
 #define TLClient_h
 
 #include "Arduino.h"
-#include "secrets.h"
+#include "secrets_all.h"
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
@@ -33,7 +33,7 @@ class TLClient
     boolean subscribe(const char* topic);
     boolean publish(const char* topic, const char* payload);
 
-    //String convert_name_to_value(String name);
+    String convert_name_to_value(const char* name);
     
     //TLClient& setMCU(const char*);
     TLClient& setMqttClient(PubSubClient& mqttClient);

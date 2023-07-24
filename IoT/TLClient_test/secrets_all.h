@@ -9,6 +9,7 @@ const char AWS_IOT_ENDPOINT[] = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws
 //String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };
 
 
+const char CERT_ARR[10][1500] = {};
 /*
 AWS_CERT_CA[]
 SUP_CERT[]		    SUP_PRIKEY[]
