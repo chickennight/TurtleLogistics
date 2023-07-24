@@ -73,7 +73,7 @@ void connectAWS()
 void GETorder(){
   if (WiFi.status() == WL_CONNECTED) 
   {
-    http.begin(GET_URL);
+    http.begin("http://localhost:8080/order/start");
     int httpCode = http.GET();
     Serial.print("HttpCODE:");
     Serial.print(httpCode);
