@@ -1,5 +1,6 @@
 package class2.a204.entity;
 
+import class2.a204.jwt.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
@@ -37,6 +38,7 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
+
     //기본생성자
     public Customer() {
     }
