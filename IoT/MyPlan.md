@@ -1,10 +1,6 @@
 {orderno, producA:n, productB:n, producC:n , address}
 
-SUP 1 - 완
-SCH 1 - 
-DIV 3 - 세모
-Veri 2 - 
-Motor2 -
+Div_Servo3 : 함수 헤더파일에 모두
 
 에픽 : MQTT 통신
 	중복 함수, 라이브러리 통합 헤더파일 만들기
