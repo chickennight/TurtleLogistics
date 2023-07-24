@@ -12,10 +12,12 @@ import class2.a204.service.ProductService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -40,7 +42,7 @@ public class OrderController {
     }
 
     @GetMapping("/analysis/day")
-    public ResponseEntity<?> dataAnalysisDay(@RequestParam("start_day") Date startDay, @RequestParam("end_day") Date endDay) {
+    public ResponseEntity<?> dataAnalysisDay(@RequestParam("start_day")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDay, @RequestParam("end_day")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDay) {
         try {
             return new ResponseEntity<>(OS.dataDay(startDay, endDay), HttpStatus.OK);
         } catch (Exception e) {

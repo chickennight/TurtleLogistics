@@ -1,10 +1,10 @@
 package class2.a204.dto;
 
 public class AnalysisDayDto {
-    private Integer day;
-    private Integer count;
+    private String day;
+    private Long count;
 
-    public AnalysisDayDto(Integer day, Integer count) {
+    public AnalysisDayDto(String day, Long count) {
         this.day = day;
         this.count = count;
     }
@@ -12,19 +12,19 @@ public class AnalysisDayDto {
     public AnalysisDayDto() {
     }
 
-    public Integer getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Integer day) {
+    public void setDay(String day) {
         this.day = day;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 }
