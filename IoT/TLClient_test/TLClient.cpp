@@ -1,9 +1,9 @@
 #include "Arduino.h"
 #include "TLClient.h"
 
-//String DEVICE_NAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
-//String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };
-/*
+String DEVICE_NAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
+String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };
+
 String convert_name_to_value(String name)
 {
   for(int i =0; i<9; i++){
@@ -13,28 +13,29 @@ String convert_name_to_value(String name)
   }
   return "NULLDEVICE";
 }
-*/
+
 
 TLClient::TLClient(const char* THINGNAME)
 {
-  //this->_wifiClient = new WiFiClientSecure();
-  //this->_mqttClient = new PubSubClient(*this->_wifiClient);
-  this->_wifiClient = NULL;
-  this->_mqttClient = NULL;
+  this->_wifiClient = new WiFiClientSecure();
+  this->_mqttClient = new PubSubClient(*this->_wifiClient);
+  //this->_wifiClient = NULL;
+  //this->_mqttClient = NULL;
   this->_THINGNAME = THINGNAME;
   this->_lastMillis = 0;
   this->_previousMillis = 0;
   
   this->_CA = NULL;
-  this->_CERT = NULL;
-  this->_PRIVATEKEY = NULL;
-  //this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
-  //this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
+  //this->_CERT = NULL;
+  //this->_PRIVATEKEY = NULL;
+  this->_CERT = (convert_name_to_value(THINGNAME)+"_CERT").c_str();
+  this->_PRIVATEKEY = (convert_name_to_value(THINGNAME)+"_PRIKEY").c_str();
   this->_now = NULL;
   this->_nowish = 1510592825;
 
-  this->_WIFI_SSID = NULL;
-  this->_WIFI_PASSWORD = NULL;
+  this->_WIFI_SSID = "seogau";
+  this->_WIFI_PASSWORD = "1234567890";
+  
   //this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, AWS_IOT_ENDPOINT);
 }
 
@@ -55,7 +56,9 @@ void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
-
+void TLClient::connect_AWS(const char* ENDPOINT){
+  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, ENDPOINT);
+}
 void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT){
   
   this->connect_WiFi(this->_WIFI_SSID, this->_WIFI_PASSWORD);
@@ -82,12 +85,15 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   BearSSL::X509List client_crt(CERT);
   BearSSL::PrivateKey key(PRIVATEKEY);
 
-  delay(1000);
+  delay(100);
   this->_wifiClient->setTrustAnchors(&cert);
   this->_wifiClient->setClientRSACert(&client_crt, &key);
   this->_mqttClient->setServer(ENDPOINT, 8883);
 
   Serial.println("Connecting to AWS IoT");
+
+  this->_mqttClient->begin(ENDPOINT, this->_wifiClient);
+
   this->_mqttClient->connect(_THINGNAME);
   while(!(this->_mqttClient->connected()))
   {
