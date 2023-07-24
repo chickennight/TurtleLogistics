@@ -75,28 +75,33 @@ void GETorder(){
   {
     http.begin(GET_URL);
     int httpCode = http.GET();
-    Serial.print("HttpCODE:"
+    Serial.print("HttpCODE:");
     Serial.print(httpCode);
     Serial.print(" From:");
     Serial.print(GET_URL);
     Serial.println();
 
-    if (httpCode > 0) 
+    if (httpCode == 200) 
     {
       String response = http.getString();
 
       DynamicJsonDocument jsonDoc(1024);
       DeserializationError error = deserializeJson(jsonDoc, response);
 
-      if (error) {
+      if (error) 
+      {
               Serial.print("Error parsing JSON: ");
               Serial.println(error.c_str());
       } 
-      else {
-        if (jsonDoc.is<JsonArray>()){
+      else 
+      {
+        if (jsonDoc.is<JsonArray>())
+        {
             JsonArray ordersArray = jsonDoc.as<JsonArray>();
-            if(!ordersArray.isNull() && ordersArray.size() > 0){
-                for(JsonObject order:ordersArray){
+            if(!ordersArray.isNull() && ordersArray.size() > 0)
+              {
+                for(JsonObject order:ordersArray)
+                {
                   StaticJsonDocument<200> Data;
                   Data["orderno"] = order["order_num"];
                   Data["ProductA"] = order["productA"];
@@ -117,7 +122,8 @@ void GETorder(){
                   serializeJson(Data2,buf2);
                   mqttClient.publish(TOPIC_DIV_VERI,buf2);
 
-                  if(order_motor==-1){
+                  if(order_motor==-1)
+                  {
                     order_motor=1;
                     StaticJsonDocument<10> Motor;
                     Motor["type"]="1";
@@ -127,14 +133,16 @@ void GETorder(){
                   } 
                 }
               }
-            }
         }
       }
+    }
     http.end(); 
-  }
-  else{
-    Serial.println("Wifi is not connected!");
-  }
+   }
+   else
+   {
+      Serial.println("Wifi is not connected!");
+   }
+
 }
 
 void POSTres(const char* jsonData){
