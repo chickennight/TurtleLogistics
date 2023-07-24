@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`orders` (
   `order_num` INT UNSIGNED NOT NULL,
   `order_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_num` INT NOT NULL,
-  `address` VARCHAR(100) NOT NULL,
+  `detail_address` VARCHAR(100),
+  `address` INT NOT NULL,
   PRIMARY KEY (`order_num`),
   INDEX `customer_key_idx` (`customer_num` ASC),
   CONSTRAINT `customer_key`
@@ -127,4 +128,41 @@ CREATE TABLE IF NOT EXISTS `mydb`.`ordernow` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+insert into customer values (1,"ssafy","ssafy","왜왜왜","01012345678");
 
+insert into admin values(1,"admin","admin","01071328770");
+
+insert into orders values
+(2307000001,current_timestamp(),1,"A204",1)
+,(2307000002,current_timestamp(),1,"801",2)
+,(2307000003,current_timestamp(),1,"802",3);
+
+insert into ordernow values
+(1,2307000001,1),
+(2,2307000002,2),
+(3,2307000003,1);
+
+insert into product values
+(1,"휴지",1000,"4겹 휴지",10000),
+(2,"소고기",200,"1등급 한우",1000000),
+(3,"USB",333,"256GB USB",80000);
+
+insert into orderdetail values
+(1,3,1,2307000001),
+(2,1,2,2307000001),
+(3,1,3,2307000001),
+(4,1,1,2307000002),
+(5,2,2,2307000002),
+(6,10,1,2307000003),
+(7,5,3,2307000003);
+
+insert into machine values
+(0,"분류용",false),
+(1001,"피스톤1",true),
+(1002,"피스톤2",true),
+(1003,"피스톤3",false);
+
+insert into log values
+(1,current_timestamp(),"test고장1",1001),
+(2,current_timestamp(),"test고장22",1002),
+(3,current_timestamp(),"test고장333",1002);
