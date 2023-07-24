@@ -1,9 +1,52 @@
 <template>
   <div id="MainContainer">
-    <div id="MainLogo">메 인 로 그</div>
+    <div id="MainLogo">
+      <img class="MainTurtle" src="./MainTurtle.png">
+      TL <br>
+      TURTLE LOGISTICS
+    </div>
+    &nbsp;
     <div id="CardDiv">
-      <div id="CustomerCard">주문 페이지로 갑시다</div>
-      <div id="AdminCart">관리자 페이지</div>
+        <v-card
+          class="mx-auto"
+          max-width="344"
+          variant="outlined"
+        >
+        <v-card-item>
+          <div>
+            <div class="mb-1">
+              주문 페이지
+            </div>
+            <div>Greyhound divisely hello coldly fonwderfully</div>
+          </div>
+        </v-card-item>
+        <v-card-actions>
+          <v-btn variant="outlined" href="/customerLogin">
+            Button
+          </v-btn>
+        </v-card-actions>
+        </v-card>
+        &nbsp;
+          <v-card
+          class="mx-auto"
+          max-width="344"
+          variant="outlined"
+        >
+        <v-card-item>
+          <div>
+            <div class="mb-1">
+              관리자 페이지
+            </div>
+            <div>Greyhound divisely hello coldly fonwderfully</div>
+          </div>
+        </v-card-item>
+
+        <v-card-actions>
+          <v-btn variant="outlined" href="/adminLogin">
+            Button
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </div>
   </div>
 </template>
@@ -17,5 +60,37 @@ export default {
 </script>
 
 <style>
+#MainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+  border: 1px solid black;
+  color: white;
+}
+#MainLogo{
+  width: 400px;
+  height: 400px;
+  text-align: center;
+  font-size: 35px;
+  font-family: 'GmarketSansTTFBold';
+  background: linear-gradient(to Right Bottom, #E64878 30%, #F08556 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.MainTurtle{
+  height: 300px;
+  width: 300px;
+  object-fit: contain;
+  margin: auto;
+  display: block;
+}
+#CardDiv{
+  display: flex;
+  flex-direction: row;
+
+}
 
 </style>

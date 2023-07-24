@@ -2,10 +2,20 @@
   <div id="sideBar">
     <div id="SideLogo">
       <div id="LogoImage">
-        <img src="./SubTurtle.png" alt="" width="150px">
+        <img class="SubTurtle" src="./SubTurtle.png">
       </div>
-      <!-- <div id="MainTL">TL</div>
-      <div id="SubTL">Turtle Logistics</div> -->
+      <div id="MainTL">
+        TL <br>
+        Turtle Logistics
+      </div>
+    </div>
+    <div class="SideMenuBar">
+      <v-btn class="SideMenu" variant="outlined">주문내역</v-btn>
+      <v-btn class="SideMenu" variant="outlined">주문현황</v-btn>
+      <v-btn class="SideMenu" variant="outlined">공정현황</v-btn>
+      <v-btn class="SideMenu" variant="outlined">물류현황</v-btn>
+      <v-btn class="SideMenu" variant="outlined">기기제어</v-btn>
+      <v-btn class="SideMenu" variant="outlined">6</v-btn>
     </div>
   </div>
 </template>
@@ -18,57 +28,35 @@ export default {
 
 <style>
 #sideBar{
-  position: absolute;
-  width: 25%;
-  height: 100vmax;
-  left: 1px;
-  top: 0px;
-  border: 9px solid #000000;
+  width: 300px;
+  box-shadow: 5px 5px 3px 3px black;
 }
 #SideLogo{
-  width: 100%;
-  height: 100%;
-  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-#LogoImage{
-  position: absolute;
-  left: 1.88%;
-  top: 4.63%;
-  width : 100%;
-  height: 100%;
+.SubTurtle{
+  height: 150px;
+  width: 150px;
+  object-fit: contain;
+  margin: auto;
+  display: block;
 }
-/* #MainTL{
-  position: absolute;
-width: 87px;
-height: 76px;
-left: 173px;
-top: 30px;
-
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 65px;
-line-height: 79px;
-
-color: #665D5D;
+#MainTL{
+  margin-left: 45px;
+  background: linear-gradient(to Left Bottom, #E64878 30%, #F08556 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-#SubTL{
-  position: absolute;
-width: 312px;
-height: 54px;
-left: 173px;
-top: 103px;
-
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 35px;
-line-height: 42px;
-
-background: linear-gradient(180deg, #E64878 0%, #F08556 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-text-fill-color: transparent;
-} */
+.SideMenuBar{
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+.SideMenu{
+  margin: 5px;
+  height: 50px;
+}
 </style>
