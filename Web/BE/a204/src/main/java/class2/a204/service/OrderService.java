@@ -1,15 +1,14 @@
 package class2.a204.service;
 
 import class2.a204.dto.NewOrderDto;
+import class2.a204.dto.AnalysisDayDto;
+import class2.a204.dto.AnalysisRegionDto;
 import class2.a204.entity.*;
 import class2.a204.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class OrderService {
@@ -28,10 +27,6 @@ public class OrderService {
         ODR = odr;
     }
 
-    public String data() {
-        return "결과물";
-    }
-
     public OrderNow findByOrderNum(Long orderNum) {
         return ONR.findByOrderNum(orderNum);
     }
@@ -46,6 +41,7 @@ public class OrderService {
         System.out.println(newOrderDto);
         Order input = new Order();
         input.setOrderNum((long) today * 1000000 + todayOrders + 1);
+        input.setDetailAddress(newOrderDto.getDetailAddress());
         input.setAddress(newOrderDto.getAddress());
         Optional<Customer> customer = CR.findById(newOrderDto.getCustomerNum());
         input.setCustomer(customer.orElseGet(Customer::new));
@@ -77,5 +73,30 @@ public class OrderService {
 
     public List<OrderNow> findAllOrders() {
         return ONR.findAll();
+    }
+
+    public List<OrderNow> findPackageOrders() {
+        return ONR.findAllByStatus(1);
+    }
+
+    public List<OrderDetail> findOrderDetailsBy(Long orderNum) {
+        return ODR.findAllByOrderNum(orderNum);
+    }
+
+    public void set2OrderNow(Long orderNum) {
+        OrderNow temp = ONR.findByOrderNum(orderNum);
+        temp.setStatus(2);
+        ONR.save(temp);
+    }
+
+    public List<?> dataRegion(Integer year, Integer month) {
+        if (month == 0)
+            return OR.findRegionCountByYear(year);
+        else
+            return OR.findRegionCountByYearMonth(year, month);
+    }
+
+    public List<?> dataDay(Date startDay, Date endDay) {
+        return OR.findDayCount(startDay, endDay);
     }
 }
