@@ -1,5 +1,6 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -8,6 +9,8 @@ import java.util.List;
 @Entity
 @Table(name = "product")
 public class Product {
+
+    @JsonProperty("product_num")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_num", nullable = false)

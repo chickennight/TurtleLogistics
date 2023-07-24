@@ -1,5 +1,6 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "admin")
 public class Admin {
+    @JsonProperty("admin_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_num")
@@ -21,6 +23,7 @@ public class Admin {
     @NotNull
     private String password;
 
+    @JsonProperty("phone_number")
     @Column(name = "phone_number")
     @NotNull
     private String phoneNumber;
