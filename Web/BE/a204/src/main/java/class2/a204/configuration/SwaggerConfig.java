@@ -19,7 +19,7 @@ public class SwaggerConfig {
         final ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("Turtle Logistics")
                 .description("<h3>RestApi 문서 제공.</h3>")
-                .contact(new Contact("gitLab", "https://lab.ssafy.com/s09-webmobile3-sub2/S09P12A204", "ssafy0946119@gmail.com")).license("MIT License")
+                .contact(new Contact("Admin", "https://lab.ssafy.com/s09-webmobile3-sub2/S09P12A204", "ssafy0946119@gmail.com")).license("MIT License")
                 .version("V1.0.0").build();
 
         return new Docket(DocumentationType.SWAGGER_2)

@@ -7,7 +7,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "ordernow")
 public class OrderNow {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @NotNull
     private Integer id;
@@ -15,11 +17,11 @@ public class OrderNow {
     @OneToOne
     @JoinColumn(name = "order_num")
     @NotNull
-    private Order orderNum;
+    private Order order;
 
     @Column(name = "status")
     @NotNull
-    private byte status;
+    private Integer status;
 
 
     //기본생성자
@@ -37,19 +39,19 @@ public class OrderNow {
         this.id = id;
     }
 
-    public Order getOrderNum() {
-        return orderNum;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderNum(Order orderNum) {
-        this.orderNum = orderNum;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

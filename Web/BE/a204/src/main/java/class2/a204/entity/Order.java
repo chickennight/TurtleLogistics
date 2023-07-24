@@ -1,30 +1,32 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import jdk.jfr.Unsigned;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+
+    @JsonProperty("order_num")
     @Id
     @Column(name = "order_num")
     @NotNull
-    @Unsigned
-    private Integer orderNum;
+    private Long orderNum;
 
+    @JsonProperty("order_date")
     @Column(name = "order_date", insertable = false)
     @NotNull
-    private LocalDateTime orderData;
+    private LocalDateTime orderDate;
 
     @Column(name = "address")
     @NotNull
     private String address;
 
+    @JsonProperty("customer_num")
     @ManyToOne
     @JoinColumn(name = "customer_num")
     @NotNull
@@ -39,20 +41,20 @@ public class Order {
 
     //getters and setters
 
-    public Integer getOrderNum() {
+    public Long getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Integer orderNum) {
+    public void setOrderNum(Long orderNum) {
         this.orderNum = orderNum;
     }
 
-    public LocalDateTime getOrderData() {
-        return orderData;
+    public LocalDateTime getOrderDate() {
+        return orderDate;
     }
 
-    public void setOrderData(LocalDateTime orderData) {
-        this.orderData = orderData;
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getAddress() {
@@ -77,5 +79,16 @@ public class Order {
 
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderNum=" + orderNum +
+                ", orderDate=" + orderDate +
+                ", address='" + address + '\'' +
+                ", customer=" + customer +
+                ", orderDetails=" + orderDetails +
+                '}';
     }
 }
