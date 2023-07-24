@@ -1,10 +1,10 @@
 package class2.a204.dto;
 
 public class AnalysisRegionDto {
-    private String region;
+    private Integer region;
     private Long count;
 
-    public AnalysisRegionDto(String region, Long count) {
+    public AnalysisRegionDto(Integer region, Long count) {
         this.region = region;
         this.count = count;
     }
@@ -12,11 +12,11 @@ public class AnalysisRegionDto {
     public AnalysisRegionDto() {
     }
 
-    public String getRegion() {
+    public Integer getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(Integer region) {
         this.region = region;
     }
 

@@ -8,6 +8,7 @@ import class2.a204.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -89,14 +90,14 @@ public class OrderService {
         ONR.save(temp);
     }
 
-    public List<?> dataRegion(Integer year, Integer month) {
+    public List<AnalysisRegionDto> dataRegion(Integer year, Integer month) {
         if (month == 0)
             return OR.findRegionCountByYear(year);
         else
             return OR.findRegionCountByYearMonth(year, month);
     }
 
-    public List<?> dataDay(Date startDay, Date endDay) {
+    public List<AnalysisDayDto> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
         return OR.findDayCount(startDay, endDay);
     }
 }
