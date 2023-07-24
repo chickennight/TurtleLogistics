@@ -22,9 +22,11 @@ public class Order {
     @NotNull
     private LocalDateTime orderDate;
 
-    @Column(name = "address")
-    @NotNull
-    private String address;
+    @JsonProperty("detail_address")
+    @Column(name = "detail_address")
+    private String detailAddress;
+
+    private Integer address;
 
     @JsonProperty("customer_num")
     @ManyToOne
@@ -57,11 +59,19 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public String getAddress() {
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public Integer getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Integer address) {
         this.address = address;
     }
 
@@ -81,14 +91,5 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderNum=" + orderNum +
-                ", orderDate=" + orderDate +
-                ", address='" + address + '\'' +
-                ", customer=" + customer +
-                ", orderDetails=" + orderDetails +
-                '}';
-    }
+
 }
