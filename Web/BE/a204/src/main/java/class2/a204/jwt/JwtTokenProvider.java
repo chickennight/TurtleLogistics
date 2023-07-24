@@ -51,13 +51,13 @@ public class JwtTokenProvider {
 
     //JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPK(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserID(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
 
     // 토큰에서 회원 정보 추출
-    public String getUserPK(String token) {
+    public String getUserID(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -74,6 +74,17 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // 토큰에서 권한 정보 가져오기
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        // 토큰에서 "roles" 클레임을 가져와서 권한 정보 반환
+        return (String) claims.get("roles");
     }
 
 
