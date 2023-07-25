@@ -84,10 +84,10 @@ public class OrderController {
                 List<OrderDetail> detailList = OS.findOrderDetailsBy(on.getOrder().getOrderNum());
                 List<Product> productList = PS.findAll();
                 for (Product p : productList)
-                    input.put(String.valueOf(p.getProductNum()), 0L);
+                    input.put(String.valueOf(p.getName()), 0L);
 
                 for (OrderDetail od : detailList)
-                    input.put(String.valueOf(od.getProduct().getProductNum()), (long) od.getProduct().getStock());
+                    input.put(String.valueOf(od.getProduct().getName()), (long) od.getAmount());
 
 
                 input.put("address", (long) on.getOrder().getAddress());
