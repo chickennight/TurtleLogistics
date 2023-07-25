@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AdminService {
@@ -32,13 +33,25 @@ public class AdminService {
         return AR.save(admin);
     }
 
-    public String login(String id, String password) {
+    public Map<String, String> login(String id, String password) {
         Admin admin = AR.findByAdminId(id).get();
         if (admin != null && encoder.matches(password, admin.getPassword())) {
-            String token = JP.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
+            String accessToken = JP.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
+            String refreshToken = JP.createRefreshToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
 
-            return token;
+            Map<String, String> tokens = new HashMap<>();
+            tokens.put("accessToken", accessToken);
+            tokens.put("refreshToken", refreshToken);
+            return tokens;
         }
         return null;
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        return JP.refreshAccessToken(refreshToken);
+    }
+
+    public String getAdminPhone(String token) {
+        return AR.findByAdminId(JP.getUserID(token)).get().getPhoneNumber();
     }
 }
