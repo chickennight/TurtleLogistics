@@ -13,10 +13,4 @@ app.use(store)
 app.use(vuetify)
 app.mount('#app');
 
-// createApp(App)
-//   .use(store)
-//   .use(router)
-//   .use(vuetify)
-//   .mount('#app');
-
 

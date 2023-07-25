@@ -20,12 +20,11 @@ export default {
   height: 100px;
   display: flex;
   justify-content: flex-end;
-  box-shadow: 5px 5px 3px 3px black;
+  box-shadow: 6px 1px 3px 3px black;
   
 }
 .AdminProfile{
   width: 350px;
-  border: 1px solid white;
   margin: auto 0;
 }
 </style>

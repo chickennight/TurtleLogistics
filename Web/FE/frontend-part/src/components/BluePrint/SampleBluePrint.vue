@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>미니단면도</div>
 </template>
 
 <script>

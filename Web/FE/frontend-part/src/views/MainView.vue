@@ -65,7 +65,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 800px;
+  height: 1000px;
   border: 1px solid black;
   color: white;
 }

@@ -1,5 +1,7 @@
 <template>
-  <div>주문할거임</div>
+  <div>
+    <router-view />
+  </div>
 </template>
 
 <script>
@@ -8,6 +10,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

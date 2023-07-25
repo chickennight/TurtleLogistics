@@ -1,9 +1,9 @@
 <template>
   <div id="adminMainContainer">
-  <sidebar-nav></sidebar-nav>
+    <sidebar-nav></sidebar-nav>
     <div class="adminSubContainer">
       <header-nav></header-nav>
-      <admin-main-view></admin-main-view>
+      <router-view/>
     </div>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
 import HeaderNav from "@/components/common/HeaderNav.vue";
 import SidebarNav from "@/components/common/SidebarNav.vue";
-import AdminMainView from "@/components/Admin/AdminMainView.vue";
+// import AdminMainView from "@/components/Admin/AdminMainView.vue";
 
 export default {
   name: "AdminView",
@@ -19,7 +19,7 @@ export default {
   components: {
     HeaderNav,
     SidebarNav,
-    AdminMainView,
+
   },
 };
 </script>
@@ -27,13 +27,12 @@ export default {
 <style>
 #adminMainContainer{
   display : flex;
-
-  height: 150vh;
+  width: 100%;
+  height: 200vh;
 }
 
 .adminSubContainer{
   flex-direction: column;
-
   width: 100%;
 }
 
