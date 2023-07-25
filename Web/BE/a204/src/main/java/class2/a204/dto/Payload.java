@@ -10,6 +10,9 @@ public class Payload {
         this.message = message;
     }
 
+    public Payload() {
+    }
+
     public String getTopic() {
         return topic;
     }
