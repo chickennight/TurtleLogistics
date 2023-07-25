@@ -6,8 +6,8 @@
 String DEVICE_FULLNAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
 const char* DEVICE_NAME_LIST[9] = {SUP_CERT, ORD_VERI_CERT, ORD_SCHE_CERT, ORD_MOTO_CERT, DIV_VERI_CERT, DIV_MOTO_CERT, DIV_SER1_CERT, DIV_SER2_CERT, DIV_SER3_CERT};
 const char* DEVICE_KEY_LIST[9] = {SUP_PRIKEY, ORD_VERI_PRIKEY, ORD_SCHE_PRIKEY, ORD_MOTO_PRIKEY, DIV_VERI_PRIKEY, DIV_MOTO_PRIKEY, DIV_SER1_PRIKEY, DIV_SER2_PRIKEY, DIV_SER3_PRIKEY};
-const char* SSID = "seogau";
-const char* PASSWORD = "1234567890";
+const char* SSID = WIFI_SSID;
+const char* PASSWORD = WIFI_PASSWORD;
 const char* ENDPOINT = AWS_IOT_ENDPOINT;
 
 const char* convert_fullname_to_name(const char* name)
@@ -51,7 +51,7 @@ TLClient::TLClient(const char* THINGNAME)
   
 }
 
-void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
+void TLClient::connect_WiFi(){
   ESP8266WiFiClass WiFi;
   //WiFiClass WiFi;
   this->_WIFI_SSID = SSID;
@@ -68,12 +68,8 @@ void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
 }
 
 void TLClient::connect_AWS(){
-  this->connect_AWS(this->_CA, this->_CERT, this->_PRIVATEKEY, this->_AWS_IOT_ENDPOINT);
-}
-
-void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT){
   
-  this->connect_WiFi(this->_WIFI_SSID, this->_WIFI_PASSWORD);
+  this->connect_WiFi();
   
   Serial.print("Setting time using SNTP");
   int8_t TIME_ZONE = 9;
