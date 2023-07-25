@@ -39,6 +39,12 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5' //jwt 생성과 검증 담당
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version:'0.11.5' // 생성,파싱
 
+	//Lombok
+	implementation 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
 }
 
 tasks.named('test') {
