@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .headers().frameOptions().disable().and()
                 .authorizeRequests()//요청에 대한 권한 체크
                 .antMatchers("/admin/register", "/admin/login").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll().and()//그 외 요청은 누구나 접근 가능
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable);

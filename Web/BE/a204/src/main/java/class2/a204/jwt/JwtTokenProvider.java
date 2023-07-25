@@ -17,8 +17,8 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    private String secretKey = "TESTSECRETKEYTESTTESTTTTTTTTTTTT";
-    private String refreshKey = "refreshTokenTestTestTest";
+    private String secretKey = "vQg9uGhF0pO7Zx2R1q4m9TcC6fJ8kPdSD54K3GEN1CHOVY1";
+    private String refreshKey = "aQ4f9R6h8Jc1mZ7xO6p2rT5uV0wY3eEgDT1GEN34CHOVY1";
 
     //토큰 유효시간 8시간
     private long tokenValidTime = 8 * 60 * 60 * 1000L;
@@ -102,16 +102,16 @@ public class JwtTokenProvider {
     }
 
 //    // Request의 Header에서 token 값을 가져온다. "authorization" : "token'
-//    public String resolveToken(HttpServletRequest request) {
-//        if(request.getHeader("Authorization") != null )
-//            return request.getHeader("Authorization").substring(7);
-//        return null;
-//    }
+    public String resolveToken(HttpServletRequest request) {
+        if(request.getHeader("Authorization") != null )
+            return request.getHeader("Authorization").substring(7);
+        return null;
+    }
 
     // Request의 Header에서 token 값 가져오기
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
-    }
+//    public String resolveToken(HttpServletRequest request) {
+//        return request.getHeader("X-AUTH-TOKEN");
+//    }
 
     // Refresh Token으로 Access Token 갱신
     public String refreshAccessToken(String refreshToken) {
