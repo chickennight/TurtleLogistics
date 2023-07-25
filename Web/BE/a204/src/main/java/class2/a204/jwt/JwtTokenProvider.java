@@ -18,9 +18,10 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     private String secretKey = "TESTSECRETKEYTESTTESTTTTTTTTTTTT";
+    private String refreshKey = "refreshTokenTestTestTest";
 
-    //토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    //토큰 유효시간 8시간
+    private long tokenValidTime = 8 * 60 * 60 * 1000L;
 
     //리프레쉬 토큰 유효시간 1주
     private long refreshValidTime = 7 * 24 * 60 * 60 * 1000L;
@@ -62,7 +63,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + refreshValidTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, refreshKey)
                 .compact();
     }
 

@@ -42,9 +42,9 @@ public class CustomerController {
         try {
             String id = Info.get("customer_id");
             String password = Info.get("password");
-            String token = CS.login(id,password);
-            if (token != null) {
-                return new ResponseEntity<>(token,HttpStatus.OK);
+            Map<String, String> tokens = CS.login(id,password);
+            if (tokens != null) {
+                return new ResponseEntity<>(tokens,HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
