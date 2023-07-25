@@ -1,8 +1,8 @@
 #include <pgmspace.h>
 
 #define SECRET
-//const char* WIFI_SSID = "seogau";
-//const char* WIFI_PASSWORD = "1234567890";
+const char WIFI_SSID[] = "seogau";
+const char WIFI_PASSWORD[] = "1234567890";
 const char AWS_IOT_ENDPOINT[] = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com";       //change this
 
 /*

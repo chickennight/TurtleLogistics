@@ -1,9 +1,12 @@
 #include "TLClient.h"
-TLClient order_scheduler("Ord_Sch");
+#define THINGNAME "Ord_Sch"
+TLClient order_scheduler(THINGNAME);
 #define SUB_TOPIC_01 "/web/power"
 #define SUB_TOPIC_02 "/sup/add"
 #define SUB_TOPIC_03 "/mod/ord/sch/angle"
 #define SUB_TOPIC_04 "/mod/ord/sch/interval"
+#define PUB_TOPIC_00 "/connect"
+
 void Publish_callback(int orderno, int flag);
 void Subscribe_callback(char *topic, byte *payload, unsigned int length);
 void Device_function();
@@ -55,11 +58,13 @@ void setup() {
   order_scheduler.subscribe(SUB_TOPIC_02);
   order_scheduler.subscribe(SUB_TOPIC_03);
   order_scheduler.subscribe(SUB_TOPIC_04);
+  order_scheduler.publish(PUB_TOPIC_00, "/Ord_Sch Connected");
 }
 
 void loop() {
   order_scheduler.mqttLoop();
-  Device_function();
+  if(ord_sch_power==1)
+    Device_function();
 }
 
 void Publish_callback(int orderno,int flag){
@@ -80,11 +85,12 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   serializeJson(doc,res);
 
   if(strcmp(SUB_TOPIC_01, topic)==0){           // /web/power
-    ord_sch_power = (int)doc["type"];
+    ord_sch_power = doc["type"];
     Serial.print("POWER : ");
     Serial.println(ord_sch_power);
   }
   else if(strcmp(SUB_TOPIC_02, topic)==0){      //  /sup/add
+    if(ord_sch_power == -1) ord_sch_power = 1;
     order_list order_list;
     order_list.product1 = (int)doc["productA"];
     order_list.product2 = (int)doc["productB"];
