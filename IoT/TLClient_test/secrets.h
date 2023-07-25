@@ -5,7 +5,7 @@
 //int8_t TIME_ZONE = -5;
 //const char* WIFI_SSID = "seogau";
 //const char* WIFI_PASSWORD = "1234567890";
-const char AWS_IOT_ENDPOINT[] = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com";
+//const char AWS_IOT_ENDPOINT[] = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com";
 
 //String DEVICE_NAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
 //String DEVICE_VALUE_LIST[9] = { "SUP","ORD_VERI","ORD_SCHE","ORD_MOTO","DIV_VERI","DIV_MOTO","DIV_SER1","DIV_SER2","DIV_SER3" };

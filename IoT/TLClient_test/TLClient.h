@@ -16,7 +16,6 @@
 class TLClient
 {
   public:
-    //TLClient();
     TLClient(const char* THINGNAME);  
     
     ~TLClient() {
