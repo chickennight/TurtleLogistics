@@ -1,13 +1,19 @@
 package class2.a204.entity;
 
 import com.sun.istack.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "ordernow")
 public class OrderNow {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @NotNull
     private Integer id;
@@ -15,41 +21,9 @@ public class OrderNow {
     @OneToOne
     @JoinColumn(name = "order_num")
     @NotNull
-    private Order orderNum;
+    private Order order;
 
     @Column(name = "status")
     @NotNull
-    private byte status;
-
-
-    //기본생성자
-    public OrderNow() {
-    }
-
-    //getters and setters
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Order getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Order orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(byte status) {
-        this.status = status;
-    }
+    private Integer status;
 }

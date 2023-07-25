@@ -1,30 +1,38 @@
 package class2.a204.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import jdk.jfr.Unsigned;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
+
+    @JsonProperty("order_num")
     @Id
     @Column(name = "order_num")
     @NotNull
-    @Unsigned
-    private Integer orderNum;
+    private Long orderNum;
 
+    @JsonProperty("order_date")
     @Column(name = "order_date", insertable = false)
     @NotNull
-    private LocalDateTime orderData;
+    private LocalDateTime orderDate;
 
-    @Column(name = "address")
-    @NotNull
-    private String address;
+    @JsonProperty("detail_address")
+    @Column(name = "detail_address")
+    private String detailAddress;
 
+    private Integer address;
+
+    @JsonProperty("customer_num")
     @ManyToOne
     @JoinColumn(name = "customer_num")
     @NotNull
@@ -33,49 +41,4 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
-    //기본생성자
-    public Order() {
-    }
-
-    //getters and setters
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public LocalDateTime getOrderData() {
-        return orderData;
-    }
-
-    public void setOrderData(LocalDateTime orderData) {
-        this.orderData = orderData;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
 }
