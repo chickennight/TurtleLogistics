@@ -1,5 +1,13 @@
 {orderno, producA:n, productB:n, producC:n , address}
 
+// 매개 변수 바꾸기
+
+speed : 속도
+angle : 각도
+interval : 딜레이 시간
+
+
+
 Div_Servo3 : 함수 헤더파일에 모두
 
 에픽 : MQTT 통신

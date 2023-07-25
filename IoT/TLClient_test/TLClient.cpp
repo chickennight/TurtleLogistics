@@ -95,13 +95,14 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   this->_CERT = convert_fullname_to_name(this->_THINGNAME);
   this->_PRIVATEKEY = convert_fullname_to_key(this->_THINGNAME);
 
-  BearSSL::X509List cert(this->_CA);
-  BearSSL::X509List client_crt(this->_CERT);
-  BearSSL::PrivateKey key(this->_PRIVATEKEY);
+  //BearSSL::X509List cert(this->_CA);
+  //BearSSL::X509List client_crt(this->_CERT);
+  //BearSSL::PrivateKey key(this->_PRIVATEKEY);
 
   delay(100);
-  this->_wifiClient->setTrustAnchors(&cert);
-  this->_wifiClient->setClientRSACert(&client_crt, &key);
+  this->_wifiClient->setCACert(_CA);
+  this->_wifiClient->setCertificate(_CERT);
+  this->_wifiClient->setPrivateKey(_PRIVATEKEY);
   this->_mqttClient->setServer(ENDPOINT, 8883);
 
   Serial.println("Connecting to AWS IoT");
