@@ -96,7 +96,7 @@ public class MachineController {
             input.setMachine(MS.findMachine(logDto.getMachineId()));
             MS.addLog(input);
             String token = JP.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(AS.getAdminPhone(token), input.getMachine() + " 기계 이상 발생");
+            MessageDTO sms = new MessageDTO(AS.getAdminPhone(token), input.getMachine().getMachineDetail() + " 기계 이상 발생");
             SS.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
