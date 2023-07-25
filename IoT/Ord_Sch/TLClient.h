@@ -23,8 +23,7 @@ class TLClient
       delete this->_wifiClient;
     }
     
-    void connect_WiFi(const char* SSID, const char* PASSWORD);
-    void connect_AWS(const char* CA, const char* CERT, const char* PRIVATEKEY, const char* ENDPOINT);
+    void connect_WiFi();
     void connect_AWS();
 
     bool mqttConnected();
@@ -32,8 +31,6 @@ class TLClient
     boolean subscribe(const char* topic);
     boolean publish(const char* topic, const char* payload);
 
-    String convert_name_to_value(const char* name);
-    
     //TLClient& setMCU(const char*);
     TLClient& setMqttClient(PubSubClient& mqttClient);
     TLClient& setWifiClient(WiFiClientSecure& wifiClient);
