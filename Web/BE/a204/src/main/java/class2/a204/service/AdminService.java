@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -52,4 +51,7 @@ public class AdminService {
         return JP.refreshAccessToken(refreshToken);
     }
 
+    public String getAdminPhone(String token) {
+        return AR.findByAdminId(JP.getUserID(token)).get().getPhoneNumber();
+    }
 }

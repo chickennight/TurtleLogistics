@@ -90,11 +90,22 @@ public class OrderService {
         ONR.save(temp);
     }
 
-    public List<AnalysisRegionDto> dataRegion(Integer year, Integer month) {
+    public Map<String, Long> dataRegion(Integer year, Integer month) {
+        List<AnalysisRegionDto> list = new ArrayList<>();
         if (month == 0)
-            return OR.findRegionCountByYear(year);
+            list = OR.findRegionCountByYear(year);
         else
-            return OR.findRegionCountByYearMonth(year, month);
+            list = OR.findRegionCountByYearMonth(year, month);
+
+        Map<String, Long> result = new HashMap<>();
+
+        for (int i = 1; i <= 17; ++i)
+            result.put(String.valueOf(i), 0L);
+
+        for (AnalysisRegionDto dto : list) {
+            result.put(String.valueOf(dto.getRegion()), dto.getCount());
+        }
+        return result;
     }
 
     public List<AnalysisDayDto> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
