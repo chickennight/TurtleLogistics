@@ -6,6 +6,9 @@
 String DEVICE_FULLNAME_LIST[9] = { "Supervisor", "Ord_Verifier","Ord_Sch","Ord_Motor","Div_Verifier","Div_Motor","Div_Servo1","Div_Servo2","Div_Servo3" };
 const char* DEVICE_NAME_LIST[9] = {SUP_CERT, ORD_VERI_CERT, ORD_SCHE_CERT, ORD_MOTO_CERT, DIV_VERI_CERT, DIV_MOTO_CERT, DIV_SER1_CERT, DIV_SER2_CERT, DIV_SER3_CERT};
 const char* DEVICE_KEY_LIST[9] = {SUP_PRIKEY, ORD_VERI_PRIKEY, ORD_SCHE_PRIKEY, ORD_MOTO_PRIKEY, DIV_VERI_PRIKEY, DIV_MOTO_PRIKEY, DIV_SER1_PRIKEY, DIV_SER2_PRIKEY, DIV_SER3_PRIKEY};
+const char* SSID = "seogau";
+const char* PASSWORD = "1234567890";
+const char* ENDPOINT = AWS_IOT_ENDPOINT;
 
 const char* convert_fullname_to_name(const char* name)
 {
@@ -31,8 +34,6 @@ TLClient::TLClient(const char* THINGNAME)
 {
   this->_wifiClient = new WiFiClientSecure();
   this->_mqttClient = new PubSubClient(*this->_wifiClient);
-  //this->_wifiClient = NULL;
-  //this->_mqttClient = NULL;
   this->_THINGNAME = THINGNAME;
   this->_lastMillis = 0;
   this->_previousMillis = 0;
@@ -41,16 +42,13 @@ TLClient::TLClient(const char* THINGNAME)
   this->_CERT = NULL;
   this->_PRIVATEKEY = NULL;
 
-  //this->_CERT = AWS_CERT_CRT;
-  //this->_PRIVATEKEY = AWS_CERT_PRIVATE;
   this->_now = NULL;
   this->_nowish = 1510592825;
 
-  this->_WIFI_SSID = "seogau";
-  this->_WIFI_PASSWORD = "1234567890";
-  //this->_AWS_IOT_ENDPOINT = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com";
-  this->_AWS_IOT_ENDPOINT = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com";
-
+  this->_WIFI_SSID = SSID;
+  this->_WIFI_PASSWORD = PASSWORD;
+  this->_AWS_IOT_ENDPOINT = ENDPOINT;
+  
 }
 
 void TLClient::connect_WiFi(const char* SSID, const char* PASSWORD){
@@ -94,14 +92,8 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   Serial.print("Current time: ");
   Serial.print(asctime(&timeinfo));
 
-  //String CERT = (convert_name_to_value(this->_THINGNAME)+"_CERT");
-  //String PRIVATEKEY = (convert_name_to_value(this->_THINGNAME)+"_PRIKEY");
   this->_CERT = convert_fullname_to_name(this->_THINGNAME);
   this->_PRIVATEKEY = convert_fullname_to_key(this->_THINGNAME);
-
-  Serial.println(this->_CERT);
-  Serial.println("happy");
-  Serial.println(this->_PRIVATEKEY);
 
   BearSSL::X509List cert(this->_CA);
   BearSSL::X509List client_crt(this->_CERT);
@@ -113,8 +105,6 @@ void TLClient::connect_AWS(const char* CA, const char* CERT, const char* PRIVATE
   this->_mqttClient->setServer(ENDPOINT, 8883);
 
   Serial.println("Connecting to AWS IoT");
-
-  //this->_mqttClient->begin(ENDPOINT, this->_wifiClient);
 
   this->_mqttClient->connect(_THINGNAME);
   while(!(this->_mqttClient->connected()))
