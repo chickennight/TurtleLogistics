@@ -85,7 +85,7 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   serializeJson(doc,res);
 
   if(strcmp(SUB_TOPIC_01, topic)==0){           // /web/power
-    ord_sch_power = doc["type"];
+    ord_sch_power = (int)doc["type"];
     Serial.print("POWER : ");
     Serial.println(ord_sch_power);
   }
