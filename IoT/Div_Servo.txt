@@ -1,0 +1,9 @@
+Div_Servo1
+== ESP8266 코드로 바꾸기 필요 == (완)
+: 주문 번호 수신
+	-> 동작
+		-> Move Servo(완)
+		-> n seconds waiting(완)
+		-> IR Sensor Check(완)
+: 결과 Pub
+	-> Pub(/div/res)	-> order_num , result 발행(완)
