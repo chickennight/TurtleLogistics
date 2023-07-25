@@ -1,6 +1,6 @@
 package class2.a204.controller;
 
-import class2.a204.model.Admin;
+import class2.a204.entity.Admin;
 import class2.a204.service.AdminService;
 import class2.a204.service.OrderService;
 import class2.a204.util.ErrorHandler;
@@ -10,50 +10,56 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    private final AdminService adminService;
-    private final OrderService orderService;
-    private final ErrorHandler errorHandler;
+    private final AdminService AS;
+    private final OrderService OS;
+    private final ErrorHandler Handler;
 
     @Autowired
-    public AdminController(AdminService adminService, OrderService orderService, ErrorHandler errorHandler) {
-        this.adminService = adminService;
-        this.orderService = orderService;
-        this.errorHandler = errorHandler;
+    public AdminController(AdminService as, OrderService os, ErrorHandler handler) {
+        this.AS = as;
+        this.OS = os;
+        this.Handler = handler;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
+        System.out.println(admin.getAdminId());
         try {
-            adminService.saveAdmin(admin);
+            AS.registerAdmin(admin);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+            return Handler.errorMessage(e);
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String id, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
+
         try {
-            if (adminService.login(id, password)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            String id = Info.get("admin_id");
+            String password = Info.get("password");
+            String token = AS.login(id, password);
+            if(token != null){
+                return new ResponseEntity<>(token,HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+        } catch (Exception e){
+            return Handler.errorMessage(e);
         }
     }
 
     @GetMapping("/orders")
     public ResponseEntity<?> getOrders() {
         try {
-            List<?> orders = orderService.findAllOrders();
+            List<?> orders = OS.findAllOrders();
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
-            return errorHandler.errorMessage(e);
+            return Handler.errorMessage(e);
         }
     }
 }
