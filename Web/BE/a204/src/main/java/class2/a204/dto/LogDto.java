@@ -1,21 +1,19 @@
 package class2.a204.dto;
 
 import class2.a204.entity.Log;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.models.auth.In;
-import org.springframework.context.annotation.Bean;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 
 public class LogDto {
+    @JsonProperty("log_num")
     private Integer logNum;
+    @JsonProperty("error_date")
     private String errorDate;
+    @JsonProperty("error_message")
     private String errorMessage;
+    @JsonProperty("machine_id")
     private Integer machineId;
 
     public LogDto(Log l) {
