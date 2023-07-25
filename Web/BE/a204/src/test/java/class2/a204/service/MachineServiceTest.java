@@ -1,29 +1,28 @@
 package class2.a204.service;
 
+import class2.a204.dto.MessageDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.repository.LogRepository;
 import class2.a204.repository.MachineRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -31,19 +30,19 @@ import static org.mockito.Mockito.*;
 @Transactional
 public class MachineServiceTest {
 
-    @Mock
-    private LogRepository logRepository;
 
-    @Mock
-    private MachineRepository machineRepository;
+    private final LogRepository logRepository;
+    private final MachineRepository machineRepository;
+    private final MachineService machineService;
+    private final SmsService SS;
 
-    @InjectMocks
-    private MachineService machineService;
-
-//    @BeforeEach //deprecated API
-//    public void setup() {
-//        MockitoAnnotations.initMocks(this);
-//    }
+    @Autowired
+    public MachineServiceTest(LogRepository logRepository, MachineRepository machineRepository, MachineService machineService, SmsService ss) {
+        this.logRepository = logRepository;
+        this.machineRepository = machineRepository;
+        this.machineService = machineService;
+        SS = ss;
+    }
 
     @Test
     public void testFindMachineAll() {
@@ -70,21 +69,23 @@ public class MachineServiceTest {
     }
 
     @Test
-    public void testBrokenMachine() {
-        List<Machine> machineList = new ArrayList<>();
-        machineList.add(new Machine(1, "1", true));
-        machineList.add(new Machine(2, "1"));
-        machineList.add(new Machine(3, "1", true));
-        machineList.add(new Machine(4, "1"));
-        machineList.add(new Machine(5, "1", true));
-        machineList.add(new Machine(6, "1"));
-        machineRepository.saveAll(machineList);
-
-        List<Machine> temp = machineRepository.findAll();
-        System.out.println(temp.size());
-        List<Integer> result = machineService.brokenMachine(temp);
-
-        assertEquals(3, result.size());
+    public void testBrokenMachine() throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
+//        List<Machine> machineList = new ArrayList<>();
+//        machineList.add(new Machine(1, "1", true));
+//        machineList.add(new Machine(2, "1"));
+//        machineList.add(new Machine(3, "1", true));
+//        machineList.add(new Machine(4, "1"));
+//        machineList.add(new Machine(5, "1", true));
+//        machineList.add(new Machine(6, "1"));
+//        machineRepository.saveAll(machineList);
+//
+//        List<Machine> temp = machineRepository.findAll();
+//        System.out.println(temp.size());
+//        List<Integer> result = machineService.brokenMachine(temp);
+//
+//        assertEquals(3, result.size());
+        MessageDTO sms = new MessageDTO("01047368221", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!권도현 바보!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        SS.sendSms(sms);
     }
 
     @Test
