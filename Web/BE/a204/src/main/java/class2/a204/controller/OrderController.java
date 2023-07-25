@@ -1,14 +1,17 @@
 package class2.a204.controller;
 
+import class2.a204.dto.MessageDTO;
 import class2.a204.dto.NewOrderDto;
 import class2.a204.dto.OrderUpdateDto;
 import class2.a204.entity.Log;
 import class2.a204.entity.OrderDetail;
 import class2.a204.entity.OrderNow;
 import class2.a204.entity.Product;
+import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.service.MachineService;
 import class2.a204.service.OrderService;
 import class2.a204.service.ProductService;
+import class2.a204.service.SmsService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -33,16 +38,21 @@ public class OrderController {
 
     private final ProductService PS;
 
+    private final SmsService SS;
+    private final JwtTokenProvider JP;
+
     @Autowired
-    public OrderController(OrderService os, ErrorHandler er, MachineService ms, ProductService ps) {
+    public OrderController(OrderService os, ErrorHandler er, MachineService ms, ProductService ps, SmsService ss, JwtTokenProvider jp) {
         OS = os;
         ER = er;
         MS = ms;
         PS = ps;
+        SS = ss;
+        JP = jp;
     }
 
     @GetMapping("/analysis/day")
-    public ResponseEntity<?> dataAnalysisDay(@RequestParam("start_day")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDay, @RequestParam("end_day")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDay) {
+    public ResponseEntity<?> dataAnalysisDay(@RequestParam("start_day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDay, @RequestParam("end_day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDay) {
         try {
             return new ResponseEntity<>(OS.dataDay(startDay, endDay), HttpStatus.OK);
         } catch (Exception e) {
@@ -142,8 +152,20 @@ public class OrderController {
                     MS.addLog(errorLog(orderUpdateDto, "분류 순서 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
-            } else
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else if (orderUpdateDto.getType() == 2) {
+                if (orderNow.getStatus() == 4) {
+                    orderNow.setStatus(5);
+                    OS.updateStatus(orderNow);
+                    SS.sendSms(new MessageDTO(orderNow.getOrder().getCustomer().getPhoneNumber(), "주문하신 상품이 배송완료되었습니다."));
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    orderNow.setStatus(5);
+                    OS.updateStatus(orderNow);
+                    MS.addLog(errorLog(orderUpdateDto, "배송 문제 발생"));
+                    return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
+                }
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return ER.errorMessage(e);
         }
