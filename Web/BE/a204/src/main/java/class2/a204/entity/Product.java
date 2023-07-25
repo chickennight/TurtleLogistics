@@ -2,11 +2,15 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "product")
 public class Product {
 
@@ -33,57 +37,5 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
-    //기본생성자
-    public Product() {
-    }
 
-    //getters and setters
-
-    public Integer getProductNum() {
-        return productNum;
-    }
-
-    public void setProductNum(Integer productNum) {
-        this.productNum = productNum;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public List<OrderDetail> getOrderDetails() {
-        return orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
 }
