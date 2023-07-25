@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>미니그래프</div>
 </template>
 
 <script>

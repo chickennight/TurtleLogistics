@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .SampleContainer{
   display : flex;
   flex-direction: column;

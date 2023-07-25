@@ -6,19 +6,29 @@
         <h2 >로그인</h2>
         <v-form fast-fail @submit.prevent>
         <v-text-field
-            v-model="adminId"
+            v-model="admin.admin_id"
             label="아이디"
-            :rules="firstNameRules"
+            :rules="nameRules"
+            required
+            @keyup.enter="doAdminLogin"
         ></v-text-field>
 
         <v-text-field
-            v-model="adminPassword"
+            v-model="admin.password"
             label="비밀번호"
             type="password"
-            :rules="lastNameRules"
+            :rules="nameRules"
+            required
+            @keyup.enter="doAdminLogin"
         ></v-text-field>
 
-        <v-btn href="/admin" block class="mt-2">로그인</v-btn>
+        <v-btn 
+          block 
+          class="mt-2"
+          @click="doAdminLogin" 
+          >
+          로그인
+        </v-btn>
         </v-form>
         &nbsp;
         <div class="registDiv">
@@ -33,26 +43,21 @@
 export default {
     name: "AdminLogin",
     data: () => ({
-      adminId: '',
-      firstNameRules: [
-        value => {
-          if (value?.length > 3) return true
-
-          return 'First name must be at least 3 characters.'
-        },
-      ],
-      adminPassword: '',
-      lastNameRules: [
-        value => {
-          if (/[^0-9]/.test(value)) return true
-
-          return 'Last name can not contain digits.'
-        },
+      admin: {
+        admin_id: "",
+        password: "",
+      },
+      nameRules: [
+        v => !!v || '해당 칸을 입력해주세요',
       ],
     }),
     methods:{
       doAdminLogin(){
-        
+        console.log(this.admin.admin_id);
+        console.log(this.admin.password);
+
+        this.$store.dispatch("adminLogin", this.admin);
+
       }
     }
 }
@@ -70,7 +75,7 @@ export default {
 }
 .loginForm *{
   color: white;
-  background-color: rgb(41, 41, 41);
+  background-color: rgb(53, 53, 53);
   text-align: center;
 }
 .registDiv{
