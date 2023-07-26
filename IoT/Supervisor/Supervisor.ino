@@ -8,15 +8,17 @@
 
 #define THINGNAME "Supervisor"
 // PUBLISH TOPIC
-#define TOPIC_INIT "/sup/init"
-#define TOPIC_ORD_SCH "/sup/add"
-#define TOPIC_ORD_VERI "/sup/ord/veri"
-#define TOPIC_DIV_VERI "/sup/div/veri"
+#define TOPIC_INIT "/mod/ord/motor/power"
+#define TOPIC_INIT2 "/mod/div/motor/power"
+#define TOPIC_ORD_SCH "/sup/ord/sch/info"
+#define TOPIC_ORD_VERI "/sup/ord/veri/info"
+#define TOPIC_DIV_VERI "/sup/div/veri/info"
+#define TOPIC_LOG "/log"
 
 // SUBSCRIBE TOPIC
-#define TOPIC_ORDER_RES "/order/res"
+#define TOPIC_ORDER_RES "/ord/res"
 #define TOPIC_DIV_RES "/div/res"
-#define TOPIC_POWER "/web/power"
+#define TOPIC_POWER "/mod/web/power"
 
 int order_motor=-1,div_motor=-1;
 unsigned long previousMillis = 0;
@@ -37,7 +39,7 @@ void setup()
   supervisor.subscribe(TOPIC_ORDER_RES);
   supervisor.subscribe(TOPIC_DIV_RES);
   supervisor.subscribe(TOPIC_POWER);
- 
+  supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"AWS Connect Success\"");
 }
 
 void loop() 
@@ -47,6 +49,7 @@ void loop()
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
     GETorder();
+    supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"Get Order Lists\"");
   }
 }
 
@@ -82,7 +85,7 @@ void GETorder(){
                   {
                     order_motor=1;
                     StaticJsonDocument<10> Motor;
-                    Motor["type"]="1";
+                    Motor["power"]="1";
                     char buf3[12];
                     serializeJson(Motor,buf3); 
                     supervisor.publish(TOPIC_INIT,buf3);                                     
@@ -90,7 +93,7 @@ void GETorder(){
                 for(JsonObject order:ordersArray)
                 {
                   StaticJsonDocument<200> Data;
-                  Data["orderno"] = order["order_num"];
+                  Data["order_num"] = order["order_num"];
                   Data["ProductA"] = order["productA"];
                   Data["ProductB"] = order["productB"];
                   Data["ProductC"] = order["productC"];
@@ -100,14 +103,16 @@ void GETorder(){
 
                   supervisor.publish(TOPIC_ORD_SCH, buf1);
                   supervisor.publish(TOPIC_ORD_VERI, buf1);
-
+                  supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"Pub Ord Sch OrderLists\"");
+                  supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"Pub Ord Veri OrderLists\"");
                   StaticJsonDocument<100> Data2;
-                  Data2["orderno"] = order["order_num"];
+                  Data2["order_num"] = order["order_num"];
                   Data2["address"] = order["adderess"];
                   
                   char buf2[100];
                   serializeJson(Data2,buf2);
                   supervisor.publish(TOPIC_DIV_VERI,buf2);
+                  supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"Pub Div Veri OrderLists\"");
                 }
               }
         }
@@ -127,13 +132,21 @@ void POSTres(const char* jsonData){
   http.addHeader("Content-Type","application/json");
 
   int httpResponseCodePost = http.POST(jsonData);
-
+  supervisor.publish(TOPIC_LOG, "\"dev\":\"Supervisor\",\"content\":\"Post Results\"");
   if(httpResponseCodePost>0){
     String response = http.getString();
     Serial.print("HTTP POST Response:");
     Serial.println(response);
   }
   http.end();
+  if(div_motor==-1){
+    StaticJsonDocument<10> Motor;
+    Motor["power"]="1";
+    char buf[12];
+    serializeJson(Motor,buf3);
+    supervisor.publish(TOPIC_INIT2,buf);
+  }
+  
 }
 
 void Subscribe_callback(char *topic, byte *payload, unsigned int length)
@@ -146,18 +159,13 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
   
 
   if(strcmp(topic,TOPIC_ORDER_RES)==0){ // orderno, res
-      Serial.println("Get Result From Order Conveyor");
-      Serial.println(res);
       POSTres(res);
   }
   else if(strcmp(topic,TOPIC_DIV_RES)==0){ // orderno, res
-      Serial.println("Get Result From Divide Conveyor");
-      Serial.println(res);
       POSTres(res);
   }
   else if(strcmp(topic,TOPIC_POWER)==0){ // type : 0(on),1(off)
-      Serial.println("Motor Power Control From User!");
-      int val = doc["type"].as<int>();
+      int val = doc["power"].as<int>();
 
       if((val!=order_motor) && (val!=div_motor)){
         if(val==1 or val==-1){
@@ -165,15 +173,10 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
           div_motor*=-1;
           StaticJsonDocument<20> temp;
           char buffer[20];
-          temp["type"] = val;
+          temp["power"] = val;
           serializeJson(temp,buffer);
-          supervisor.publish("/div/motor", buffer);
-          supervisor.publish("/ord/motor", buffer);
+          supervisor.publish(TOPIC_POWER, buffer);
 
-          Serial.print("Now Order Motor Power : ");
-          Serial.println(order_motor);
-          Serial.print("Now Divider Motor Power : ");
-          Serial.println(div_motor);
         }
 
       }
