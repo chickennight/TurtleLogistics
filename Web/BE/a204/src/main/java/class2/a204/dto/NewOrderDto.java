@@ -12,27 +12,10 @@ public class NewOrderDto {
 
     private List<Product> products;
 
-    private String address;
+    @JsonProperty("detail_address")
+    private String detailAddress;
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Override
-    public String toString() {
-        return "NewOrderDto{" +
-                "customerNum=" + customerNum +
-                ", products=" + products +
-                ", address='" + address + '\'' +
-                '}';
-    }
-
-    public NewOrderDto() {
-    }
+    private Integer address;
 
     public Integer getCustomerNum() {
         return customerNum;
@@ -48,5 +31,21 @@ public class NewOrderDto {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public Integer getAddress() {
+        return address;
+    }
+
+    public void setAddress(Integer address) {
+        this.address = address;
     }
 }
