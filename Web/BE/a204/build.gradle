@@ -55,12 +55,3 @@ tasks.named('test') {
 tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << "-parameters"
 }
-
-bootJar{
-	mainClassName = 'class2.a204.A204Application'
-}
-
-bootRun {
-	String activeProfile = System.properties['spring.profiles.active']
-	systemProperty "spring.profiles.active", activeProfile
-}
