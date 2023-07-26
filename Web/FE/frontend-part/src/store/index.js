@@ -24,6 +24,7 @@ const store = createStore({
             state;
             console.log(data);
             alert("회원 가입이 완료되었습니다. 로그인해주세요.");
+            router.push("/customerLogin");
         },
         CUSTOMER_LOGIN(state, data) {
             state;
@@ -92,6 +93,21 @@ const store = createStore({
                 console.log(err);    
             })
         },
+        getOrderData({ commit }, date) {
+            const API_URL = `${REST_API}/order/analysis/day`;
+            axios({
+                url: `${API_URL}?start_day=${date.start}&end_day=${date.end}`,
+                method: "get",
+            })
+            .then((res) => {
+                console.log(res.data);
+                commit;
+            })
+            .catch((err) => {
+                console.log(err.data);    
+            })
+            
+        }
     }
 })
 

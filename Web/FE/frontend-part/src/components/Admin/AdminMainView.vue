@@ -2,7 +2,7 @@
   <div class="SampleContainer">
     <div id="UpperContainer">
       위쪽컨테이너
-      <sample-graph></sample-graph>
+      <sample-graph class="GraphContainer" />
       <span>샘플 2</span>
     </div>
     <div id="LowerContainer">
@@ -40,5 +40,8 @@ export default {
   border : 1px solid black;
   height: 450px;
   margin: 20px
+}
+.GraphContainer{
+  width: 60%;
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="SampleContainer">지역별주문!!!!!!</div>
+  <div class="OrderRegionContainer">
+    지역별주문!!!!!!
+  </div>
 </template>
 
 <script>
@@ -9,7 +11,7 @@ export default {
 </script>
 
 <style>
-.SampleContainer{
+.OrderRegionContainer{
   margin: 20px;
   border: 1px solid white;
 }
