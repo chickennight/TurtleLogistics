@@ -2,13 +2,13 @@
 
 #define THINGNAME "Div_Motor"
 // SUBSCRIBE TOPIC
-#define TOPIC_INIT "/sup/init"
-#define TOPIC_POWER "/web/power"
+#define TOPIC_POWER "/mod/web/power"
+#define TOPIC_INIT "/mod/div/motor/power"
 #define TOPIC_CHANGE "/mod/div/motor/speed"
-#define TOPIC_CONNECT "/connect"
+#define TOPIC_LOG "/log"
 
 // -1: power off, 1: power on
-int powered=-1;
+int power=-1;
 int speed = 200;
 
 // Motor A
@@ -42,7 +42,7 @@ void setup()
 
   div_motor.setCallback(Subscribe_callback);
   div_motor.connect_AWS();
-  div_motor.publish(TOPIC_CONNECT,"/Div/Motor Connected");
+  div_motor.publish(TOPIC_LOG,"\"dev\":\"Div_Motor\",\"content\":\"AWS Connect Success\"");
   div_motor.subscribe(TOPIC_INIT);
   div_motor.subscribe(TOPIC_POWER);
   div_motor.subscribe(TOPIC_CHANGE);
@@ -55,10 +55,11 @@ void loop()
 
 void changePower(){
 
-  if(powered==1){
+  if(power==1){
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
     ledcWrite(pwmChannel, speed); 
+    div_motor.publish(TOPIC_LOG,"\"dev\":\"Div_Motor\",\"content\":\"Motor Speed Change\"");
     Serial.print("Motor Speed : ");
     Serial.println(speed);
 
@@ -67,6 +68,7 @@ void changePower(){
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
     ledcWrite(pwmChannel, 0); 
+    div_motor.publish(TOPIC_LOG,"\"dev\":\"Div_Motor\",\"content\":\"Turn off Motor\"");
     Serial.println("Motor Speed : 0");
   }
 }
@@ -74,26 +76,25 @@ void changePower(){
 void Subscribe_callback(char *topic, byte *payload, unsigned int length)
 {
 
-  if(strcmp(topic,TOPIC_INIT)==0 && powered!=1){
-    powered=1;
+  if(strcmp(topic,TOPIC_INIT)==0 && power!=1){
+    power=1;
     changePower();
+    div_motor.publish(TOPIC_LOG,"\"dev\":\"Div_Motor\",\"content\":\"Motor INIT!!\"");
     Serial.println("MOTOR INIT!");
   }
   else{
     StaticJsonDocument<200> doc;
     DeserializationError error = deserializeJson(doc, payload, length);
-    // char res[100];
-    // serializeJson(doc,res);
     if(strcmp(topic,TOPIC_POWER)==0){
     
-      if(doc["type"].as<int>()!=powered)
+      if(doc["power"].as<int>()!=power)
         {
           Serial.println("Power Change!");
-          powered*=-1;
+          power*=-1;
           changePower();
         }
     }
-    else if(strcmp(topic,TOPIC_CHANGE)==0 && powered==1){
+    else if(strcmp(topic,TOPIC_CHANGE)==0 && power==1){
       if(doc["speed"].as<int>()!=speed)
       {
         speed = doc["speed"].as<int>();

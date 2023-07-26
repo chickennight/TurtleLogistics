@@ -6,15 +6,15 @@ import cv2
 import json
 
 ## PUBLISH TOPIC
-PUB_DIV_SERVO = "/div/servo/"
+PUB_DIV_SERVO = "/div/servo"
 PUB_LOG = "/log"
 PUB_DIV_MOTOR = "/mod/div/motor/power"
 
-SUB_DIV_INFO = "/sup/div/veri"
+SUB_DIV_INFO = "/sup/div/veri/info"
 SUB_DIV_CAM = "/div/cam"
-SUB_MOD_ITV = "/mod/div/veri/time"
+SUB_MOD_ITV = "/mod/div/veri/interval"
 SUB_MOD_DIST = "/mod/div/veri/distance"
-SUB_WEB_POWER ="/web/power"
+SUB_WEB_POWER ="/mod/web/power"
 
 CA = "/home/ssafy09204/TL/CA1.pem"
 PRIKEY = "/home/ssafy09204/TL/PRIVATE.key"
@@ -97,7 +97,7 @@ def read_QR(self,params,packet):
         if(Address_Info[str(order_num)] not in Address_list):
             myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Address not in Address List\",\"order_num\":{order_num}}}",0)
         else:
-            myMQTTClient.publish(PUB_DIV_SERVO+Address_Info[order_num],f"{{\"order_num\" : \"{order_num}\"}}",0)
+            myMQTTClient.publish(PUB_DIV_SERVO+Address_Info[order_num]+"/info",f"{{\"order_num\" : \"{order_num}\"}}",0)
             myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Div_Veifier\",\"content\":\"Get Address Success\"}",0)
             Order_Lists.remove(int(order_num))
             del Address_Info[str(order_num)]
