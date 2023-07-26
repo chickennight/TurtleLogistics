@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -27,6 +29,7 @@ public class AdminController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
+        System.out.println(admin.getAdminId());
         try {
             AS.registerAdmin(admin);
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -36,13 +39,16 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String id, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
         try {
-            if (AS.login(id, password)) {
-                return new ResponseEntity<>(HttpStatus.OK);
+            String id = Info.get("admin_id");
+            String password = Info.get("password");
+            Map<String, String> tokens = AS.login(id, password);
+            if(tokens != null){
+                return new ResponseEntity<>(tokens, HttpStatus.OK);
             }
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
+        } catch (Exception e){
             return Handler.errorMessage(e);
         }
     }
@@ -54,6 +60,19 @@ public class AdminController {
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
             return Handler.errorMessage(e);
+        }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> tokenMap) {
+        try {
+            String refreshToken = tokenMap.get("refreshToken");
+            String newAccessToken = AS.refreshAccessToken(refreshToken);
+            Map<String, String> response = new HashMap<>();
+            response.put("accessToken", newAccessToken);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
