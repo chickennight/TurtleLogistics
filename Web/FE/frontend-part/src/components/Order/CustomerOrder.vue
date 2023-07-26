@@ -9,7 +9,7 @@
         <h2>주문</h2>
         <v-form ref="form">
           <v-text-field
-            v-model="name"
+            v-model="order.customer_num"
             :rules="nameRules"
             label="수신자 이름"
             color="warning"
@@ -17,7 +17,7 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="productA"
+            v-model="order.products[0].stock"
             :rules="nameRules"
             label="상품 A"
             color="warning"
@@ -25,7 +25,7 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="productB"
+            v-model="order.products[1].stock"
             :rules="nameRules"
             label="상품 B"
             color="warning"
@@ -33,7 +33,7 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="productC"
+            v-model="order.products[2].stock"
             :rules="nameRules"
             label="상품 C"
             color="warning"
@@ -41,9 +41,17 @@
           ></v-text-field>
 
           <v-text-field
-            v-model="region"
+            v-model="order.address"
             :rules="nameRules"
             label="지역"
+            color="warning"
+            required
+          ></v-text-field>
+
+          <v-text-field
+            v-model="order.detailAddress"
+            :rules="nameRules"
+            label="상세주소"
             color="warning"
             required
           ></v-text-field>
@@ -53,7 +61,7 @@
               color="success"
               class="mt-4"
               block
-              @click="validate"
+              @click="doOrder"
             >
               주문하기
             </v-btn>
@@ -67,6 +75,29 @@
 <script>
 export default {
     name : 'CustomerOrder',
+    data: () => ({
+      order : {
+        customer_num : "",
+        products:[
+          {"product_num": 1, "stock": ''},
+          {"product_num": 2, "stock": ''},
+          {"product_num": 3, "stock": ''},
+        ],
+        address: "",
+        detailAddress: "",
+      }
+    }),
+    created(){
+      console.log(this.order.products[0].stock);
+      console.log(this.order.products[0]);
+    },
+    methods: {
+      doOrder(){
+        console.log(111);
+        console.log(this.order);
+        console.log(this.order.products)
+      }
+    }
 }
 </script>
 

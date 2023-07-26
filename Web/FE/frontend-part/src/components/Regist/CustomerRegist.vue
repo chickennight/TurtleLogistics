@@ -9,7 +9,7 @@
         <h2>회원가입</h2>
         <v-form ref="form">
           <v-text-field
-            v-model="customer.customer_Id"
+            v-model="customer.customer_id"
             :rules="nameRules"
             label="아이디"
             color="warning"
@@ -20,6 +20,7 @@
             v-model="customer.password"
             :rules="nameRules"
             label="비밀번호"
+            type="password"
             color="warning"
             required
           ></v-text-field>
@@ -28,6 +29,7 @@
             v-model="customer.passwordCheck"
             :rules="nameRules"
             label="비밀번호 확인"
+            type="password"
             color="warning"
             required
           ></v-text-field>
@@ -67,7 +69,7 @@ export default {
     name: "CustomerRegist",
     data: () => ({
       customer:{
-        customer_Id: '',
+        customer_id: '',
         password: '',
         passwordCheck: '',
         phone_number: '',
