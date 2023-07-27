@@ -92,7 +92,7 @@ public class OrderController {
 
                 input.put("address", (long) on.getOrder().getAddress());
 
-                OS.set2OrderNow(on.getOrder().getOrderNum());
+//                OS.set2OrderNow(on.getOrder().getOrderNum());
 
                 answer.add(input);
             }
