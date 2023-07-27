@@ -58,17 +58,13 @@ void loop()
 void GETorder(){
   if (WiFi.status() == WL_CONNECTED) 
   {
-    Serial.println("Request Get For Get ORDER LISTS");
     http.begin("http://i9A204.p.ssafy.io:8080/order/start");
     int httpCode = http.GET();
-    Serial.print("HttpCODE:");
-    Serial.println(httpCode);
 
     if (httpCode == 200) 
     {
       checkmotor();
       String response = http.getString();
-      Serial.println(response);
       DynamicJsonDocument jsonDoc(1024);
       DeserializationError error = deserializeJson(jsonDoc, response);
       if (error) 
