@@ -38,7 +38,6 @@ void setup()
   
   supervisor.setCallback(Subscribe_callback);
   supervisor.connect_AWS();
-  checkmotor();
   supervisor.subscribe(TOPIC_ORDER_RES);
   supervisor.subscribe(TOPIC_DIV_RES);
   supervisor.subscribe(TOPIC_POWER);
