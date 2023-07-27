@@ -8,13 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderUpdateDto {
+public class LogAddDto {
 
-    @JsonProperty("order_num")
-    private Long orderNum;
+    @JsonProperty("machine_id")
+    private Integer machineId;
 
     private Integer type;
-
-    private Integer result;
 
 }
