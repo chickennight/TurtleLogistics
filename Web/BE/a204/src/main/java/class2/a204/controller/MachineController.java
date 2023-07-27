@@ -1,5 +1,6 @@
 package class2.a204.controller;
 
+import class2.a204.dto.LogAddDto;
 import class2.a204.dto.LogDto;
 import class2.a204.dto.MessageDTO;
 import class2.a204.dto.Payload;
@@ -89,15 +90,16 @@ public class MachineController {
     }
 
     @PostMapping("/log")
-    public ResponseEntity<?> createLog(@RequestBody LogDto logDto, ServletRequest request) {
+    public ResponseEntity<?> createLog(@RequestBody LogAddDto logAddDto) {
         try {
             Log input = new Log();
-            input.setErrorMessage(logDto.getErrorMessage());
-            input.setMachine(MS.findMachine(logDto.getMachineId()));
+            if (logAddDto.getType() == 0)
+                input.setErrorMessage("포장 파트" + logAddDto.getMachineId() + "기기 이상 발생");
+            else
+                input.setErrorMessage("분류 파트" + logAddDto.getMachineId() + "기기 이상 발생");
+
+            input.setMachine(MS.findMachine(logAddDto.getMachineId()));
             MS.addLog(input);
-            String token = JP.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(AS.getAdminPhone(token), input.getMachine().getMachineDetail() + " 기계 이상 발생");
-            SS.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return Handler.errorMessage(e);
