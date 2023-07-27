@@ -40,7 +40,4 @@ public class Customer {
     @NotNull
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
-
 }
