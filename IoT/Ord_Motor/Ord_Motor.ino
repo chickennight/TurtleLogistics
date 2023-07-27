@@ -42,7 +42,7 @@ void setup()
 
   div_motor.setCallback(Subscribe_callback);
   div_motor.connect_AWS();
-  div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"AWS Connect Success\"");
+  div_motor.publish(TOPIC_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"AWS Connect Success\"}");
   div_motor.subscribe(TOPIC_INIT);
   div_motor.subscribe(TOPIC_POWER);
   div_motor.subscribe(TOPIC_CHANGE);
@@ -59,7 +59,7 @@ void changePower(){
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
     ledcWrite(pwmChannel, speed); 
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Motor Speed Change\"");
+    div_motor.publish(TOPIC_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"Motor Speed Change\"}");
     Serial.print("Motor Speed : ");
     Serial.println(speed);
 
@@ -68,7 +68,7 @@ void changePower(){
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
     ledcWrite(pwmChannel, 0); 
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Turn Off Motor\"");
+    div_motor.publish(TOPIC_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"Turn Off Motor\"}");
     Serial.println("Motor Speed : 0");
   }
 }
@@ -76,10 +76,10 @@ void changePower(){
 void Subscribe_callback(char *topic, byte *payload, unsigned int length)
 {
 
-  if(strcmp(topic,TOPIC_INIT)==0 && power!=1){
-    power=1;
+  if(strcmp(topic,TOPIC_INIT)==0){
+    power*=-1;
     changePower();
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Motor INIT!\"");
+    div_motor.publish(TOPIC_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"Motor INIT!\"}");
     Serial.println("MOTOR INIT!");
   }
   else{
