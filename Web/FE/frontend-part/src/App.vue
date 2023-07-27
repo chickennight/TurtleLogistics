@@ -17,7 +17,25 @@ export default {
 </script>
 
 <style>
+@font-face{
+  font-family: 'GmarketSansTTFMedium';
+  src: url('../public/fonts/GmarketSansTTFMedium.ttf');
+}
+@font-face{
+  font-family: 'GmarketSansTTFBold';
+  src: url('../public/fonts/GmarketSansTTFBold.ttf');
+}
+@font-face{
+  font-family: 'GmarketSansTTFLight';
+  src: url('../public/fonts/GmarketSansTTFLight.ttf');
+}
+*{
+  font-family: 'GmarketSansTTFMedium';
+  text-decoration: none;
 
-
-
+  color: white;
+}
+#app{
+    background-color: rgb(53, 53, 53);
+}
 </style>
