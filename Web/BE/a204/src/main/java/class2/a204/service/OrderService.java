@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.LongConsumer;
 
 @Service
 public class OrderService {
@@ -90,11 +91,9 @@ public class OrderService {
     }
 
     public Map<String, Long> dataRegion(Integer year, Integer month) {
-        List<AnalysisRegionDto> list = new ArrayList<>();
-        if (month == 0)
-            list = OR.findRegionCountByYear(year);
-        else
-            list = OR.findRegionCountByYearMonth(year, month);
+        List<AnalysisRegionDto> list;
+        if (month == 0) list = OR.findRegionCountByYear(year);
+        else list = OR.findRegionCountByYearMonth(year, month);
 
         Map<String, Long> result = new HashMap<>();
 
@@ -107,7 +106,19 @@ public class OrderService {
         return result;
     }
 
-    public List<AnalysisDayDto> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
-        return OR.findDayCount(startDay, endDay);
+    public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
+        List<AnalysisDayDto> list = OR.findDayCount(startDay, endDay);
+        Map<String, Long> result = new TreeMap<>();
+        LocalDateTime now = startDay;
+        endDay = endDay.plusDays(1);
+        while (now.isBefore(endDay)) {
+            int input = now.getYear() * 10000 + now.getMonth().getValue() * 100 + now.getDayOfMonth();
+            result.put(String.valueOf(input), 0L);
+            now = now.plusDays(1);
+        }
+        for (AnalysisDayDto ad : list)
+            result.put(ad.getDay(), ad.getCount());
+
+        return result;
     }
 }
