@@ -6,8 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class AnalysisRegionDto {
     private Integer region;
     private Long count;
+
+    public AnalysisRegionDto(Integer region, Long count) {
+        this.region = region;
+        this.count = count;
+    }
 }
