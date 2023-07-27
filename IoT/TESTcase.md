@@ -13,6 +13,11 @@ POST_URL : http://i9a204.p.ssafy.io:8080/order/update : {order_num, type, result
 
 ### Ord Verifier
 ```
+1. /mod/web/power
+    {"power":"1"}
+
+2. /sup/ord/veri/info
+    {"order_num":"100","productA":"2","productB":"1","productC":"3"}
 
 ```
 
@@ -22,7 +27,7 @@ POST_URL : http://i9a204.p.ssafy.io:8080/order/update : {order_num, type, result
 ```
 1. /log , 연결되면 오는지
 2. /mod/ord/motor/power { "power" : "1" } -> /mod/ord/motor/power { "power" : "-1" } -> /mod/ord/motor/speed {"speed":"100"} -> 
- /mod/ord/motor/power { "power" : "1"} ->  /mod/ord/motor/speed {"speed":"100"}
+ /mod/ord/motor/power { "power" : "1"} ->  /mod/ord/motor/speed {"speed":"190"}
 ```
 ### Ord Sch
 
