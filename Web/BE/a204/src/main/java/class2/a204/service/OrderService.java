@@ -39,13 +39,12 @@ public class OrderService {
         int today = (year - 2000) * 100 + month;
         int todayOrders = OR.todayCount(today);
 
-        System.out.println(newOrderDto);
         Order input = new Order();
         input.setOrderNum((long) today * 1000000 + todayOrders + 1);
         input.setDetailAddress(newOrderDto.getDetailAddress());
         input.setAddress(newOrderDto.getAddress());
-        Optional<Customer> customer = CR.findById(newOrderDto.getCustomerNum());
-        input.setCustomer(customer.orElseGet(Customer::new));
+        Customer customer = CR.findByCustomerNum(newOrderDto.getCustomerNum());
+        input.setCustomer(customer);
 
         System.out.println(input);
         OR.save(input);
