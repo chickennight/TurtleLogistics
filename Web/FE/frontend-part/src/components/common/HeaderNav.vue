@@ -1,6 +1,10 @@
 <template>
   <div id="header">
-
+    <div class="AdminProfile">
+      %%%님 환영합니다 &nbsp;&nbsp;&nbsp;
+      마이페이지  &nbsp; |  &nbsp;
+      로그아웃
+    </div>
   </div>
 </template>
 
@@ -11,13 +15,16 @@ export default {
 </script>
 
 <style>
-  #header{
-    box-sizing: border-box;
-    position: absolute;
-    width: 76vmax;
-    height: 100px;
-    left: 25%;
-    top: 0px;
-    border: 9px solid #000000;
-  }
+#header{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: 6px 1px 3px 3px black;
+  
+}
+.AdminProfile{
+  width: 350px;
+  margin: auto 0;
+}
 </style>
