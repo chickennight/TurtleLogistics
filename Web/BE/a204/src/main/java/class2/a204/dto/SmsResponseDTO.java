@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Data
 @Builder
 public class SmsResponseDTO {
     String requestId;
