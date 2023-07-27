@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query("SELECT count(*) FROM Order r WHERE r.orderNum BETWEEN ?1*1000000 AND (?1+1)*1000000")
+    @Query("SELECT count(r) FROM Order r WHERE r.orderNum BETWEEN ?1*1000000 AND (?1+1)*1000000")
     int todayCount(int today);
 
     @Query(value = "SELECT new class2.a204.dto.AnalysisRegionDto(o.address, COUNT(o)) FROM Order o WHERE YEAR(o.orderDate) = ?1 GROUP BY o.address")
