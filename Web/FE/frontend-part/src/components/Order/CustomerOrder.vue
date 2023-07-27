@@ -1,61 +1,69 @@
 <template>
-    <div class="CustomerContainer">
+  <div class="CustomerContainer">
     <div>
       <img class="MainTurtle" src="./MainTurtle.png">
     </div>
     &nbsp;
-    <div class="CustomerRegistForm">
+    <div class="OrderForm">
       <v-sheet width="300" class="mx-auto">
-        <h2>회원가입</h2>
+        <h2>주문</h2>
         <v-form ref="form">
           <v-text-field
-            v-model="customer.customer_id"
+            v-model="order.customer_num"
             :rules="nameRules"
-            label="아이디"
+            label="수신자 이름"
             color="warning"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="customer.password"
+            v-model="order.products[0].stock"
             :rules="nameRules"
-            label="비밀번호"
-            type="password"
+            label="상품 A"
             color="warning"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="customer.passwordCheck"
+            v-model="order.products[1].stock"
             :rules="nameRules"
-            label="비밀번호 확인"
-            type="password"
+            label="상품 B"
             color="warning"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="customer.phone_number"
+            v-model="order.products[2].stock"
             :rules="nameRules"
-            label="전화번호"
+            label="상품 C"
+            color="warning"
             required
-         ></v-text-field>
+          ></v-text-field>
 
           <v-text-field
-            v-model="customer.address"
+            v-model="order.address"
             :rules="nameRules"
             label="지역"
+            color="warning"
             required
-         ></v-text-field>
+          ></v-text-field>
+
+          <v-text-field
+            v-model="order.detailAddress"
+            :rules="nameRules"
+            label="상세주소"
+            color="warning"
+            required
+          ></v-text-field>
 
           <div class="d-flex flex-column">
             <v-btn
               color="success"
               class="mt-4"
               block
-              @click="customerRegist"
+              @click="doOrder"
             >
-              가입하기
+              주문하기
             </v-btn>
           </div>
         </v-form>
@@ -66,24 +74,28 @@
 
 <script>
 export default {
-    name: "CustomerRegist",
+    name : 'CustomerOrder',
     data: () => ({
-      customer:{
-        customer_id: '',
-        password: '',
-        passwordCheck: '',
-        phone_number: '',
-        address: '',
-      },
-        nameRules: [
-            v => !!v || '해당 칸을 입력해주세요',
+      order : {
+        customer_num : "",
+        products:[
+          {"product_num": 1, "stock": ''},
+          {"product_num": 2, "stock": ''},
+          {"product_num": 3, "stock": ''},
         ],
-        select: null,
+        address: "",
+        detailAddress: "",
+      }
     }),
+    created(){
+      console.log(this.order.products[0].stock);
+      console.log(this.order.products[0]);
+    },
     methods: {
-      customerRegist(){
-        console.log(this.customer);
-        this.$store.dispatch("customerRegist", this.customer);
+      doOrder(){
+        console.log(111);
+        console.log(this.order);
+        console.log(this.order.products)
       }
     }
 }
@@ -96,7 +108,7 @@ export default {
   height: 200vh;
   text-align: center;
 }
-.CustomerRegistForm *{
+.OrderForm *{
   background-color: rgb(53, 53, 53);
 }
 .MainTurtle{
@@ -106,5 +118,7 @@ export default {
   margin: auto;
   display: block;
 }
-
+.test *{
+  background-color: red !important;
+}
 </style>
