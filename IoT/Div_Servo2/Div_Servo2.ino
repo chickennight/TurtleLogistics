@@ -67,7 +67,7 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
     delay(servo_interval);
     pubres(orderno,verify());
   }
-  else if(strcmp(TOPIC_MOD_SER_ANG, topic)==0){      
+  else if(strcmp(TOPIC_MOD_SER_ANG, topic)==0){
     angle = (int)doc["angle"];
     MSG("Angle Changed");
   }
