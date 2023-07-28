@@ -1,14 +1,14 @@
 ## TEST CASE
+```
 GET_URL : http://i9a204.p.ssafy.io:8080/order/start
 POST_URL : http://i9a204.p.ssafy.io:8080/order/update : {order_num, type, result} type(0:포장, 1:분류), result(0:성공,1:에러)
 기기고장 : type:0 result:1
-
+```
 
 ### SuperVisor 
 ```
-1. GET -> /mod/ord/motor/power -> /sup/ord/sch/info, /sup/ord/veri/info, /sup/div/veri/info
-2. SUB(/div/res,/ord/res) -> POST(/log)
-3. SUB(/ord/res) -> /mod/div/motor/power
+1. GET ->/sup/ord/sch/info, /sup/ord/veri/info, /sup/div/veri/info
+2. SUB(/div/res,/ord/res) {"order_num":"1234",type:"0",type:"0"},{"order_num":"1234",type:"1",type:"0"} -> POST(/log)
 ```
 
 ### Ord Verifier
@@ -22,14 +22,32 @@ POST_URL : http://i9a204.p.ssafy.io:8080/order/update : {order_num, type, result
 ```
 
 ### Div Veirifier
+```
 
-### Ord,Div Motor
+```
+
+### Ord Motor
+```
+
+```
+
+### Div Motor
 ```
 1. /log , 연결되면 오는지
-2. /mod/ord/motor/power { "power" : "1" } -> /mod/ord/motor/power { "power" : "-1" } -> /mod/ord/motor/speed {"speed":"100"} -> 
- /mod/ord/motor/power { "power" : "1"} ->  /mod/ord/motor/speed {"speed":"190"}
+2. /mod/web/power {"power" : "1"}, {"power" : "-1"}
+3. /mod/web/speed {"speed": "250"}, {"speed" :"0" }
+
 ```
 ### Ord Sch
 
 ### Div Servo
+1. /div/servo1/info {"order_num" : "12345" } -> /div/res 결과 확인
+2. /mod/div/servo1/servo_angel {"servo_angel": "100"}
+3. /mod/div/servo1/servo_interval {"servo_interval" : "1000"}
+4. /mod/div/servo1/ir_interval {"ir_interval" : "1000" }
+
+
+
+
+
 
