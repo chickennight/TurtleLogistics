@@ -3,7 +3,7 @@
 #define THINGNAME "Div_Motor"
 
 #define TOPIC_POW_CTR "/mod/web/power" 
-#define TOPIC_MOT_SPD "/mod/div/motor/speed"
+#define TOPIC_MOD_SPD "/mod/div/motor/speed"
 #define TOPIC_WEB_LOG "/log"
 
 int power=-1;
@@ -19,9 +19,11 @@ const int resolution = 8;
 
 TLClient div_motor(THINGNAME);
 
-void Subscribe_callback(char *topic, byte *payload, unsigned int length);
+
 void change();
 void WriteLog();
+void MSG(String str);
+void Subscribe_callback(char *topic, byte *payload, unsigned int length);
 
 void setup() 
 {
@@ -40,10 +42,8 @@ void setup()
   div_motor.setCallback(Subscribe_callback);
   div_motor.connect_AWS();
   div_motor.subscribe(TOPIC_POW_CTR);
-  div_motor.subscribe(TOPIC_MOT_POW);
-  div_motor.subscribe(TOPIC_MOT_SPD);
-
-  div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"AWS Connect Success\"}");
+  div_motor.subscribe(TOPIC_MOD_SPD);
+  MSG("AWS Connect Success");
 }
 
 void loop() 
@@ -77,32 +77,28 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
   {  
     power = doc["power"].as<int>();
     change();
-    WriteLog("power");
+    if(power==1)
+    {
+      MSG("power set by web_power=1");
+    }
+    else
+    {
+      MSG("power set by web_power=-1");
+    }
+    
   }
-  else if(strcmp(topic,TOPIC_MOT_SPD)==0)
+  else if(strcmp(topic,TOPIC_MOD_SPD)==0)
   {
     speed = doc["speed"].as<int>();
     change();
-    WriteLog("speed");
+    MSG("Speed Changed");
   }
   
 }
 
-void WriteLog(const char* str){
-  if(strcmp(str,"power")==0)
-  {
-    if(power==1)
-        {
-          div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"User Turn on Motor!\"}");
-        }
-        else
-        {
-          div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"User Turn off Motor!\"}");
-        }
-  }
-  else if(strcmp(str,"speed")==0)
-  {
-    div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"Change Speed!\"}");
-  }
 
+void MSG(String str){
+  String base="{\"dev\":\"Div_Motor\",\"content\":\"";
+  String base2="\"}";
+  div_motor.publish(TOPIC_WEB_LOG, (base+str+base2).c_str());
 }
