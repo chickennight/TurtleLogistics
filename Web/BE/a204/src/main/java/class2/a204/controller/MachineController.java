@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin("*")
 @Api(tags = "Machine")
 @RequestMapping("/machine")
 public class MachineController {

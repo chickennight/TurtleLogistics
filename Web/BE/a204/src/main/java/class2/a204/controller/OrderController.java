@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
+@CrossOrigin("*")
 @Api(tags = "Order")
 @RequestMapping("/order")
 public class OrderController {
