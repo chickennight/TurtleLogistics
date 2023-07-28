@@ -43,7 +43,10 @@
       
     <hr><hr>
     <Line :data="chartData"/>
-    <Bar :data="chartData" />
+    <Bar :data="chartData"/>
+    <div id="LineDiv">
+      <Line :data="chartData"/>
+    </div>
     </div>
   </div>
 </template>
@@ -94,20 +97,22 @@ export default {
       
       this.$store.dispatch("getOrderData", date);
 
-      console.log("1");
+      console.log("********************");
       var idx = 0;
       for (let key in this.orderData) {
-        console.log(this.orderData[key]);
-        this.chartData.labels[idx++] = key;
-        this.chartData.datasets[0].data[idx++] =  this.orderData[key];
+
+        this.chartData.labels[idx] = key.substr(4);
+        this.chartData.datasets[0].data[idx] =  this.orderData[key];
+        idx++;
       }
+      console.log(this.chartData);
       
-        console.log(this.orderData);
-
-
     },
     computed:{
       ...mapState(["orderData"]),
+      chartData123(){
+        return this.orderData;
+      }
     },
     methods:{
       check(){
@@ -130,8 +135,18 @@ export default {
           }
 
           this.$store.dispatch("getOrderData", date);
+
+          var idx = 0;
+          for (let key in this.orderData) {
+
+            this.chartData.labels[idx] = key.substr(4);
+            this.chartData.datasets[0].data[idx] =  this.orderData[key];
+            idx++;
+          }
+
       },
       getOrderDataMonth(){
+
           const offset = new Date().getTimezoneOffset() * 60000;
           const today = new Date(Date.now() - offset);
           const end_day = today.toISOString();
@@ -147,6 +162,18 @@ export default {
           }
 
           this.$store.dispatch("getOrderData", date);
+
+          var idx = 0;
+          for (let key in this.orderData) {
+
+            this.chartData.labels[idx] = key.substr(4);
+            this.chartData.datasets[0].data[idx] =  this.orderData[key];
+            idx++;
+          }
+
+          var ddiv = document.getElementById("LineDiv");
+          ddiv.innerHTML = '<Line :data="chartData"/>';
+
       },
       getOrderData3Month(){
           const offset = new Date().getTimezoneOffset() * 60000;
