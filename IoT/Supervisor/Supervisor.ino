@@ -166,6 +166,7 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
   }
   else if(strcmp(topic,TOPIC_POWER)==0){ // type : 0(on),1(off)
       int val = doc["power"].as<int>();
+      
 
       if((val!=order_motor) && (val!=div_motor)){
         if(val==1 or val==-1){

@@ -2,14 +2,14 @@
 
 #define THINGNAME "Ord_Motor"
 // SUBSCRIBE TOPIC
-#define TOPIC_POWER "/mod/web/power" // Sup ctrl
-#define TOPIC_INIT "/mod/ord/motor/power"
-#define TOPIC_CHANGE "/mod/ord/motor/speed"
-#define TOPIC_LOG "/log"
+#define TOPIC_POW_CTR "/mod/web/power" // Sup ctrl
+#define TOPIC_MOT_POW "/mod/ord/motor/power"
+#define TOPIC_MOT_SPD "/mod/ord/motor/speed"
+#define TOPIC_WEB_LOG "/log"
 
 // -1: power off, 1: power on
 int power=-1;
-int speed = 200;
+int speed = 190;
 
 // Motor A
 int motor1Pin1 = 27; 
@@ -22,8 +22,6 @@ const int pwmChannel = 0;
 const int resolution = 8;
 
 TLClient div_motor(THINGNAME);
-
-void changePower();
 void Subscribe_callback(char *topic, byte *payload, unsigned int length);
 
 void setup() 
@@ -42,66 +40,52 @@ void setup()
 
   div_motor.setCallback(Subscribe_callback);
   div_motor.connect_AWS();
-  div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"AWS Connect Success\"");
-  div_motor.subscribe(TOPIC_INIT);
-  div_motor.subscribe(TOPIC_POWER);
-  div_motor.subscribe(TOPIC_CHANGE);
+  div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"AWS Connect Success\"}");
+  div_motor.subscribe(TOPIC_MOT_POW);
+  div_motor.subscribe(TOPIC_POW_CTR);
+  div_motor.subscribe(TOPIC_MOT_SPD);
 }
 
 void loop() 
 {
   div_motor.mqttLoop();
-}
+  
+  digitalWrite(motor1Pin1, HIGH);
+  digitalWrite(motor1Pin2, LOW);
 
-void changePower(){
+  if(power==1) ledcWrite(pwmChannel, speed); 
+  else if(power==-1) ledcWrite(pwmChannel, 0); 
 
-  if(power==1){
-    digitalWrite(motor1Pin1, HIGH);
-    digitalWrite(motor1Pin2, LOW);
-    ledcWrite(pwmChannel, speed); 
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Motor Speed Change\"");
-    Serial.print("Motor Speed : ");
-    Serial.println(speed);
-
-  }
-  else{
-    digitalWrite(motor1Pin1, HIGH);
-    digitalWrite(motor1Pin2, LOW);
-    ledcWrite(pwmChannel, 0); 
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Turn Off Motor\"");
-    Serial.println("Motor Speed : 0");
-  }
 }
 
 void Subscribe_callback(char *topic, byte *payload, unsigned int length)
 {
+  StaticJsonDocument<200> doc;
+  DeserializationError error = deserializeJson(doc, payload, length);
 
-  if(strcmp(topic,TOPIC_INIT)==0 && power!=1){
-    power=1;
-    changePower();
-    div_motor.publish(TOPIC_LOG,"\"dev\":\"Ord_Motor\",\"content\":\"Motor INIT!\"");
-    Serial.println("MOTOR INIT!");
+  if(strcmp(topic,TOPIC_POW_CTR)==0)
+  {
+    power = doc["power"].as<int>();
+    if(power == 1)
+      div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"power set by web_power = 1\"}");
+    else if (power == -1)
+      div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"power set by web_power = -1\"}");
   }
-  else{
-    StaticJsonDocument<200> doc;
-    DeserializationError error = deserializeJson(doc, payload, length);
-    if(strcmp(topic,TOPIC_POWER)==0){
-    
-      if(doc["power"].as<int>()!=power)
-        {
-          Serial.println("Power Change!");
-          power*=-1;
-          changePower();
-        }
-    }
-    else if(strcmp(topic,TOPIC_CHANGE)==0 && power==1){
-      if(doc["speed"].as<int>()!=speed)
-      {
-        speed = doc["speed"].as<int>();
-        changePower();
-      }
-    
-    }
+
+  else if(strcmp(topic,TOPIC_MOT_POW)==0)
+  {
+    power = doc["power"].as<int>();
+    if(power == 1)
+      div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"power set by device_power = 1\"}");
+    else if (power == -1)
+      div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"power set by device_power = -1\"}");
+  }
+  
+  else if(strcmp(topic,TOPIC_MOT_SPD)==0)
+  {
+    speed = doc["speed"].as<int>();
+    div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Ord_Motor\",\"content\":\"Speed Changed\"}");
   }
   
 }
+
