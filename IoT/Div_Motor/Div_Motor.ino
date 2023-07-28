@@ -1,31 +1,28 @@
 #include "TLClient.h"
 
 #define THINGNAME "Div_Motor"
-// SUBSCRIBE TOPIC
-#define TOPIC_POW_CTR "/mod/web/power" // Sup ctrl
-#define TOPIC_MOT_POW "/mod/div/motor/power"
+
+#define TOPIC_POW_CTR "/mod/web/power" 
 #define TOPIC_MOT_SPD "/mod/div/motor/speed"
 #define TOPIC_WEB_LOG "/log"
 
-// -1: power off, 1: power on
 int power=-1;
 int speed = 200;
 
-// Motor A
 int motor1Pin1 = 27; 
 int motor1Pin2 = 26; 
 int enable1Pin = 14; 
 
-// Setting PWM properties
 const int freq = 30000;
 const int pwmChannel = 0;
 const int resolution = 8;
 
 TLClient div_motor(THINGNAME);
 
-void changePower();
 void Subscribe_callback(char *topic, byte *payload, unsigned int length);
+void change();
 void WriteLog();
+
 void setup() 
 {
   Serial.begin(115200);
@@ -42,10 +39,11 @@ void setup()
 
   div_motor.setCallback(Subscribe_callback);
   div_motor.connect_AWS();
-  div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"AWS Connect Success\"}");
   div_motor.subscribe(TOPIC_POW_CTR);
   div_motor.subscribe(TOPIC_MOT_POW);
   div_motor.subscribe(TOPIC_MOT_SPD);
+
+  div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"AWS Connect Success\"}");
 }
 
 void loop() 
@@ -53,17 +51,20 @@ void loop()
   div_motor.mqttLoop();
 }
 
-void changePower(const char* str){
+void change()
+{
 
-  if(power==1){
+  if(power==1)
+  {
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
     ledcWrite(pwmChannel, speed);
   }
-  else{
+  else
+  {
     digitalWrite(motor1Pin1, HIGH);
     digitalWrite(motor1Pin2, LOW);
-    ledcWrite(pwmChannel, 0); 
+    ledcWrite(pwmChannel, 0);
   }
 }
 
@@ -71,44 +72,18 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
 {
   StaticJsonDocument<200> doc;
   DeserializationError error = deserializeJson(doc, payload, length);
-  int pow=0;
-  int spd =0;
 
-  try 
-  {
-    pow = doc["power"].as<int>();
-  }
-  catch(const std::exception& e)
-  {
-    spd = doc["speed"].as<int>();
-  }
-
-  if(strcmp(topic,TOPIC_MOT_POW)==0)
-  {
-    if(pow!=power){
-      power*=-1;
-      changePower();
-      WriteLog("power");
-    }
-  }
-  else if(strcmp(topic,TOPIC_POW_CTR)==0)
+  if(strcmp(topic,TOPIC_POW_CTR)==0)
   {  
-    if(pow!=power)
-    {
-      div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"User Change Power!\"}");
-      power*=-1;
-      changePower();
-      WriteLog("power");
-    }
+    power = doc["power"].as<int>();
+    change();
+    WriteLog("power");
   }
   else if(strcmp(topic,TOPIC_MOT_SPD)==0)
   {
-    if(spd!=speed)
-    {
-      speed = spd;
-      changePower();
-      WriteLog("speed");
-    }
+    speed = doc["speed"].as<int>();
+    change();
+    WriteLog("speed");
   }
   
 }
@@ -118,11 +93,11 @@ void WriteLog(const char* str){
   {
     if(power==1)
         {
-        div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"Motor On!\"}");
+          div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"User Turn on Motor!\"}");
         }
         else
         {
-          div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"Motor Off!\"}");
+          div_motor.publish(TOPIC_WEB_LOG,"{\"dev\":\"Div_Motor\",\"content\":\"User Turn off Motor!\"}");
         }
   }
   else if(strcmp(str,"speed")==0)

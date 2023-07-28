@@ -1,4 +1,6 @@
 #include "TLClient.h"
+#include <Servo.h>
+
 #define THINGNAME "Div_Servo2"
 
 #define TOPIC_WEB_LOG "/log"
@@ -14,9 +16,6 @@ void Publish_callback(int orderno, int flag);
 void Subscribe_callback(char *topic, byte *payload, unsigned int length);
 void Device_function();
 
-
-//for divider
-#include <Servo.h>
 #define SENSORPIN 5
 #define SERVOPIN 3
 Servo divider;
@@ -28,9 +27,9 @@ int angle = 90;
 void moveservo(Servo* divider, int ANGLELIMIT);
 void pubres(int orderno,int flag);
 int verify();
+void MSG(String str);
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   Div_Servo.connect_AWS();
   Div_Servo.setCallback(Subscribe_callback);
@@ -38,7 +37,7 @@ void setup() {
   Div_Servo.subscribe(TOPIC_MOD_SER_ANG);
   Div_Servo.subscribe(TOPIC_MOD_SER_INT);
   Div_Servo.subscribe(TOPIC_MOD_IR_INT);
-  Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"AWS Connect Success\"}");
+  MSG("AWS Connect Success");
 
   pinMode(SENSORPIN,INPUT);
   divider.attach(SERVOPIN);
@@ -46,7 +45,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   Div_Servo.mqttLoop();
 }
 
@@ -71,31 +69,16 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   }
   else if(strcmp(TOPIC_MOD_SER_ANG, topic)==0){      
     angle = (int)doc["angle"];
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Angle Changed\"}");
-    
+    MSG("Angle Changed");
   }
   else if(strcmp(TOPIC_MOD_SER_INT, topic)==0){
     servo_interval = (int)doc["servo_interval"];
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Servo Interval Changed\"}");
+    MSG("Servo Interval Changed");
   }
   else if(strcmp(TOPIC_MOD_IR_INT, topic)==0){
     ir_interval = (int)doc["ir_interval"];
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"IR Interval Changed\"}");
+    MSG("Servo Interval Changed");
   }
-}
-
-void moveservo(Servo* divider,int ANGLELIMIT) {
-    delay(servo_interval);
-    Serial.println("Motor Move!");
-    for (int i = 0; i <= ANGLELIMIT; i++) {
-        divider->write(i);
-        delay(ir_interval);
-    }
-
-    for (int i = ANGLELIMIT; i >= 0; i--) {
-        divider->write(i);
-        delay(ir_interval);
-    }
 }
 
 void pubres(const char* orderno,int flag){
@@ -105,18 +88,19 @@ void pubres(const char* orderno,int flag){
   temp["result"] = String(flag);
   char buf[100];
   serializeJson(temp,buf);
-  Div_Servo.publish(TOPIC_DIV_RES,buf);
+
   if(flag==1){
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Divide Success\"}");
+    MSG("Divide Success");
   }
   else{
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Divide Error\"}");
+    MSG("Divide Error");
   }
+
   if(!Div_Servo.publish(TOPIC_DIV_RES,buf)){
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Publish Result Success\"}");
+    MSG("Publish Result Success");
   }
   else{
-    Div_Servo.publish(TOPIC_WEB_LOG, "{\"dev\":\"Div_Servo2\",\"content\":\"Publish Result Fail\"}");
+    MSG("Publish Result Fail");
   }
 }
 
@@ -139,4 +123,21 @@ int verify(){
   return flag;
 }
 
+void moveservo(Servo* divider,int ANGLELIMIT) {
+    delay(servo_interval);
+    for (int i = 0; i <= ANGLELIMIT; i++) {
+        divider->write(i);
+        delay(ir_interval);
+    }
+
+    for (int i = ANGLELIMIT; i >= 0; i--) {
+        divider->write(i);
+        delay(ir_interval);
+    }
+}
+void MSG(String str){
+  String base="{\"dev\":\"Div_Servo2\",\"content\":\"";
+  String base2="\"}";
+  Div_Servo.publish(TOPIC_WEB_LOG, (base+str+base2).c_str());
+}
 
