@@ -107,7 +107,30 @@ const store = createStore({
                 console.log(err.data);    
             })
             
-        }
+        },
+        getMachineStatus({commit}) {
+            const API_URL = `${REST_API}/machine`;
+            axios({
+                url: API_URL,
+                method: "get",
+            })
+            .then((res) => {
+                console.log(res);
+                commit;
+            })
+    
+        },
+        getMachineLog({commit}) {
+            const API_URL = `${REST_API}/machine/log`
+            axios({
+                url: API_URL,
+                method: "get",
+            })
+            .then((res) => {
+                console.log(res);
+                commit;
+            })
+        },
     }
 })
 
