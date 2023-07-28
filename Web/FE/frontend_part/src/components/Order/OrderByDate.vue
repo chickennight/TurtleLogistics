@@ -32,6 +32,12 @@
       variant="outlined">
         1년
       </v-btn>
+
+      <v-btn @click="check"
+      background-color='rgb(53, 53, 53)'
+      variant="outlined">
+        1년
+      </v-btn>
     </div>
     <div class="OrderGraphContainer">
       
@@ -44,6 +50,7 @@
 
 
 <script>
+import { mapState } from 'vuex';
 import { Bar, Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement,
   LineElement  } from 'chart.js'
@@ -77,23 +84,44 @@ export default {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
-      const week = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000));
+      const week = new Date(Date.now() - (6 * 24 * 60 * 60 * 1000) - offset);
       const start_day = week.toISOString();
 
       const date = {
         end : end_day,
         start : start_day,
       }
-
+      
       this.$store.dispatch("getOrderData", date);
 
+      console.log("1");
+      var idx = 0;
+      for (let key in this.orderData) {
+        console.log(this.orderData[key]);
+        this.chartData.labels[idx++] = key;
+        this.chartData.datasets[0].data[idx++] =  this.orderData[key];
+      }
+      
+        console.log(this.orderData);
+
+
+    },
+    computed:{
+      ...mapState(["orderData"]),
     },
     methods:{
+      check(){
+
+        for (let key in this.orderData) {
+            console.log(this.orderData[key])
+        }
+
+      },
       getOrderDataWeek(){
           const offset = new Date().getTimezoneOffset() * 60000;
           const today = new Date(Date.now() - offset);
           const end_day = today.toISOString();
-          const week = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000));
+          const week = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000) - offset);
           const start_day = week.toISOString();
 
           const date = {
