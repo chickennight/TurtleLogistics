@@ -6,7 +6,9 @@ import router from "../router";
 const REST_API = "http://localhost:8080";
 
 const store = createStore({
-    state: {},
+    state: {
+        orderData: [],
+    },
     getters: {},
     mutations: {
         ADMIN_LOGIN(state, data) {
@@ -30,6 +32,9 @@ const store = createStore({
             state;
             console.log(data);
             router.push("/customer");
+        },
+        GET_ORDER_DATE(state, date) {
+            state.orderData = date;
         }
     },
     actions: {
@@ -100,8 +105,7 @@ const store = createStore({
                 method: "get",
             })
             .then((res) => {
-                console.log(res.data);
-                commit;
+                commit("GET_ORDER_DATE", res.data);
             })
             .catch((err) => {
                 console.log(err.data);    
