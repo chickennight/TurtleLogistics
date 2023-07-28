@@ -104,7 +104,7 @@ const store = createStore({
                 url: `${API_URL}?start_day=${date.start}&end_day=${date.end}`,
                 method: "get",
             })
-            .then((res) => {
+                .then((res) => {
                 commit("GET_ORDER_DATE", res.data);
             })
             .catch((err) => {
