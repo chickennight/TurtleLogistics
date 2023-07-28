@@ -25,6 +25,10 @@ FROM nginx:1.25.1-alpine
 # 첫 번째 빌드 단계에서 빌드한 소스를 Nginx가 서빙할 수 있게 복사
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# nginx.conf를 Nginx 설정 디렉토리에 복사
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# 포트80에서 트래픽 listen 하겠다는 뜻
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
