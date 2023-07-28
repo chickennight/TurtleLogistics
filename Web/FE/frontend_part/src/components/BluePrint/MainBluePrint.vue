@@ -15,7 +15,7 @@ export default {
     name: "MainBluePrint",
     methods: {
       getMachineStatus(){
-        
+        this.$store.dispatch("getMachineStatus");
       }
     }
 }
