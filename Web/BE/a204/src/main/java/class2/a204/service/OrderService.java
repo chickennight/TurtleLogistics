@@ -79,7 +79,7 @@ public class OrderService {
 
     public void set2OrderNow(Long orderNum) {
         OrderNow temp = ONR.findByOrderNum(orderNum);
-        temp.setStatus(2);
+        temp.changeStatus(2);
         ONR.save(temp);
     }
 

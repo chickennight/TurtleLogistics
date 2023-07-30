@@ -121,44 +121,44 @@ public class OrderController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             if (orderUpdateDto.getType() == 0) {
                 if (orderUpdateDto.getResult() == 1) {
-                    orderNow.setStatus(0);
+                    orderNow.changeStatus(0);
                     machineService.addLog(errorLog(orderUpdateDto, "포장 문제 발생"));
                     return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
                 if (orderNow.getStatus() == 2) {
-                    orderNow.setStatus(3);
+                    orderNow.changeStatus(3);
                     orderService.updateStatus(orderNow);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    orderNow.setStatus(3);
+                    orderNow.changeStatus(3);
                     orderService.updateStatus(orderNow);
                     machineService.addLog(errorLog(orderUpdateDto, "포장 순서 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
             } else if (orderUpdateDto.getType() == 1) {
                 if (orderUpdateDto.getResult() == 1) {
-                    orderNow.setStatus(0);
+                    orderNow.changeStatus(0);
                     machineService.addLog(errorLog(orderUpdateDto, "분류 문제 발생"));
                     return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
                 if (orderNow.getStatus() == 3) {
-                    orderNow.setStatus(4);
+                    orderNow.changeStatus(4);
                     orderService.updateStatus(orderNow);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    orderNow.setStatus(4);
+                    orderNow.changeStatus(4);
                     orderService.updateStatus(orderNow);
                     machineService.addLog(errorLog(orderUpdateDto, "분류 순서 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
             } else if (orderUpdateDto.getType() == 2) {
                 if (orderNow.getStatus() == 4) {
-                    orderNow.setStatus(5);
+                    orderNow.changeStatus(5);
                     orderService.updateStatus(orderNow);
                     smsService.sendSms(new MessageDTO(orderNow.getOrder().getCustomer().getPhoneNumber(), "주문하신 상품이 배송완료되었습니다."));
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    orderNow.setStatus(5);
+                    orderNow.changeStatus(5);
                     orderService.updateStatus(orderNow);
                     machineService.addLog(errorLog(orderUpdateDto, "배송 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
