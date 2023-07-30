@@ -28,16 +28,16 @@ public class CustomerService {
     }
 
     //회원가입
-    public Customer registerCustomer(CustomerDTO customerDTO){
-        Customer customer = customerDTO.toEntity();
+    public Customer registerCustomer(CustomerDTO customerDto){
+        Customer customer = customerDto.toEntity();
         customer.encodePassword(encoder);
         return CR.save(customer);
     }
 
     //로그인
-    public Map<String, String> login(LoginRequestDTO loginRequestDTO){
-        String id = loginRequestDTO.getId();
-        String password = loginRequestDTO.getPassword();
+    public Map<String, String> login(LoginRequestDTO loginRequestDto){
+        String id = loginRequestDto.getId();
+        String password = loginRequestDto.getPassword();
         Customer customer = CR.findByCustomerId(id).get();
         if(customer != null && encoder.matches(password, customer.getPassword())){
             String accessToken = JP.createToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());

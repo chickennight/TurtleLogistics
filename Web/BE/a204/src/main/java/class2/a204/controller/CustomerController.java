@@ -33,9 +33,9 @@ public class CustomerController {
     //회원가입
     @ApiOperation(value = "사용자 등록", notes = "신규 사용자 등록")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody CustomerDTO customerDTO){
+    public ResponseEntity<?> register(@RequestBody CustomerDTO customerDto){
         try{
-            customerService.registerCustomer(customerDTO);
+            customerService.registerCustomer(customerDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (Exception e){
             return errorHandler.errorMessage(e);
@@ -46,9 +46,9 @@ public class CustomerController {
     //로그인
     @ApiOperation(value = "사용자 로그인", notes = "사용자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDto) {
         try {
-            Map<String, String> tokens = customerService.login(loginRequestDTO);
+            Map<String, String> tokens = customerService.login(loginRequestDto);
             if (tokens != null) {
                 return new ResponseEntity<>(tokens,HttpStatus.OK);
             }
