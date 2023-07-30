@@ -1,7 +1,7 @@
 package class2.a204.service;
 
 import class2.a204.dto.AdminDTO;
-import class2.a204.dto.LoginRequestDTO;
+import class2.a204.dto.AdminLoginDTO;
 import class2.a204.entity.Admin;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.jwt.Role;
@@ -38,9 +38,9 @@ public class AdminService {
     }
 
     //로그인
-    public Map<String, String> login(LoginRequestDTO loginRequestDto) {
-        String id = loginRequestDto.getId();
-        String password = loginRequestDto.getPassword();
+    public Map<String, String> login(AdminLoginDTO adminLoginDto) {
+        String id = adminLoginDto.getAdmin_id();
+        String password = adminLoginDto.getPassword();
         Admin admin = AR.findByAdminId(id).get();
         if (admin != null && encoder.matches(password, admin.getPassword())) {
             String accessToken = JP.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());

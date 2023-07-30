@@ -50,9 +50,9 @@ public class AdminController {
 
     @ApiOperation(value = "관리자 로그인", notes = "관리자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDto) {
+    public ResponseEntity<?> login(@RequestBody AdminLoginDTO adminLoginDto) {
         try {
-            Map<String, String> tokens = adminService.login(loginRequestDto);
+            Map<String, String> tokens = adminService.login(adminLoginDto);
             if (tokens != null) {
                 return new ResponseEntity<>(tokens, HttpStatus.OK);
             }
