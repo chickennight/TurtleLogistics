@@ -9,9 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginRequestDTO {
+public class AdminLoginDTO {
     @ApiModelProperty(value = "아이디", required = true, example = "Admin")
-    private String id;
+    private String admin_id;
     @ApiModelProperty(value = "비밀번호", required = true, example = "Admin")
     private String password;
 }

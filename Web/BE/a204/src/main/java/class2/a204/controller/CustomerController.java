@@ -2,8 +2,8 @@ package class2.a204.controller;
 
 
 import class2.a204.dto.CustomerDTO;
-import class2.a204.dto.LoginRequestDTO;
-import class2.a204.entity.Customer;
+import class2.a204.dto.AdminLoginDTO;
+import class2.a204.dto.CustomerLoginDTO;
 import class2.a204.service.CustomerService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
@@ -46,9 +46,9 @@ public class CustomerController {
     //로그인
     @ApiOperation(value = "사용자 로그인", notes = "사용자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDto) {
+    public ResponseEntity<?> login(@RequestBody CustomerLoginDTO customerLoginDTO) {
         try {
-            Map<String, String> tokens = customerService.login(loginRequestDto);
+            Map<String, String> tokens = customerService.login(customerLoginDTO);
             if (tokens != null) {
                 return new ResponseEntity<>(tokens,HttpStatus.OK);
             }

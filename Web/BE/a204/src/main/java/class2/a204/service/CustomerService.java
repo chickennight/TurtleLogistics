@@ -1,7 +1,8 @@
 package class2.a204.service;
 
 import class2.a204.dto.CustomerDTO;
-import class2.a204.dto.LoginRequestDTO;
+import class2.a204.dto.AdminLoginDTO;
+import class2.a204.dto.CustomerLoginDTO;
 import class2.a204.entity.Customer;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.jwt.Role;
@@ -35,9 +36,9 @@ public class CustomerService {
     }
 
     //로그인
-    public Map<String, String> login(LoginRequestDTO loginRequestDto){
-        String id = loginRequestDto.getId();
-        String password = loginRequestDto.getPassword();
+    public Map<String, String> login(CustomerLoginDTO customerLoginDTO){
+        String id = customerLoginDTO.getCustomer_id();
+        String password = customerLoginDTO.getPassword();
         Customer customer = CR.findByCustomerId(id).get();
         if(customer != null && encoder.matches(password, customer.getPassword())){
             String accessToken = JP.createToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
