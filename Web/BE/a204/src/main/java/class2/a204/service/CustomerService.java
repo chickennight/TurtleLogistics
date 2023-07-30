@@ -16,33 +16,33 @@ import java.util.Map;
 
 @Service
 public class CustomerService {
-    private final CustomerRepository CR;
+    private final CustomerRepository customerRepository;
 
-    private final JwtTokenProvider JP;
-    private final PasswordEncoder encoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomerService(CustomerRepository cr,JwtTokenProvider jp, PasswordEncoder encoder){
-        this.CR = cr;
-        this.JP = jp;
-        this.encoder = encoder;
+    public CustomerService(CustomerRepository customerRepository,JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder){
+        this.customerRepository = customerRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //회원가입
     public Customer registerCustomer(CustomerDTO customerDto){
         Customer customer = customerDto.toEntity();
-        customer.encodePassword(encoder);
-        return CR.save(customer);
+        customer.encodePassword(passwordEncoder);
+        return customerRepository.save(customer);
     }
 
     //로그인
     public Map<String, String> login(CustomerLoginDTO customerLoginDTO){
         String id = customerLoginDTO.getCustomer_id();
         String password = customerLoginDTO.getPassword();
-        Customer customer = CR.findByCustomerId(id).get();
-        if(customer != null && encoder.matches(password, customer.getPassword())){
-            String accessToken = JP.createToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
-            String refreshToken = JP.createRefreshToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
+        Customer customer = customerRepository.findByCustomerId(id).get();
+        if(customer != null && passwordEncoder.matches(password, customer.getPassword())){
+            String accessToken = jwtTokenProvider.createToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
+            String refreshToken = jwtTokenProvider.createRefreshToken(customer.getCustomerId(), Role.ROLE_CUSTOMER.name());
 
             Map<String, String> tokens = new HashMap<>();
             tokens.put("accessToken", accessToken);
