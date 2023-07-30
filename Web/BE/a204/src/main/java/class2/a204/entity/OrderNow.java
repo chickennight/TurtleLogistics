@@ -33,7 +33,7 @@ public class OrderNow {
         this.status = status;
     }
 
-    public void setStatus(int status) {
+    public void changeStatus(int status) {
         this.status = status;
     }
 }
