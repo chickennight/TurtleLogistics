@@ -4,8 +4,13 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
+
 public class AnalysisRegionDTO {
     private Integer region;
     private Long count;
+
+    public AnalysisRegionDTO(Integer region, Long count){
+        this.region = region;
+        this.count = count;
+    }
 }
