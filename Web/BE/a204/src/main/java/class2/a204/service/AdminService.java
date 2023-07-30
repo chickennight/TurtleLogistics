@@ -31,16 +31,16 @@ public class AdminService {
 //    }
 
     //회원가입
-    public Admin registerAdmin(AdminDTO adminDTO) {
-        Admin admin = adminDTO.toEntity();
+    public Admin registerAdmin(AdminDTO adminDto) {
+        Admin admin = adminDto.toEntity();
         admin.encodePassword(encoder);
         return AR.save(admin);
     }
 
     //로그인
-    public Map<String, String> login(LoginRequestDTO loginRequestDTO) {
-        String id = loginRequestDTO.getId();
-        String password = loginRequestDTO.getPassword();
+    public Map<String, String> login(LoginRequestDTO loginRequestDto) {
+        String id = loginRequestDto.getId();
+        String password = loginRequestDto.getPassword();
         Admin admin = AR.findByAdminId(id).get();
         if (admin != null && encoder.matches(password, admin.getPassword())) {
             String accessToken = JP.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());

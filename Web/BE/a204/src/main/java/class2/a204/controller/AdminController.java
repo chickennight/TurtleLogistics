@@ -39,9 +39,9 @@ public class AdminController {
 
     @ApiOperation(value = "관리자 등록", notes = "신규 관리자 등록")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AdminDTO adminDTO) {
+    public ResponseEntity<?> register(@RequestBody AdminDTO adminDto) {
         try {
-            adminService.registerAdmin(adminDTO);
+            adminService.registerAdmin(adminDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
@@ -50,9 +50,9 @@ public class AdminController {
 
     @ApiOperation(value = "관리자 로그인", notes = "관리자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDto) {
         try {
-            Map<String, String> tokens = adminService.login(loginRequestDTO);
+            Map<String, String> tokens = adminService.login(loginRequestDto);
             if (tokens != null) {
                 return new ResponseEntity<>(tokens, HttpStatus.OK);
             }
