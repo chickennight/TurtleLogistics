@@ -45,7 +45,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<AnalysisRegionDTO> findRegionCountByYearMonth(Integer year, Integer month);
 
     /**
-     * 지정된 기간 동안에 각 일자별로 주문된 주문 수를 표시하는 AnalysisDayDTO 객체 리스트를 반환합니다.
+     * 지정된 기간 동안에 각 일자별로 주문된 주문 수를 표시하는 AnalysisDayDTO 객체 리스트
      *
      * @param startDay 주문 데이터를 검색할 시작 일자
      * @param endDay 주문 데이터를 검색할 종료 일자
