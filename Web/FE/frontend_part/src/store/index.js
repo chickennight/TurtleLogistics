@@ -8,6 +8,8 @@ const REST_API = "http://localhost:8080";
 const store = createStore({
     state: {
         orderData: [],
+        machineLog: [],
+        machineStatus: [],
     },
     getters: {},
     mutations: {
@@ -35,6 +37,13 @@ const store = createStore({
         },
         GET_ORDER_DATE(state, date) {
             state.orderData = date;
+        },
+        GET_MACHINE_LOG(state, data){
+            state.machineLog = data;
+        },
+        GET_MACHINE_STATUS(state, data){
+            state.machineStatus = data;
+            console.log(data);
         }
     },
     actions: {
@@ -119,8 +128,10 @@ const store = createStore({
                 method: "get",
             })
             .then((res) => {
-                console.log(res);
-                commit;
+                commit("GET_MACHINE_STATUS", res.data["상태"]);
+            })
+            .catch((err) => {
+                console.log(err);
             })
     
         },
@@ -131,8 +142,10 @@ const store = createStore({
                 method: "get",
             })
             .then((res) => {
-                console.log(res);
-                commit;
+                commit("GET_MACHINE_LOG", res.data);
+            })
+            .catch((err) => {
+                console.log(err);
             })
         },
     }
