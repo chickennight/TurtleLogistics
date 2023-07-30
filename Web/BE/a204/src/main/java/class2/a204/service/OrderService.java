@@ -13,23 +13,23 @@ import java.util.*;
 
 @Service
 public class OrderService {
-    private final OrderRepository OR;
-    private final OrderNowRepository ONR;
-    private final LogRepository LR;
-    private final CustomerRepository CR;
-    private final OrderDetailRepository ODR;
+    private final OrderRepository orderRepository;
+    private final OrderNowRepository orderNowRepository;
+    private final LogRepository logRepository;
+    private final CustomerRepository customerRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     @Autowired
-    public OrderService(OrderRepository or, OrderNowRepository onr, LogRepository lr, CustomerRepository cr, OrderDetailRepository odr) {
-        OR = or;
-        ONR = onr;
-        LR = lr;
-        CR = cr;
-        ODR = odr;
+    public OrderService(OrderRepository orderRepository, OrderNowRepository orderNowRepository, LogRepository logRepository, CustomerRepository customerRepository, OrderDetailRepository orderDetailRepository) {
+        this.orderRepository = orderRepository;
+        this.orderNowRepository = orderNowRepository;
+        this.logRepository = logRepository;
+        this.customerRepository = customerRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     public OrderNow findByOrderNum(Long orderNum) {
-        return ONR.findByOrderNum(orderNum);
+        return orderNowRepository.findByOrderNum(orderNum);
     }
 
     public void addNewOrder(NewOrderDTO newOrderDto) {
@@ -37,56 +37,56 @@ public class OrderService {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int today = (year - 2000) * 100 + month;
-        int todayOrders = OR.todayCount(today);
+        int todayOrders = orderRepository.todayCount(today);
 
 
         Long orderNum = ((long) today * 1000000 + todayOrders + 1);
-        Customer customer = CR.findByCustomerNum(newOrderDto.getCustomerNum());
+        Customer customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
         Order input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer);
 
         System.out.println(input);
-        OR.save(input);
+        orderRepository.save(input);
 
         for (Product p : newOrderDto.getProducts()) {
             OrderDetail in = new OrderDetail(input, p, p.getStock());
-            ODR.save(in);
+            orderDetailRepository.save(in);
         }
 
 
         OrderNow create = new OrderNow(input, 1);
-        ONR.save(create);
+        orderNowRepository.save(create);
     }
 
     public void updateStatus(OrderNow orderNow) {
-        ONR.save(orderNow);
+        orderNowRepository.save(orderNow);
     }
 
     public List<Log> findOrderError() {
-        return LR.findAllByMachine_MachineId(0);
+        return logRepository.findAllByMachine_MachineId(0);
     }
 
     public List<OrderNow> findAllOrders() {
-        return ONR.findAll();
+        return orderNowRepository.findAll();
     }
 
     public List<OrderNow> findPackageOrders() {
-        return ONR.findAllByStatus(1);
+        return orderNowRepository.findAllByStatus(1);
     }
 
     public List<OrderDetail> findOrderDetailsBy(Long orderNum) {
-        return ODR.findAllByOrderNum(orderNum);
+        return orderDetailRepository.findAllByOrderNum(orderNum);
     }
 
     public void set2OrderNow(Long orderNum) {
-        OrderNow temp = ONR.findByOrderNum(orderNum);
+        OrderNow temp = orderNowRepository.findByOrderNum(orderNum);
         temp.changeStatus(2);
-        ONR.save(temp);
+        orderNowRepository.save(temp);
     }
 
     public Map<String, Long> dataRegion(Integer year, Integer month) {
         List<AnalysisRegionDTO> list;
-        if (month == 0) list = OR.findRegionCountByYear(year);
-        else list = OR.findRegionCountByYearMonth(year, month);
+        if (month == 0) list = orderRepository.findRegionCountByYear(year);
+        else list = orderRepository.findRegionCountByYearMonth(year, month);
 
         Map<String, Long> result = new HashMap<>();
 
@@ -100,7 +100,7 @@ public class OrderService {
     }
 
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
-        List<AnalysisDayDTO> list = OR.findDayCount(startDay, endDay);
+        List<AnalysisDayDTO> list = orderRepository.findDayCount(startDay, endDay);
         Map<String, Long> result = new TreeMap<>();
         LocalDateTime now = startDay;
         endDay = endDay.plusDays(1);

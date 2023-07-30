@@ -16,25 +16,25 @@ import java.util.Optional;
 @Service
 public class MachineService {
 
-    private final LogRepository LR;
-    private final MachineRepository MR;
+    private final LogRepository logRepository;
+    private final MachineRepository machineRepository;
 
     @Autowired
-    public MachineService(LogRepository lr, MachineRepository mr) {
-        LR = lr;
-        MR = mr;
+    public MachineService(LogRepository logRepository, MachineRepository machineRepository) {
+        this.logRepository = logRepository;
+        this.machineRepository = machineRepository;
     }
 
     public List<Machine> findMachineAll() {
-        return MR.findAll();
+        return machineRepository.findAll();
     }
 
     public List<Log> findLogAll() {
-        return LR.findAll();
+        return logRepository.findAll();
     }
 
     public void addLog(Log log) {
-        LR.save(log);
+        logRepository.save(log);
     }
 
     public List<Integer> brokenMachine(List<Machine> list) {
@@ -47,12 +47,12 @@ public class MachineService {
 
     public List<Log> lastBrokenLogs(List<Integer> brokenList) {
         List<Log> lastBrokenLogList = new ArrayList<>();
-        for (Integer n : brokenList) lastBrokenLogList.add(LR.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
+        for (Integer n : brokenList) lastBrokenLogList.add(logRepository.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
         return lastBrokenLogList;
     }
 
     public void updateMachine(MachineDTO machineDto, Integer machineId) {
-        Optional<Machine> foundMachine = MR.findById(machineId);
+        Optional<Machine> foundMachine = machineRepository.findById(machineId);
         if(!foundMachine.isPresent()) {
             throw new RuntimeException("등록되지 않은 기기 : " + machineId);
         }
@@ -61,10 +61,10 @@ public class MachineService {
             machine.changeDetail(machineDto.getMachineDetail());
         }
         machine.changeBroken(machineDto.getBroken());
-        MR.save(machine);
+        machineRepository.save(machine);
     }
 
     public Machine findMachine(Integer machineId) {
-        return MR.findByMachineId(machineId);
+        return machineRepository.findByMachineId(machineId);
     }
 }

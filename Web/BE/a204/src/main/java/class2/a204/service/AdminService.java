@@ -15,15 +15,15 @@ import java.util.Map;
 
 @Service
 public class AdminService {
-    private final AdminRepository AR;
-    private final JwtTokenProvider JP;
-    private final PasswordEncoder encoder;
+    private final AdminRepository adminRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminService(AdminRepository ar,JwtTokenProvider jp, PasswordEncoder encoder) {
-        this.AR = ar;
-        this.JP = jp;
-        this.encoder = encoder;
+    public AdminService(AdminRepository adminRepository,JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+        this.adminRepository = adminRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
 //    public Admin findAdminById(String id) {
@@ -33,18 +33,18 @@ public class AdminService {
     //회원가입
     public Admin registerAdmin(AdminDTO adminDto) {
         Admin admin = adminDto.toEntity();
-        admin.encodePassword(encoder);
-        return AR.save(admin);
+        admin.encodePassword(passwordEncoder);
+        return adminRepository.save(admin);
     }
 
     //로그인
     public Map<String, String> login(AdminLoginDTO adminLoginDto) {
         String id = adminLoginDto.getAdmin_id();
         String password = adminLoginDto.getPassword();
-        Admin admin = AR.findByAdminId(id).get();
-        if (admin != null && encoder.matches(password, admin.getPassword())) {
-            String accessToken = JP.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
-            String refreshToken = JP.createRefreshToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
+        Admin admin = adminRepository.findByAdminId(id).get();
+        if (admin != null && passwordEncoder.matches(password, admin.getPassword())) {
+            String accessToken = jwtTokenProvider.createToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
+            String refreshToken = jwtTokenProvider.createRefreshToken(admin.getAdminId(), Role.ROLE_ADMIN.name());
 
             Map<String, String> tokens = new HashMap<>();
             tokens.put("accessToken", accessToken);
@@ -55,10 +55,10 @@ public class AdminService {
     }
 
     public String refreshAccessToken(String refreshToken) {
-        return JP.refreshAccessToken(refreshToken);
+        return jwtTokenProvider.refreshAccessToken(refreshToken);
     }
 
     public String getAdminPhone(String token) {
-        return AR.findByAdminId(JP.getUserID(token)).get().getPhoneNumber();
+        return adminRepository.findByAdminId(jwtTokenProvider.getUserID(token)).get().getPhoneNumber();
     }
 }
