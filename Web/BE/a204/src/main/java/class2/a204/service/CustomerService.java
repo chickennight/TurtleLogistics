@@ -37,7 +37,7 @@ public class CustomerService {
 
     //로그인
     public Map<String, String> login(CustomerLoginDTO customerLoginDTO){
-        String id = customerLoginDTO.getCustomer_id();
+        String id = customerLoginDTO.getCustomerId();
         String password = customerLoginDTO.getPassword();
         Customer customer = customerRepository.findByCustomerId(id).get();
         if(customer != null && passwordEncoder.matches(password, customer.getPassword())){
