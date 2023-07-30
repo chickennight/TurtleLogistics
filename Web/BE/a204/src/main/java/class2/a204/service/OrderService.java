@@ -1,8 +1,8 @@
 package class2.a204.service;
 
-import class2.a204.dto.NewOrderDto;
-import class2.a204.dto.AnalysisDayDto;
-import class2.a204.dto.AnalysisRegionDto;
+import class2.a204.dto.NewOrderDTO;
+import class2.a204.dto.AnalysisDayDTO;
+import class2.a204.dto.AnalysisRegionDTO;
 import class2.a204.entity.*;
 import class2.a204.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.LongConsumer;
 
 @Service
 public class OrderService {
@@ -33,34 +32,28 @@ public class OrderService {
         return ONR.findByOrderNum(orderNum);
     }
 
-    public void addNewOrder(NewOrderDto newOrderDto) {
+    public void addNewOrder(NewOrderDTO newOrderDto) {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int today = (year - 2000) * 100 + month;
         int todayOrders = OR.todayCount(today);
 
-        Order input = new Order();
-        input.setOrderNum((long) today * 1000000 + todayOrders + 1);
-        input.setDetailAddress(newOrderDto.getDetailAddress());
-        input.setAddress(newOrderDto.getAddress());
+
+        Long orderNum = ((long) today * 1000000 + todayOrders + 1);
         Customer customer = CR.findByCustomerNum(newOrderDto.getCustomerNum());
-        input.setCustomer(customer);
+        Order input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer);
 
         System.out.println(input);
         OR.save(input);
 
         for (Product p : newOrderDto.getProducts()) {
-            OrderDetail in = new OrderDetail();
-            in.setOrder(input);
-            in.setProduct(p);
-            in.setAmount(p.getStock());
+            OrderDetail in = new OrderDetail(input, p, p.getStock());
             ODR.save(in);
         }
 
-        OrderNow create = new OrderNow();
-        create.setOrder(input);
-        create.setStatus(1);
+
+        OrderNow create = new OrderNow(input, 1);
         ONR.save(create);
     }
 
@@ -91,7 +84,7 @@ public class OrderService {
     }
 
     public Map<String, Long> dataRegion(Integer year, Integer month) {
-        List<AnalysisRegionDto> list;
+        List<AnalysisRegionDTO> list;
         if (month == 0) list = OR.findRegionCountByYear(year);
         else list = OR.findRegionCountByYearMonth(year, month);
 
@@ -100,14 +93,14 @@ public class OrderService {
         for (int i = 1; i <= 17; ++i)
             result.put(String.valueOf(i), 0L);
 
-        for (AnalysisRegionDto dto : list) {
+        for (AnalysisRegionDTO dto : list) {
             result.put(String.valueOf(dto.getRegion()), dto.getCount());
         }
         return result;
     }
 
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
-        List<AnalysisDayDto> list = OR.findDayCount(startDay, endDay);
+        List<AnalysisDayDTO> list = OR.findDayCount(startDay, endDay);
         Map<String, Long> result = new TreeMap<>();
         LocalDateTime now = startDay;
         endDay = endDay.plusDays(1);
@@ -116,7 +109,7 @@ public class OrderService {
             result.put(String.valueOf(input), 0L);
             now = now.plusDays(1);
         }
-        for (AnalysisDayDto ad : list)
+        for (AnalysisDayDTO ad : list)
             result.put(ad.getDay(), ad.getCount());
 
         return result;
