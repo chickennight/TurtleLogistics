@@ -2,16 +2,13 @@ package class2.a204.dto;
 
 import class2.a204.entity.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
-
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class NewOrderDto {
+public class NewOrderDTO {
 
     @JsonProperty("customer_num")
     private Integer customerNum;

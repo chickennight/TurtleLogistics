@@ -4,9 +4,9 @@ import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Builder
 public class SmsRequestDTO {
     String type;
