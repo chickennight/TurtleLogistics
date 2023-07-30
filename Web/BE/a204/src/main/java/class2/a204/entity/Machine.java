@@ -43,11 +43,18 @@ public class Machine {
         this.logs = logs;
     }
 
-    public Machine(Integer machineId, String machineDetail, Boolean broken) {
-        this.machineId = machineId;
+    public Machine(String machineDetail, Boolean broken) {
         this.machineDetail = machineDetail;
         this.broken = broken;
     }
+
+    public void changeDetail(String machineDetail){
+        this.machineDetail = machineDetail;
+    }
+    public void changeBroken(Boolean broken){
+        this.broken  = broken;
+    }
+
 
     public Machine(Integer machineId, String machineDetail) {
         this.machineId = machineId;
