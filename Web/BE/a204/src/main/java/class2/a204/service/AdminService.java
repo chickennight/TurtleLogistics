@@ -39,7 +39,7 @@ public class AdminService {
 
     //로그인
     public Map<String, String> login(AdminLoginDTO adminLoginDto) {
-        String id = adminLoginDto.getAdmin_id();
+        String id = adminLoginDto.getAdminId();
         String password = adminLoginDto.getPassword();
         Admin admin = adminRepository.findByAdminId(id).get();
         if (admin != null && passwordEncoder.matches(password, admin.getPassword())) {
