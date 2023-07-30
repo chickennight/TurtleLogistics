@@ -3,7 +3,7 @@
     <div class="AdminProfile">
       관리자님 환영합니다 &nbsp;&nbsp;&nbsp;
       마이페이지  &nbsp; |  &nbsp;
-      로그아웃
+      <span @click="logout">로그아웃</span>
     </div>
   </div>
 </template>
@@ -11,6 +11,12 @@
 <script>
 export default {
     name : "HeaderNav",
+    methods:{
+      logout(){
+        alert("로그아웃되었습니다.");
+        this.$router.push("/");
+      }
+    }
 }
 </script>
 
