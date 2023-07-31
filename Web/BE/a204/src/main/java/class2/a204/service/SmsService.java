@@ -22,6 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class SmsService {
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    public String makeSignature(Long time) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+    public String makeSignature(Long time) throws NoSuchAlgorithmException, InvalidKeyException {
         String space = " ";
         String newLine = "\n";
         String method = "POST";
@@ -53,24 +54,21 @@ public class SmsService {
         String accessKey = this.accessKey;
         String secretKey = this.secretKey;
 
-        String message = new StringBuilder()
-                .append(method)
-                .append(space)
-                .append(url)
-                .append(newLine)
-                .append(timestamp)
-                .append(newLine)
-                .append(accessKey)
-                .toString();
+        String message = method +
+                space +
+                url +
+                newLine +
+                timestamp +
+                newLine +
+                accessKey;
 
-        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(signingKey);
 
-        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-        String encodeBase64String = Base64.encodeBase64String(rawHmac);
+        byte[] rawHmac = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
 
-        return encodeBase64String;
+        return Base64.encodeBase64String(rawHmac);
     }
     public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         Long time = System.currentTimeMillis();

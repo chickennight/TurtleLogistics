@@ -7,13 +7,13 @@ import class2.a204.entity.Log;
 import class2.a204.entity.OrderDetail;
 import class2.a204.entity.OrderNow;
 import class2.a204.entity.Product;
-import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.service.MachineService;
 import class2.a204.service.OrderService;
 import class2.a204.service.ProductService;
 import class2.a204.service.SmsService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -38,18 +41,17 @@ public class OrderController {
     private final ProductService productService;
 
     private final SmsService smsService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public OrderController(OrderService orderService, ErrorHandler errorHandler, MachineService machineService, ProductService productService, SmsService smsService, JwtTokenProvider jwtTokenProvider) {
+    public OrderController(OrderService orderService, ErrorHandler errorHandler, MachineService machineService, ProductService productService, SmsService smsService) {
         this.orderService = orderService;
         this.errorHandler = errorHandler;
         this.machineService = machineService;
         this.productService = productService;
         this.smsService = smsService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @ApiOperation(value = "일자별 주문 분석", notes = "입력 기간에 따른 주문의 일자별 자료를 반환")
     @GetMapping("/analysis/day")
     public ResponseEntity<?> dataAnalysisDay(@RequestParam("start_day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDay, @RequestParam("end_day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDay) {
         try {
@@ -59,6 +61,7 @@ public class OrderController {
         }
     }
 
+    @ApiOperation(value = "지역별 주문 분석", notes = "입력 기간에 따른 주문의 지역별 자료를 반환")
     @GetMapping("/analysis/region")
     public ResponseEntity<?> dataAnalysisRegion(Integer year, Integer month) {
         try {
@@ -68,6 +71,7 @@ public class OrderController {
         }
     }
 
+    @ApiOperation(value = "포장이 필요한 주문 반환", notes = "포장 시스템에서 필요로 하는 주문 반환")
     @GetMapping("/start")
     public ResponseEntity<?> packageList() {
         try {
@@ -102,6 +106,7 @@ public class OrderController {
         }
     }
 
+    @ApiOperation(value = "새로운 주문 입력", notes = "홈페이지에서 사용될 새로운 주문 입력")
     @PostMapping
     public ResponseEntity<?> newOrder(@RequestBody NewOrderDTO newOrderDto) {
         try {
@@ -113,6 +118,7 @@ public class OrderController {
     }
 
 
+    @ApiOperation(value = "주문 진행 현황 업데이트", notes = "기기에서 주문이 진행되는 과정에 따른 현황 업데이트")
     @PutMapping("/update")
     public ResponseEntity<?> orderUpdate(@RequestBody OrderUpdateDTO orderUpdateDto) {
         try {

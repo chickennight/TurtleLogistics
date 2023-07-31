@@ -2,11 +2,8 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
