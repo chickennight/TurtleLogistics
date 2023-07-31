@@ -2,7 +2,6 @@ package class2.a204.controller;
 
 
 import class2.a204.dto.CustomerDTO;
-import class2.a204.dto.AdminLoginDTO;
 import class2.a204.dto.CustomerLoginDTO;
 import class2.a204.service.CustomerService;
 import class2.a204.util.ErrorHandler;
