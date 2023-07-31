@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class LogAddDTO {
 
     @JsonProperty("machine_id")

@@ -7,6 +7,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class AdminDTO {
     @ApiModelProperty(value = "관리자 아이디", required = true, example = "Admin")

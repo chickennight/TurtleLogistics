@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDTO {
     @ApiModelProperty(value = "사용자 아이디", required = true, example = "Customer")
