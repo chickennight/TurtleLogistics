@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,14 +18,10 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    private String secretKey = "vQg9uGhF0pO7Zx2R1q4m9TcC6fJ8kPdSD54K3GEN1CHOVY1";
-    private String refreshKey = "aQ4f9R6h8Jc1mZ7xO6p2rT5uV0wY3eEgDT1GEN34CHOVY1";
-
-    //토큰 유효시간 8시간
-    private long tokenValidTime = 8 * 60 * 60 * 1000L;
-
-    //리프레쉬 토큰 유효시간 1주
-    private long refreshValidTime = 7 * 24 * 60 * 60 * 1000L;
+    @Value("${JwtTokenProvider.secretKey}")
+    private String secretKey;
+    @Value("${JwtTokenProvider.refreshKey}")
+    private String refreshKey;
 
 
     private final UserDetailsService userDetailsService;
@@ -45,6 +42,8 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(userPK); //JWT payload에 저장되는 정보 단위
         claims.put("roles", roles); //정보 저장 key-value
         Date now = new Date();
+        //토큰 유효시간 8시간
+        long tokenValidTime = 8 * 60 * 60 * 1000L;
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -59,6 +58,8 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(userPK);
         claims.put("roles", roles);
         Date now = new Date();
+        //리프레쉬 토큰 유효시간 1주
+        long refreshValidTime = 7 * 24 * 60 * 60 * 1000L;
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -101,9 +102,9 @@ public class JwtTokenProvider {
         return (String) claims.get("roles");
     }
 
-//    // Request의 Header에서 token 값을 가져온다. "authorization" : "token'
+    //    // Request의 Header에서 token 값을 가져온다. "authorization" : "token'
     public String resolveToken(HttpServletRequest request) {
-        if(request.getHeader("Authorization") != null )
+        if (request.getHeader("Authorization") != null)
             return request.getHeader("Authorization").substring(7);
         return null;
     }

@@ -8,7 +8,6 @@ import class2.a204.repository.MachineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.Mac;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,7 @@ public class MachineService {
 
     public void updateMachine(MachineDTO machineDto, Integer machineId) {
         Optional<Machine> foundMachine = machineRepository.findById(machineId);
-        if(!foundMachine.isPresent()) {
+        if(foundMachine.isEmpty()) {
             throw new RuntimeException("등록되지 않은 기기 : " + machineId);
         }
         Machine machine = foundMachine.get();
