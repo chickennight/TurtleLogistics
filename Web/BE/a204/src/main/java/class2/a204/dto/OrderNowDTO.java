@@ -15,10 +15,28 @@ public class OrderNowDTO {
     @JsonProperty("order_num")
     private Long orderNum;
 
-    private Integer status;
+    private String status;
 
     public OrderNowDTO(OrderNow orderNow) {
         this.orderNum = orderNow.getOrder().getOrderNum();
-        this.status = orderNow.getStatus();
+        String status = "";
+        switch (orderNow.getStatus()) {
+            case 1:
+                status = "주문 접수";
+                break;
+            case 2:
+                status = "포장 과정";
+                break;
+            case 3:
+                status = "분류 과정";
+                break;
+            case 4:
+                status = "분류 완료";
+                break;
+            case 5:
+                status = "배송 과정";
+                break;
+        }
+        this.status = status;
     }
 }
