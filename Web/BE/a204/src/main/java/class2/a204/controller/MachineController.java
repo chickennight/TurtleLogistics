@@ -30,19 +30,13 @@ public class MachineController {
     private final MqttService mqttService;
     private final ErrorHandler errorHandler;
     private final OrderService orderService;
-    private final SmsService smsService;
-    private final AdminService adminService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public MachineController(MachineService machineService, MqttService mqttService, ErrorHandler errorHandler, OrderService orderService, SmsService smsService, AdminService adminService, JwtTokenProvider jwtTokenProvider) {
+    public MachineController(MachineService machineService, MqttService mqttService, ErrorHandler errorHandler, OrderService orderService) {
         this.machineService = machineService;
         this.mqttService = mqttService;
         this.errorHandler = errorHandler;
         this.orderService = orderService;
-        this.smsService = smsService;
-        this.adminService = adminService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @ApiOperation(value = "기기 상태 정보 반환", notes = "모든 기기 상태 정보를 반환하고 에러가 있는 기기가 있다면 에러 기기 로그 기록도 함께 반환")
