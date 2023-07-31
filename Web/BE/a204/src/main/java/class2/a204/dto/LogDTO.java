@@ -2,17 +2,15 @@ package class2.a204.dto;
 
 import class2.a204.entity.Log;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.format.DateTimeFormatter;
 
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class LogDto {
+public class LogDTO {
     @JsonProperty("log_num")
     private Integer logNum;
     @JsonProperty("error_date")
@@ -22,7 +20,7 @@ public class LogDto {
     @JsonProperty("machine_id")
     private Integer machineId;
 
-    public LogDto(Log l) {
+    public LogDTO(Log l) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.logNum = l.getLogNum();
         this.errorDate = l.getErrorDate().format(formatter);
