@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class LogDTO {
     @JsonProperty("log_num")
     private Integer logNum;

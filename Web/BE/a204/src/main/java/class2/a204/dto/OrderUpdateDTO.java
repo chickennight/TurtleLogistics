@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class OrderUpdateDTO {
 
     @JsonProperty("order_num")

@@ -4,6 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class AnalysisDayDTO {
     private String day;

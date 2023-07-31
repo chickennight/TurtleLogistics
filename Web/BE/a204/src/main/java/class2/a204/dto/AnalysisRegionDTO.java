@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-
+@NoArgsConstructor
 public class AnalysisRegionDTO {
     private Integer region;
     private Long count;
