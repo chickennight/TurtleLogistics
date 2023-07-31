@@ -3,12 +3,13 @@ package class2.a204.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "orderdetail")
 public class OrderDetail {
@@ -32,5 +33,11 @@ public class OrderDetail {
     @JoinColumn(name = "order_num")
     @NotNull
     private Order order;
+
+    public OrderDetail(Order order, Product product, Integer amount){
+        this.order = order;
+        this.product = product;
+        this.amount = amount;
+    }
 
 }

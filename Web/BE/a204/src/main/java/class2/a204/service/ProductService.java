@@ -10,14 +10,14 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final ProductRepository PR;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public ProductService(ProductRepository pr) {
-        PR = pr;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public List<Product> findAll() {
-        return PR.findAll();
+        return productRepository.findAll();
     }
 }
