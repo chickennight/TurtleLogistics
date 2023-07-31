@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class MachineStatusDTO {
     @JsonProperty("order_num")
     private Long orderNum;
