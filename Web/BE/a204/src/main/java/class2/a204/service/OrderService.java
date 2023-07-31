@@ -3,6 +3,7 @@ package class2.a204.service;
 import class2.a204.dto.NewOrderDTO;
 import class2.a204.dto.AnalysisDayDTO;
 import class2.a204.dto.AnalysisRegionDTO;
+import class2.a204.dto.OrderNowDTO;
 import class2.a204.entity.*;
 import class2.a204.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,16 @@ public class OrderService {
     private final LogRepository logRepository;
     private final CustomerRepository customerRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, OrderNowRepository orderNowRepository, LogRepository logRepository, CustomerRepository customerRepository, OrderDetailRepository orderDetailRepository) {
+    public OrderService(OrderRepository orderRepository, OrderNowRepository orderNowRepository, LogRepository logRepository, CustomerRepository customerRepository, OrderDetailRepository orderDetailRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.orderNowRepository = orderNowRepository;
         this.logRepository = logRepository;
         this.customerRepository = customerRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.productRepository = productRepository;
     }
 
     public OrderNow findByOrderNum(Long orderNum) {
@@ -50,6 +53,7 @@ public class OrderService {
         for (Product p : newOrderDto.getProducts()) {
             OrderDetail in = new OrderDetail(input, p, p.getStock());
             orderDetailRepository.save(in);
+            productRepository.updateStock(p.getProductNum(), p.getStock());
         }
 
 
@@ -113,5 +117,17 @@ public class OrderService {
             result.put(ad.getDay(), ad.getCount());
 
         return result;
+    }
+
+    public List<OrderNowDTO> getOrderNow() {
+        List<OrderNow> list = orderNowRepository.findAll();
+        List<OrderNowDTO> ans = new ArrayList<>();
+        for (OrderNow on : list)
+            ans.add(new OrderNowDTO(on));
+        return ans;
+    }
+
+    public void deleteOrderNow(OrderNow orderNow) {
+        orderNowRepository.delete(orderNow);
     }
 }
