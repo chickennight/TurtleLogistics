@@ -1,14 +1,12 @@
 package class2.a204.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
-public class MachineStatus {
+public class MachineStatusDTO {
     @JsonProperty("order_num")
     private Long orderNum;
 
