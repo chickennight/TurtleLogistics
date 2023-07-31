@@ -42,11 +42,7 @@
     <div class="OrderGraphContainer">
       
     <hr><hr>
-    <Line :data="chartData"/>
-    <Bar :data="chartData"/>
-    <div id="LineDiv">
-      <Line :data="chartData"/>
-    </div>
+    <Line :data="chartData" :key="renderCount"/>
     </div>
   </div>
 </template>
@@ -54,7 +50,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { Bar, Line } from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement,
   LineElement  } from 'chart.js'
 
@@ -64,26 +60,26 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 export default {
     name: "OrderByDate",
     components:{
-      Bar,
       Line
     },
     data: () => ({
 
       chartData: {
-        labels: [ '0721', '0722', '0723', '0724', '0725', '0726', '0727'],
+        labels: [],
         datasets: [
           {
             label: '주문건수',
             backgroundColor: 'salmon',
             borderColor: 'salmon',
             color: 'red',
-            data: [40, 20, 12, 25, 38, 50, 15]
+            data: []
           }
-        ]
-      }
+        ],
+      },
+      renderCount: 0,
 
     }),
-    created(){
+    mounted(){
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -95,24 +91,25 @@ export default {
         start : start_day,
       }
       
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("getOrderWeekData", date);
 
-      console.log("********************");
       var idx = 0;
-      for (let key in this.orderData) {
+      this.chartData.labels = [];
+      this.chartData.datasets.data = [];
 
-        this.chartData.labels[idx] = key.substr(4);
-        this.chartData.datasets[0].data[idx] =  this.orderData[key];
-        idx++;
-      }
-      console.log(this.chartData);
+
+        for (let key in this.orderWeekData) {
+          this.chartData.labels[idx] = key.substr(4);
+          this.chartData.datasets[0].data[idx] =  this.orderWeekData[key];
+          idx++;
+        }
+        
+        this.renderCount += 1;
       
     },
     computed:{
-      ...mapState(["orderData"]),
-      chartData123(){
-        return this.orderData;
-      }
+      ...mapState(["orderWeekData", "orderData"]),
+
     },
     methods:{
       check(){
@@ -126,7 +123,7 @@ export default {
           const offset = new Date().getTimezoneOffset() * 60000;
           const today = new Date(Date.now() - offset);
           const end_day = today.toISOString();
-          const week = new Date(Date.now() - (7 * 24 * 60 * 60 * 1000) - offset);
+          const week = new Date(Date.now() - (6 * 24 * 60 * 60 * 1000) - offset);
           const start_day = week.toISOString();
 
           const date = {
@@ -137,12 +134,20 @@ export default {
           this.$store.dispatch("getOrderData", date);
 
           var idx = 0;
-          for (let key in this.orderData) {
+          this.chartData.labels = [];
+          this.chartData.datasets.data = [];
 
-            this.chartData.labels[idx] = key.substr(4);
-            this.chartData.datasets[0].data[idx] =  this.orderData[key];
-            idx++;
-          }
+          setTimeout(() =>{
+
+            for (let key in this.orderData) {
+              this.chartData.labels[idx] = key.substr(4);
+              this.chartData.datasets[0].data[idx] =  this.orderData[key];
+              idx++;
+            }
+            this.renderCount += 1;
+          }, 10)
+
+
 
       },
       getOrderDataMonth(){
@@ -162,17 +167,20 @@ export default {
           }
 
           this.$store.dispatch("getOrderData", date);
-
+          this.chartData.labels = [];
+          this.chartData.datasets.data = [];
           var idx = 0;
-          for (let key in this.orderData) {
 
-            this.chartData.labels[idx] = key.substr(4);
-            this.chartData.datasets[0].data[idx] =  this.orderData[key];
-            idx++;
-          }
+          setTimeout(() => {
 
-          var ddiv = document.getElementById("LineDiv");
-          ddiv.innerHTML = '<Line :data="chartData"/>';
+            for (let key in this.orderData) {
+              this.chartData.labels[idx] = key.substr(4);
+              this.chartData.datasets[0].data[idx] =  this.orderData[key];
+              idx++;
+            }
+          this.renderCount += 1;
+          }, 10)
+
 
       },
       getOrderData3Month(){
@@ -190,7 +198,38 @@ export default {
             start : start_day,
           }
 
+          var idx = 0;
+
           this.$store.dispatch("getOrderData", date);
+            
+          this.chartData.labels = [];
+          this.chartData.datasets[0].data = [];
+
+          setTimeout(()=>{
+            
+              for (let key in this.orderData) {
+
+                if(this.chartData.labels[idx] == undefined){
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] =  this.orderData[key];
+                }
+                else if(key.substr(0, 6) != this.chartData.labels[idx]){
+                  idx++;
+                  this.chartData.datasets[0].data[idx] = 0;
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                else if(key.substr(0, 6) == this.chartData.labels[idx]){
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                
+              }
+    
+              this.renderCount += 1;
+            }, 10);
+
+            
+
       },
       getOrderData6Month(){
           const offset = new Date().getTimezoneOffset() * 60000;
@@ -208,6 +247,33 @@ export default {
           }
 
           this.$store.dispatch("getOrderData", date);
+          var idx = 0;
+          this.chartData.labels = [];
+          this.chartData.datasets[0].data = [];
+
+          setTimeout(()=>{
+            
+              for (let key in this.orderData) {
+
+                if(this.chartData.labels[idx] == undefined){
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] =  this.orderData[key];
+                }
+                else if(key.substr(0, 6) != this.chartData.labels[idx]){
+                  idx++;
+                  this.chartData.datasets[0].data[idx] = 0;
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                else if(key.substr(0, 6) == this.chartData.labels[idx]){
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                
+              }
+    
+              this.renderCount += 1;
+            }, 10);
+
       },
       getOrderDataYear(){
           const offset = new Date().getTimezoneOffset() * 60000;
@@ -225,6 +291,34 @@ export default {
           }
 
           this.$store.dispatch("getOrderData", date);
+
+          var idx = 0;
+          this.chartData.labels = [];
+          this.chartData.datasets.data = [];
+
+          setTimeout(()=>{
+            
+              for (let key in this.orderData) {
+
+                if(this.chartData.labels[idx] == undefined){
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] =  this.orderData[key];
+                }
+                else if(key.substr(0, 6) != this.chartData.labels[idx]){
+                  idx++;
+                  this.chartData.datasets[0].data[idx] = 0;
+                  this.chartData.labels[idx] = key.substr(0, 6);
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                else if(key.substr(0, 6) == this.chartData.labels[idx]){
+                  this.chartData.datasets[0].data[idx] +=  this.orderData[key];
+                }
+                
+              }
+    
+              this.renderCount += 1;
+            }, 10);
+
       }
 
 
