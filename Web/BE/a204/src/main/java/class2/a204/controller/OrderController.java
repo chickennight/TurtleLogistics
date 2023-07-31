@@ -125,12 +125,15 @@ public class OrderController {
             OrderNow orderNow = orderService.findByOrderNum(orderUpdateDto.getOrderNum());
             if (orderService.findByOrderNum(orderUpdateDto.getOrderNum()) == null)
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            if (orderUpdateDto.getType() == 0) {
+            if (orderUpdateDto.getType() == 0) { // 분류 과정일 경우
+                // 포장 과정 이상 발생
                 if (orderUpdateDto.getResult() == 1) {
                     orderNow.changeStatus(0);
                     machineService.addLog(errorLog(orderUpdateDto, "포장 문제 발생"));
                     return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
+
+                // 포장 과정 이상 없음
                 if (orderNow.getStatus() == 2) {
                     orderNow.changeStatus(3);
                     orderService.updateStatus(orderNow);
@@ -141,12 +144,14 @@ public class OrderController {
                     machineService.addLog(errorLog(orderUpdateDto, "포장 순서 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
-            } else if (orderUpdateDto.getType() == 1) {
+            } else if (orderUpdateDto.getType() == 1) { // 분류 파트
+                // 분류 과정 이상 발생
                 if (orderUpdateDto.getResult() == 1) {
                     orderNow.changeStatus(0);
                     machineService.addLog(errorLog(orderUpdateDto, "분류 문제 발생"));
                     return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
+                //분류 과정 이상 없음
                 if (orderNow.getStatus() == 3) {
                     orderNow.changeStatus(4);
                     orderService.updateStatus(orderNow);
@@ -157,20 +162,40 @@ public class OrderController {
                     machineService.addLog(errorLog(orderUpdateDto, "분류 순서 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
-            } else if (orderUpdateDto.getType() == 2) {
+            } else if (orderUpdateDto.getType() == 2) { // 배송파트
                 if (orderNow.getStatus() == 4) {
                     orderNow.changeStatus(5);
                     orderService.updateStatus(orderNow);
-                    smsService.sendSms(new MessageDTO(orderNow.getOrder().getCustomer().getPhoneNumber(), "주문하신 상품이 배송완료되었습니다."));
+                    smsService.sendSms(new MessageDTO(orderNow.getOrder().getCustomer().getPhoneNumber(), "주문하신 상품이 배송시작되었습니다."));
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
                     orderNow.changeStatus(5);
                     orderService.updateStatus(orderNow);
+                    machineService.addLog(errorLog(orderUpdateDto, "배송 순서 문제 발생"));
+                    return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
+                }
+            } else if (orderUpdateDto.getType() == 3) { // 배송 완료
+                if (orderNow.getStatus() == 5) {
+                    orderService.deleteOrderNow(orderNow);
+                    smsService.sendSms(new MessageDTO(orderNow.getOrder().getCustomer().getPhoneNumber(), "주문하신 상품이 배송완료되었습니다."));
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    orderService.deleteOrderNow(orderNow);
                     machineService.addLog(errorLog(orderUpdateDto, "배송 문제 발생"));
                     return new ResponseEntity<>("OMISSION CHECK NEED", HttpStatus.ACCEPTED);
                 }
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "현재 진행중인 주문 목록", notes = "주문이 진행되는 과정에 있는 모든 주문의 현황을 반환한다")
+    @GetMapping("/now")
+    public ResponseEntity<?> OrderNow() {
+        try {
+            return new ResponseEntity<>(orderService.getOrderNow(), HttpStatus.OK);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
