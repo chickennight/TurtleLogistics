@@ -53,4 +53,5 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      */
     @Query(value = "SELECT new class2.a204.dto.AnalysisDayDTO(DATE_FORMAT(o.orderDate, '%Y%m%d'),COUNT(o)) FROM Order o WHERE o.orderDate BETWEEN ?1 AND ?2 GROUP BY DATE_FORMAT(o.orderDate, '%Y%m%d')")
     List<AnalysisDayDTO> findDayCount(LocalDateTime startDay, LocalDateTime endDay);
+
 }
