@@ -51,7 +51,7 @@ public class CustomerController {
             if (tokens != null) {
                 return new ResponseEntity<>(tokens,HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
