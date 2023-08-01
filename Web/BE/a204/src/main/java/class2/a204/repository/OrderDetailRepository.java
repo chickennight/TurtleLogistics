@@ -4,7 +4,9 @@ import class2.a204.entity.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
@@ -17,4 +19,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
      * */
     @Query("SELECT od FROM OrderDetail od WHERE od.order.orderNum = ?1")
     List<OrderDetail> findAllByOrderNum(Long orderNum);
+
+    @Query("SELECT SUM(od.amount) FROM OrderDetail od WHERE od.order.orderDate >= ?1 AND od.product.productNum = ?2")
+    Optional<Long> sumAmountByTimeAndProductNum(LocalDateTime yearAgo, Integer productNum);
 }

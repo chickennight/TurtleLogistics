@@ -14,6 +14,7 @@ import lombok.Setter;
 public class LogisticAnalysisDTO {
     @JsonProperty("product_num")
     private Integer productNum;
+    private Integer stock;
     private String name;
     @JsonProperty("year")
     private Integer yearAvg;
@@ -29,6 +30,7 @@ public class LogisticAnalysisDTO {
     public LogisticAnalysisDTO(Product product) {
         this.productNum = product.getProductNum();
         this.name = product.getName();
+        this.stock = product.getStock();
         yearAvg = 0;
         monthAvg = 0;
         weekAvg = 0;
