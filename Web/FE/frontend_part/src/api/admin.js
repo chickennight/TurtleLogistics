@@ -6,7 +6,7 @@ const registerAdmin = async (adminDto) => {
     const response = await publicApi.post("/admin/register", adminDto);
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`관리자 등록 에러: ${error.message}`);
   }
 };
 
@@ -16,7 +16,7 @@ const login = async (adminLoginDto) => {
     const response = await publicApi.post("/admin/login", adminLoginDto);
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`관리자 로그인 에러: ${error.message}`);
   }
 };
 
@@ -26,7 +26,7 @@ const getOrders = async () => {
     const response = await authorizedApi.get("/admin/orders");
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`전체 주문 정보 가져오기 에러: ${error.message}`);
   }
 };
 
@@ -36,7 +36,7 @@ const refreshToken = async (refreshTokenDTO) => {
     const response = await authorizedApi.post("/admin/refresh", refreshTokenDTO);
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`Access Token 갱신 에러: ${error.message}`);
   }
 };
 
@@ -48,7 +48,7 @@ const sendMessage = async (machineDetail) => {
     });
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`기기 이상 알림 메세지 전송 에러: ${error.message}`);
   }
 };
 
@@ -58,7 +58,7 @@ const logisticAnalysis = async () => {
     const response = await authorizedApi.get("/admin/logistic");
     return response;
   } catch (error) {
-    throw error;
+    throw new Error(`물류 분석 자료 에러: ${error.message}`);
   }
 };
 
