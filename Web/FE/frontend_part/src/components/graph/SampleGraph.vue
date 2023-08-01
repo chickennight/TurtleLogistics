@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Line :data="chartData" :key="renderCount" />
+  <div class="SampleGraphContainer">
+    <Line :data="chartData" :key="renderCount" :options="chartOptions" />
   </div>
 </template>
 
@@ -31,6 +31,28 @@ export default {
             data: []
           }
         ],
+      },
+      chartOptions: {
+        plugins:{
+          legend:{
+            display: true,
+            labels: {
+              color: 'white',
+            }
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: 'white', // x축 레이블의 글자색을 지정합니다.
+            },
+          },
+          y: {
+            ticks: {
+              color: 'white', // y축 레이블의 글자색을 지정합니다.
+            },
+          },
+        }, 
       },
       renderCount: 0,
 
