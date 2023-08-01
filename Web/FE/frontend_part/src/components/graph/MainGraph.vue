@@ -58,7 +58,7 @@ export default {
       renderCount: 0,
       myTimer: null,
       chartData: {
-        labels: ["주문 접수", "포장 과정", "분류 과정", "분류 완료", "배송 과정"],
+        labels: ["주문 접수", "포장 과정", "분류 과정", "분류 완료", "배송 과정", "이상 발생"],
         datasets: [
           {
             label: "Data One",
