@@ -177,7 +177,7 @@ const store = createStore({
         method: "get",
       })
         .then((res) => {
-          let calculate = [0, 0, 0, 0, 0];
+          let calculate = [0, 0, 0, 0, 0, 0];
           for (let item of res.data) {
             switch (item.status) {
               case "주문 접수":
@@ -194,6 +194,9 @@ const store = createStore({
                 break;
               case "배송 과정":
                 calculate[4] += 1;
+                break;
+              case "이상 발생":
+                calculate[5] += 1;
                 break;
             }
           }
