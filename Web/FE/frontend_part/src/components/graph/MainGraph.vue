@@ -1,8 +1,10 @@
 <template>
-  <div class="OrderNowContainer">주문 현황</div>
-  <div>
+<div class="OrderNowContainer">
+  <div >주문 현황</div>
+  <div class="OrderNowGraph">
     <Line :data="chartData" :options="chartOptions" style="color: white" :key="renderCount" />
   </div>
+  <hr color="gray">
   <div class="OrderNowTableContainer">
     <v-table density="compact" theme="dark">
       <thead>
@@ -19,6 +21,7 @@
       </tbody>
     </v-table>
   </div>
+</div>
 </template>
 
 <script>
@@ -78,6 +81,7 @@ export default {
   },
   mounted() {
     this.myTimer = setInterval(this.get_order_nows, 5000);
+    this.renderCount += 1;
   },
   watch: {
     // orderNowcalculate 데이터의 변화를 감시
@@ -112,10 +116,16 @@ export default {
 
 <style scoped>
 .OrderNowContainer {
+  padding: 20px;
   margin: 20px;
-  border: 1px solid white;
+  box-shadow: 2px 2px 3px 3px black;
 }
 .OrderNowTableContainer {
   margin: 20px;
+}
+.OrderNowGraph{
+  padding: 10px;
+  margin: 20px;
+  box-shadow: 2px 2px 3px 3px black;
 }
 </style>
