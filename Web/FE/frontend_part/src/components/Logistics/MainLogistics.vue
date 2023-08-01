@@ -6,6 +6,7 @@
         <tr>
           <th class="text-left" rowspan="2">상품번호</th>
           <th class="text-left" rowspan="2">상품명</th>
+          <th class="text-left" rowspan="2">상품재고</th>
           <th class="text-center" colspan="4">주문량</th>
           <th class="text-left" rowspan="2">이상 발생</th>
         </tr>
@@ -17,9 +18,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in logisticAnalysis" :key="item.product_num">
+        <tr
+          v-for="item in logisticAnalysis"
+          :key="item.product_num"
+          :class="{ 'red-text': item.error_message !== `` }"
+        >
           <td>{{ item.product_num }}</td>
           <td>{{ item.name }}</td>
+          <td>{{ item.stock }}</td>
           <td>{{ item.year }}</td>
           <td>{{ item.month }}</td>
           <td>{{ item.week }}</td>
@@ -36,11 +42,20 @@ import { mapState } from "vuex";
 
 export default {
   name: "MainLogistics",
+  data() {
+    return {
+      myTimer: null,
+    };
+  },
   computed: {
     ...mapState(["logisticAnalysis"]),
   },
   mounted() {
     this.get_logistic_analysis();
+    this.myTimer = setInterval(this.get_logistic_analysis, 60000);
+  },
+  beforeUnmount() {
+    clearInterval(this.myTimer);
   },
   methods: {
     get_logistic_analysis() {
@@ -50,12 +65,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .LogisticContainer {
   margin: 20px;
   border: 1px solid white;
 }
 .ProductStatusContainer {
   margin: 20px;
+}
+.red-text td {
+  color: red;
 }
 </style>
