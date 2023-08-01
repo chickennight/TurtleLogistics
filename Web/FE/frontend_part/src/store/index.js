@@ -6,6 +6,11 @@ import createPersistedState from "vuex-persistedstate";
 
 const REST_API = "http://localhost:8080";
 
+// axiosInstance
+const axiosInstance = axios.create({
+  baseURL: REST_API,
+});
+
 const store = createStore({
   state: {
     orderData: [],
@@ -14,12 +19,18 @@ const store = createStore({
     orderNowList: [],
     orderNowcalculate: [],
     logisticAnalysis: [],
+
+    //Token
+    adminToken: null,
+    customerToken: null,
   },
   getters: {},
   mutations: {
     ADMIN_LOGIN(state, data) {
-      state;
-      console.log(data);
+      state.adminToken = data.accessToken; //토큰 저장
+      localStorage.setItem("adminToken", data.accessToken); // 로컬스토리지에 accessToken 저장
+      localStorage.setItem("adminRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
+      state.console.log(data);
       router.push("/admin");
     },
     ADMIN_REGIST(state, data) {
@@ -35,9 +46,19 @@ const store = createStore({
       router.push("/customerLogin");
     },
     CUSTOMER_LOGIN(state, data) {
-      state;
+      state.customerToken = data.accessToken; //토큰 저장
+      localStorage.setItem("customerToken", data.accessToken); // 로컬스토리지에 accessToken 저장
+      localStorage.setItem("customerRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
       console.log(data);
       router.push("/customer");
+    },
+    LOGOUT(state) {
+      state.adminToken = null;
+      state.customerToken = null;
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminRefreshToken");
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customerRefreshToken");
     },
     GET_ORDER_DATE(state, date) {
       state.orderData = date;
@@ -63,8 +84,8 @@ const store = createStore({
   },
   actions: {
     adminLogin({ commit }, admin) {
-      const API_URL = `${REST_API}/admin/login`;
-      axios({
+      const API_URL = `/admin/login`;
+      axiosInstance({
         url: API_URL,
         method: "post",
         data: admin,
@@ -108,8 +129,8 @@ const store = createStore({
         });
     },
     customerLogin({ commit }, customer) {
-      const API_URL = `${REST_API}/customer/login`;
-      axios({
+      const API_URL = `customer/login`;
+      axiosInstance({
         url: API_URL,
         method: "post",
         data: customer,
@@ -120,6 +141,24 @@ const store = createStore({
         })
         .catch((err) => {
           console.log(err);
+        });
+    },
+    refreshToken({ commit }, userRole) {
+      const API_URL = "/${userRole}/refreshToken";
+      axiosInstance({
+        url: API_URL,
+        method: "post",
+        data: {
+          refreshToken: localStorage.getItem(`${userRole}RefreshToken`),
+        },
+      })
+        .then((res) => {
+          console.log(res.data);
+          commit(`${userRole.toUpperCase()}_LOGIN`, res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          commit("LOGOUT");
         });
     },
     getOrderData({ commit }, date) {
@@ -231,5 +270,41 @@ const store = createStore({
     }),
   ],
 });
+
+//axiosInstance 인터셉터 설정
+
+// Request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const adminToken = localStorage.getItem("adminToken");
+    const customerToken = localStorage.getItem("customerToken");
+    if (adminToken) {
+      config.headers.Authorization = `Bearer ${adminToken}`;
+    } else if (customerToken) {
+      config.headers.Authorization = `Bearer ${customerToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      const originalRequest = error.config;
+      const userRole = originalRequest.url.startsWith("/admin") ? "admin" : "customer";
+      store.dispatch("refreshToken", userRole).then(() => {
+        return axiosInstance(originalRequest);
+      });
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default store;
