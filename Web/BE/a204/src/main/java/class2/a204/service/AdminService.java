@@ -2,6 +2,7 @@ package class2.a204.service;
 
 import class2.a204.dto.AdminDTO;
 import class2.a204.dto.AdminLoginDTO;
+import class2.a204.dto.LogisticAnalysisDTO;
 import class2.a204.entity.Admin;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.jwt.Role;
@@ -10,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AdminService {
@@ -65,5 +64,11 @@ public class AdminService {
             return admin.get().getPhoneNumber();
         else
             return "";
+    }
+
+    public List<LogisticAnalysisDTO> getLogisticAnalysis() {
+        List<LogisticAnalysisDTO> ans = new ArrayList<>();
+
+        return ans;
     }
 }
