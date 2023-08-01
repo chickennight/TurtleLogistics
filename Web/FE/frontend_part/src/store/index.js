@@ -195,7 +195,7 @@ const store = createStore({
         method: "get",
       })
         .then((res) => {
-          commit("GET_MACHINE_STATUS", res.data["상태"]);
+          commit("GET_MACHINE_STATUS", res.data);
         })
         .catch((err) => {
           console.log(err);
