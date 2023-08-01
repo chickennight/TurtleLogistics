@@ -113,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .SampleContainer{
   margin: 20px;
   border: 1px solid white;
