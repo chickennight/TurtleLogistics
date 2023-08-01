@@ -4,7 +4,7 @@ import axios from "axios";
 import router from "../router";
 import createPersistedState from "vuex-persistedstate";
 
-const REST_API = "https://i9a204.p.ssafy.io/turtle";
+const REST_API = "http://localhost:8080";
 
 // axiosInstance
 const axiosInstance = axios.create({
@@ -30,7 +30,8 @@ const store = createStore({
       state.adminToken = data.accessToken; //토큰 저장
       localStorage.setItem("adminToken", data.accessToken); // 로컬스토리지에 accessToken 저장
       localStorage.setItem("adminRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
-      state.console.log(data);
+      console.log(data);
+      console.log(data.accessToken);
       router.push("/admin");
     },
     ADMIN_REGIST(state, data) {
@@ -162,8 +163,8 @@ const store = createStore({
         });
     },
     getOrderData({ commit }, date) {
-      const API_URL = `${REST_API}/order/analysis/day`;
-      axios({
+      const API_URL = `/order/analysis/day`;
+      axiosInstance({
         url: `${API_URL}?start_day=${date.start}&end_day=${date.end}`,
         method: "get",
       })
@@ -175,8 +176,8 @@ const store = createStore({
         });
     },
     getOrderWeekData({ commit }, date) {
-      const API_URL = `${REST_API}/order/analysis/day`;
-      axios({
+      const API_URL = `/order/analysis/day`;
+      axiosInstance({
         url: `${API_URL}?start_day=${date.start}&end_day=${date.end}`,
         method: "get",
       })
@@ -188,8 +189,8 @@ const store = createStore({
         });
     },
     getMachineStatus({ commit }) {
-      const API_URL = `${REST_API}/machine`;
-      axios({
+      const API_URL = `/machine`;
+      axiosInstance({
         url: API_URL,
         method: "get",
       })
@@ -201,8 +202,8 @@ const store = createStore({
         });
     },
     getMachineLog({ commit }) {
-      const API_URL = `${REST_API}/machine/log`;
-      axios({
+      const API_URL = `/machine/log`;
+      axiosInstance({
         url: API_URL,
         method: "get",
       })
@@ -214,8 +215,8 @@ const store = createStore({
         });
     },
     getOrderNows({ commit }) {
-      const API_URL = `${REST_API}/order/now`;
-      axios({
+      const API_URL = `/order/now`;
+      axiosInstance({
         url: API_URL,
         method: "get",
       })
@@ -251,8 +252,8 @@ const store = createStore({
         });
     },
     getLogisticAnalysis({ commit }) {
-      const API_URL = `${REST_API}/admin/logistics`;
-      axios({
+      const API_URL = `/admin/logistic`;
+      axiosInstance({
         url: API_URL,
         method: "get",
       })
