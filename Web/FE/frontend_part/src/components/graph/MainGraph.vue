@@ -114,7 +114,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .OrderNowContainer {
   padding: 20px;
   margin: 20px;
