@@ -16,6 +16,7 @@ import OrderByDate from "../components/Order/OrderByDate.vue";
 import AdminRegist from "../components/Regist/AdminRegist.vue";
 import CustomerRegist from "../components/Regist/CustomerRegist.vue";
 import CustomerOrder from "../components/Order/CustomerOrder.vue";
+import ErrorView from "../views/ErrorView.vue";
 
 // 라우터 설계
 const routes = [
@@ -92,6 +93,15 @@ const routes = [
         path: '/adminRegist',
         name: 'AdminRegist',
         component: AdminRegist,
+    },
+    {
+        path: '/errorView',
+        name: 'ErrorView',
+        component: ErrorView,
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        redirect: "/errorView"
     }
 ]
 
