@@ -36,6 +36,8 @@ public class OrderNowDTO {
             case 5:
                 status = "배송 과정";
                 break;
+            case 0:
+                status = "이상 발생";
         }
         this.status = status;
     }
