@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #sideBar{
   width: 300px;
   box-shadow: 1px 1px 3px 3px black;
