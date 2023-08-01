@@ -11,6 +11,6 @@ public class MachineStatusDTO {
     @JsonProperty("order_num")
     private Long orderNum;
 
-    private int type;
-    private int result;
+    private Integer type;
+    private Integer result;
 }
