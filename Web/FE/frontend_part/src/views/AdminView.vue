@@ -3,7 +3,7 @@
     <sidebar-nav></sidebar-nav>
     <div class="adminSubContainer">
       <header-nav></header-nav>
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
@@ -19,21 +19,19 @@ export default {
   components: {
     HeaderNav,
     SidebarNav,
-
   },
 };
 </script>
 
-<style>
-#adminMainContainer{
-  display : flex;
+<style scoped>
+#adminMainContainer {
+  display: flex;
   width: 100%;
   height: 200vh;
 }
 
-.adminSubContainer{
+.adminSubContainer {
   flex-direction: column;
   width: 100%;
 }
-
 </style>
