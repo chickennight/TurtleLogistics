@@ -2,6 +2,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import router from "../router";
+import createPersistedState  from "vuex-persistedstate";
 
 const REST_API = "http://localhost:8080";
 
@@ -39,6 +40,9 @@ const store = createStore({
     },
     GET_ORDER_DATE(state, date) {
       state.orderData = date;
+    },
+    GET_ORDER_WEEK_DATE(state, date) {
+      state.orderWeekData = date;
     },
     GET_MACHINE_LOG(state, data) {
       state.machineLog = data;
@@ -127,6 +131,19 @@ const store = createStore({
           console.log(err.data);
         });
     },
+    getOrderWeekData({ commit }, date) {
+      const API_URL = `${REST_API}/order/analysis/day`;
+      axios({
+        url: `${API_URL}?start_day=${date.start}&end_day=${date.end}`,
+        method: "get",
+      })
+        .then((res) => {
+        commit("GET_ORDER_WEEK_DATE", res.data);
+        })
+        .catch((err) => {
+        console.log(err.data);    
+        })
+    },
     getMachineStatus({ commit }) {
       const API_URL = `${REST_API}/machine`;
       axios({
@@ -191,6 +208,9 @@ const store = createStore({
         });
     },
   },
-});
+  plugins: [createPersistedState({
+    whiteList: ["orderWeekData"],
+  })]
+})
 
 export default store;
