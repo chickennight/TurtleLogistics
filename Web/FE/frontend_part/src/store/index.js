@@ -4,7 +4,7 @@ import axios from "axios";
 import router from "../router";
 import createPersistedState from "vuex-persistedstate";
 
-const REST_API = "http://localhost:8080";
+const REST_API = "https://i9a204.p.ssafy.io/turtle";
 
 const store = createStore({
   state: {

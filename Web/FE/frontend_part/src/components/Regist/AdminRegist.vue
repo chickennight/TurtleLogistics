@@ -10,7 +10,7 @@
         <v-form ref="form">
           <v-text-field
             v-model="admin.admin_id"
-            :rules="nameRules"
+            :rules="id_rules"
             label="아이디"
             color="warning"
             required
@@ -18,7 +18,7 @@
 
           <v-text-field
             v-model="admin.password"
-            :rules="nameRules"
+            :rules="pw_rules"
             label="비밀번호"
             type="password"
             color="warning"
@@ -27,23 +27,27 @@
 
           <v-text-field
             v-model="admin.passwordCheck"
-            :rules="nameRules"
+            :rules="pwcheck_rules"
+            :hint="checkMsg"
+            @keyup="CheckPwd"
             label="비밀번호 확인"
             type="password"
             color="warning"
             required
           ></v-text-field>
+          
 
           <v-text-field
             v-model="admin.phone_number"
-            :rules="nameRules"
+            :rules="phone_rules"
             label="전화번호"
             required
          ></v-text-field>
 
           <v-text-field
             v-model="admin.adminCode"
-            :rules="nameRules"
+            :rules="code_rules"
+            type="password"
             label="관리자 코드"
             required
          ></v-text-field>
@@ -75,22 +79,49 @@ export default {
         phone_number: '',
         adminCode: '',
       },
-        nameRules: [
-            v => !!v || '해당 칸을 입력해주세요',
-        ],
-        select: null,
+      id_rules: [
+          v => !!v || '해당 칸을 입력해주세요',
+          v => !(v && v.length <= 7) || '아이디를 8자 이상으로 설정해주세요.',
+      ],
+      pw_rules: [
+          v => !!v || '해당 칸을 입력해주세요',
+          v => !(v && v.length <= 7) || '비밀번호를 8자 이상으로 설정해주세요.',
+          v => /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/.test(v) || '비밀번호를 영어, 숫자, 특수문자의 조합으로 설정해주세요.',
+      ],
+      pwcheck_rules: [
+          v => !!v || '해당 칸을 입력해주세요',
+      ],
+      phone_rules: [
+          v => !!v || '해당 칸을 입력해주세요',
+          v => !(v && v.length != 11) || '전화번호가 적합하지 않습니다.',
+      ],
+      code_rules: [
+          v => !!v || '해당 칸을 입력해주세요',
+          v => (v == 'a204') || '관리자 코드가 일치하지 않습니다.',
+      ],
+      select: null,
+      checkMsg : "동일한 비밀번호를 입력해주세요."
     }),
     methods: {
       adminRegist(){
-        console.log(this.admin.adminCode);
+
         if(this.admin.adminCode == "a204"){
           this.$store.dispatch("adminRegist", this.admin);
         }
         else{
           alert("관리자 코드가 일치하지 않습니다. 다시 확인해주세요.");
         }
-      }
-    }
+      },
+      CheckPwd() {
+        if (this.admin.passwordCheck === "") {
+          this.checkMsg = "비밀번호를 확인해주세요.";
+        } else if (this.admin.passwordCheck == this.admin.password) {
+          this.checkMsg = "비밀번호가 일치합니다.";
+        } else {
+          this.checkMsg = "비밀번호가 일치하지 않습니다.";
+        }
+      },
+    },
 }
 </script>
 
