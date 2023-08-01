@@ -98,7 +98,7 @@ public class AdminController {
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return errorHandler.errorMessage(e);
         }
     }
 
@@ -108,7 +108,7 @@ public class AdminController {
         try {
             return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return errorHandler.errorMessage(e);
         }
     }
 }
