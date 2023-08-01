@@ -110,7 +110,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .OrderNowContainer {
   margin: 20px;
   border: 1px solid white;

@@ -212,7 +212,7 @@ const store = createStore({
         });
     },
     getLogisticAnalysis({ commit }) {
-      const API_URL = `${REST_API}/admin/logistics`;
+      const API_URL = `${REST_API}/admin/logistic`;
       axios({
         url: API_URL,
         method: "get",
