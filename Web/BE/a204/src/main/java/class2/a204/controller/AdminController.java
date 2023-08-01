@@ -1,6 +1,9 @@
 package class2.a204.controller;
 
-import class2.a204.dto.*;
+import class2.a204.dto.AdminDTO;
+import class2.a204.dto.AdminLoginDTO;
+import class2.a204.dto.MessageDTO;
+import class2.a204.dto.RefreshTokenDTO;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.service.AdminService;
 import class2.a204.service.OrderService;
@@ -94,6 +97,16 @@ public class AdminController {
             MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail + " 기계 이상 발생");
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @ApiOperation(value = "물류 분석 자료", notes = "상품별 소모량 제공")
+    @GetMapping("/logistic")
+    public ResponseEntity<?> logisticAnalysis() {
+        try {
+            return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
