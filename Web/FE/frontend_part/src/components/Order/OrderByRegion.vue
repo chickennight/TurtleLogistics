@@ -1,17 +1,15 @@
 <template>
-  <div class="OrderRegionContainer">
-    지역별주문!!!!!!
-  </div>
+  <div class="OrderRegionContainer">지역별주문!!!!!!</div>
 </template>
 
 <script>
 export default {
-    name: "OrderByRegion",
-}
+  name: "OrderByRegion",
+};
 </script>
 
-<style>
-.OrderRegionContainer{
+<style scoped>
+.OrderRegionContainer {
   margin: 20px;
   border: 1px solid white;
 }
