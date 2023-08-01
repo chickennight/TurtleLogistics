@@ -8,7 +8,7 @@ import json
 CA = "/home/ssafy09204/Order_Verifier/secrets/CA1.pem"
 PRIKEY = "/home/ssafy09204/Order_Verifier/secrets/PRIVATE.key"
 CERT = "/home/ssafy09204/Order_Verifier/secrets/CERT.crt"
-END_POINT = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com"
+END_POINT = "a3r8259knz52ke-ats.iot.ap-northeast-2.amazonaws.com"
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -34,8 +34,8 @@ global already
 detect = 0
 already=1
 power=1
-distance = 5
-interval = 2
+distance = 4
+interval = 0.75
 QR_value = -1
 QR_finish = 0
 Order_Lists=[]
@@ -103,11 +103,10 @@ def add_Order(self, params, packet):
 
 def read_QR(self, params, packet):
     global QR_value , detect, Order_Lists
-    #time.sleep(interval)
+    time.sleep(interval)
     camera = cv2.VideoCapture(0)
     camera.set(3,640)
     camera.set(4,480)
-
     #myMQTTClient.publish(PUB_ORD_MOTOR,"{\"power\":-1}",0)
     ret, img = camera.read()
     print("Capture!")
@@ -132,9 +131,10 @@ def read_QR(self, params, packet):
                     Order_Lists.pop(0)
                     myMQTTClient.publish(PUB_RES,"{\"result\":\"1\"}",0)
     else:
-        myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Ord_Verifier\",\"content\":\"QR or Order error\"}",0)
         myMQTTClient.publish(PUB_ORD_MOTOR,"{\"power\":\"-1\"}",0)
+        myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Ord_Verifier\",\"content\":\"QR or Order error\"}",0)
     print("end of read_QR_function")
+    time.sleep(0.5)
 
 myMQTTClient.connect()
 myMQTTClient.subscribe(SUB_WEB_POWER,0,change_Power)
@@ -146,11 +146,11 @@ myMQTTClient.subscribe(SUB_SUP_ADD,0, add_Order)
 myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Ord_Veifier\",\"content\":\"AWS Connect Success\"}",0)
 
 while True:
-    print(detect)
-    print(already)
     if(int(power)==1):
         ## 초음파 센서 감지 loop
         ## 감지 완료
+        print(f"detect : {detect}")
+        print(f"already  {already}")
         if(detect==1 and already==0):
             # 카메라 센서에 찍으라고 PUB
             myMQTTClient.publish(SUB_ORD_CAM,"{\"func\":\"1\"}",0)
@@ -161,10 +161,8 @@ while True:
         else:
 # while True:
 #print("while1")
-          GPIO.output(TRIG,False)
-          time.sleep(0.3)
           GPIO.output(TRIG, True)
-          time.sleep(0.00001) # 10uS의 펄스 발생을 위한 딜레이
+          time.sleep(0.05) # 10uS의 펄스 발생을 위한 딜레이
           GPIO.output(TRIG, False)
           while GPIO.input(ECHO)==0:
 #print("while2")
@@ -177,7 +175,6 @@ while True:
           check_time = stop - start
           dist = check_time * 34300 / 2
           print(dist)
-          print(dist>distance)
           if(detect==0 and already==1):## already 0으로 바꾸기 위한 감지
               if(dist > distance):
                   already=0
