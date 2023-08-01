@@ -8,7 +8,9 @@
 #define TOPIC_DIV_INFO "/div/servo1/info"
 #define TOPIC_MOD_SER_ANG "/mod/div/servo1/angle"
 #define TOPIC_MOD_SER_INT "/mod/div/servo1/servo_interval"
+#define TOPIC_MOD_WA_INT "/mod/div/servo1/wait_interval"
 #define TOPIC_MOD_IR_INT "/mod/div/servo1/ir_interval"
+
 
 TLClient Div_Servo(THINGNAME);
 
@@ -20,11 +22,13 @@ void Device_function();
 #define SERVOPIN 3
 Servo divider;
 
-int servo_interval = 1000;
-int ir_interval = 10;
-int angle = 90;
+int servo_interval = 4000;
+int wait_interval = 4000;
+int ir_interval = 2000;
+int angle = 65;
 
-void moveservo(Servo* divider, int ANGLELIMIT);
+
+void moveservo();
 void pubres(int orderno,int flag);
 int verify();
 void MSG(String str);
@@ -37,6 +41,7 @@ void setup() {
   Div_Servo.subscribe(TOPIC_MOD_SER_ANG);
   Div_Servo.subscribe(TOPIC_MOD_SER_INT);
   Div_Servo.subscribe(TOPIC_MOD_IR_INT);
+  Div_Servo.subscribe(TOPIC_MOD_WA_INT);
   MSG("AWS Connect Success");
 
   pinMode(SENSORPIN,INPUT);
@@ -62,7 +67,7 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   char res[100];
   serializeJson(doc,res);
 
-  if(strcmp(TOPIC_DIV_RES, topic)==0){
+  if(strcmp(TOPIC_DIV_INFO, topic)==0){
     const char* orderno = doc["order_num"];
     delay(servo_interval);
     pubres(orderno,verify());
@@ -78,6 +83,11 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   else if(strcmp(TOPIC_MOD_IR_INT, topic)==0){
     ir_interval = (int)doc["ir_interval"];
     MSG("Servo Interval Changed");
+  }
+  else if(strcmp(TOPIC_MOD_WA_INT,topic)==0)
+  {
+    wait_interval = (int)doc["wait_interval"];
+    MSG("Servo Wait Interval Changed");
   }
 }
 
@@ -96,7 +106,7 @@ void pubres(const char* orderno,int flag){
     MSG("Divide Error");
   }
 
-  if(!Div_Servo.publish(TOPIC_DIV_RES,buf)){
+  if(Div_Servo.publish(TOPIC_DIV_RES,buf)){
     MSG("Publish Result Success");
   }
   else{
@@ -105,7 +115,7 @@ void pubres(const char* orderno,int flag){
 }
 
 int verify(){
-  moveservo(&divider, angle);
+  moveservo();
   int flag=1,val=0;
   unsigned long prev = millis();
   
@@ -123,17 +133,10 @@ int verify(){
   return flag;
 }
 
-void moveservo(Servo* divider,int ANGLELIMIT) {
+void moveservo() {
+    divider.write(angle);
     delay(servo_interval);
-    for (int i = 0; i <= ANGLELIMIT; i++) {
-        divider->write(i);
-        delay(ir_interval);
-    }
-
-    for (int i = ANGLELIMIT; i >= 0; i--) {
-        divider->write(i);
-        delay(ir_interval);
-    }
+    divider.write(0);
 }
 void MSG(String str){
   String base="{\"dev\":\"Div_Servo1\",\"content\":\"";
