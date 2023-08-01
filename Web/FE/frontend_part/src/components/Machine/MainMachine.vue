@@ -58,7 +58,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .MachineContainer{
   margin: 20px;
   border: 1px solid white;

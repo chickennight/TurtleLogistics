@@ -350,7 +350,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .OrderDateContainer{
   margin: 20px;
 }

@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .OrderRegionContainer{
   margin: 20px;
   border: 1px solid white;
