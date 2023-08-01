@@ -78,6 +78,7 @@ export default {
   },
   mounted() {
     this.myTimer = setInterval(this.get_order_nows, 5000);
+    this.renderCount += 1;
   },
   watch: {
     // orderNowcalculate 데이터의 변화를 감시
