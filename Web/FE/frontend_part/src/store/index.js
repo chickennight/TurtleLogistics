@@ -47,6 +47,7 @@ const store = createStore({
       router.push("/customerLogin");
     },
     CUSTOMER_LOGIN(state, data) {
+      console.log("11111");
       state.customerToken = data.accessToken; //토큰 저장
       localStorage.setItem("customerToken", data.accessToken); // 로컬스토리지에 accessToken 저장
       localStorage.setItem("customerRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
@@ -85,15 +86,19 @@ const store = createStore({
   },
   actions: {
     adminLogin({ commit }, admin) {
-      const API_URL = `/admin/login`;
-      axiosInstance({
+      const API_URL = `${REST_API}/admin/login`;
+      axios({
         url: API_URL,
         method: "post",
         data: admin,
       })
         .then((res) => {
-          console.log(res.data);
-          commit("ADMIN_LOGIN", res.data);
+          if (res.status == 200) {
+            console.log(res.data);
+            commit("ADMIN_LOGIN", res.data);
+          } else {
+            alert("아이디 또는 비밀번호를 확인해주세요");
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -130,15 +135,19 @@ const store = createStore({
         });
     },
     customerLogin({ commit }, customer) {
-      const API_URL = `customer/login`;
-      axiosInstance({
+      const API_URL = `${REST_API}/customer/login`;
+      axios({
         url: API_URL,
         method: "post",
         data: customer,
       })
         .then((res) => {
-          console.log(res.data);
-          commit("CUSTOMER_LOGIN", res.data);
+          if (res.status == 200) {
+            console.log(res.data);
+            commit("CUSTOMER_LOGIN", res.data);
+          } else {
+            alert("아이디 또는 비밀번호를 확인해주세요");
+          }
         })
         .catch((err) => {
           console.log(err);
