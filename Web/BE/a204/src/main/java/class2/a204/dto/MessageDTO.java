@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MessageDTO {
-    String to;
-    String content;
+    private String to;
+    private String content;
 }
