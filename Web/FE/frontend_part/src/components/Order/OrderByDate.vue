@@ -127,7 +127,7 @@ export default {
     this.renderCount += 1;
   },
   computed: {
-    ...mapState(["orderData"]),
+    ...mapState("order", ["orderData"]),
   },
   methods: {
     check() {
@@ -312,7 +312,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .OrderDateContainer {
   margin: 20px;
 }
