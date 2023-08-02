@@ -10,6 +10,7 @@ const dataAnalysisDay = async (startDay, endDay) => {
       },
     });
     console.log(response);
+    return response;
   } catch (error) {
     throw new Error(`일자별 주문 분석 에러: ${error.message}`);
   }
