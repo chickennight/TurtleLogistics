@@ -83,7 +83,7 @@ export default {
     methods: {
       customerRegist(){
         console.log(this.customer);
-        this.$store.dispatch("customerRegist", this.customer);
+        this.$store.dispatch("customer/customerRegist", this.customer);
       }
     }
 }
