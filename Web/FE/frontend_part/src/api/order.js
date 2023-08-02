@@ -9,7 +9,7 @@ const dataAnalysisDay = async (startDay, endDay) => {
         end_day: endDay,
       },
     });
-    return response.data;
+    console.log(response);
   } catch (error) {
     throw new Error(`일자별 주문 분석 에러: ${error.message}`);
   }
@@ -24,7 +24,7 @@ const dataAnalysisRegion = async (year, month) => {
         month,
       },
     });
-    return response.data;
+    return response;
   } catch (error) {
     throw new Error(`지역별 주문 분석 에러: ${error.message}`);
   }
@@ -34,7 +34,7 @@ const dataAnalysisRegion = async (year, month) => {
 const packageList = async () => {
   try {
     const response = await publicApi.get("/order/start");
-    return response.data;
+    return response;
   } catch (error) {
     throw new Error(`포장이 필요한 주문 반환 에러: ${error.message}`);
   }
@@ -44,7 +44,7 @@ const packageList = async () => {
 const newOrder = async (newOrderDto) => {
   try {
     const response = await publicApi.post("/order", newOrderDto);
-    return response.data;
+    return response;
   } catch (error) {
     throw new Error(`새로운 주문 입력 에러: ${error.message}`);
   }
@@ -54,7 +54,7 @@ const newOrder = async (newOrderDto) => {
 const orderUpdate = async (orderUpdateDto) => {
   try {
     const response = await publicApi.put("/order/update", orderUpdateDto);
-    return response.data;
+    return response;
   } catch (error) {
     throw new Error(`주문 진행 현황 업데이트 에러: ${error.message}`);
   }
@@ -64,7 +64,7 @@ const orderUpdate = async (orderUpdateDto) => {
 const orderNow = async () => {
   try {
     const response = await authorizedApi.get("/order/now");
-    return response.data;
+    return response;
   } catch (error) {
     throw new Error(`현재 진행중인 주문 목록 에러: ${error.message}`);
   }

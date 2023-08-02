@@ -56,7 +56,7 @@ const adminStore = {
     async getLogisticAnalysis({ commit }) {
       try {
         const response = await adminAPI.logisticAnalysis();
-        commit("GGET_LOGISTIC_ANALYSIS", response.data);
+        commit("GET_LOGISTIC_ANALYSIS", response.data);
       } catch (error) {
         console.log(error);
       }
