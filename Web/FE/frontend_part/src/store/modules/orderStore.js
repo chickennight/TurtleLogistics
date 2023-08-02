@@ -4,6 +4,7 @@ const orderStore = {
   namespaced: true,
   state: {
     orderData: [],
+    orderWeekData: [],
     orderNowList: [],
     orderNowcalculate: [],
   },
@@ -11,6 +12,9 @@ const orderStore = {
   mutations: {
     GET_ORDER_DATE(state, data) {
       state.orderData = data;
+    },
+    GET_ORDER_WEEK_DATE(state, data) {
+      state.orderWeekData = data;
     },
     GET_ORDER_NOWS(state, data) {
       state.orderNowList = data;
@@ -26,8 +30,18 @@ const orderStore = {
         let startDay = date.start;
         let endDay = date.end;
         const response = await orderAPI.dataAnalysisDay(startDay, endDay);
-        console.log(response);
         commit("GET_ORDER_DATE", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //주간별 주문 분석
+    async getOrderWeekData({ commit }, date) {
+      try {
+        let startDay = date.start;
+        let endDay = date.end;
+        const response = await orderAPI.dataAnalysisDay(startDay, endDay);
+        commit("GET_ORDER_WEEK_DATE", response.data);
       } catch (error) {
         console.log(error);
       }
