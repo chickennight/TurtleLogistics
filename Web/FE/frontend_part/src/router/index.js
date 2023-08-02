@@ -12,7 +12,7 @@ import CustomerLogin from "../components/Login/CustomerLogin.vue";
 import MainLogistics from "../components/Logistics/MainLogistics.vue";
 import MainMachine from "../components/Machine/MainMachine.vue";
 import OrderByDate from "../components/Order/OrderByDate.vue";
-// import OrderByRegion from "../components/Order/OrderByRegion.vue";
+import OrderByRegion from "../components/Order/OrderByRegion.vue";
 import AdminRegist from "../components/Regist/AdminRegist.vue";
 import CustomerRegist from "../components/Regist/CustomerRegist.vue";
 import CustomerOrder from "../components/Order/CustomerOrder.vue";
@@ -20,90 +20,96 @@ import ErrorView from "../views/ErrorView.vue";
 
 // 라우터 설계
 const routes = [
-  {
-    path: "/",
-    name: "MainView",
-    component: MainView,
-  },
-  {
-    path: "/admin",
-    name: "AdminView",
-    component: AdminView,
-    children: [
-      {
-        path: "",
-        name: "AdminMainView",
-        component: AdminMainView,
-      },
-      {
-        path: "date",
-        name: "OrderByDate",
-        component: OrderByDate,
-      },
-      {
-        path: "logistics",
-        name: "MainLogistics",
-        component: MainLogistics,
-      },
-      {
-        path: "blueprint",
-        name: "MainBluePrint",
-        component: MainBluePrint,
-      },
-      {
-        path: "machine",
-        name: "MainMachine",
-        component: MainMachine,
-      },
-      {
-        path: "graph",
-        name: "MainGraph",
-        component: MainGraph,
-      },
-    ],
-  },
-  {
-    path: "/adminLogin",
-    name: "AdminLogin",
-    component: AdminLogin,
-  },
-  {
-    path: "/customerLogin",
-    name: "CustomerLogin",
-    component: CustomerLogin,
-  },
-  {
-    path: "/customer",
-    name: "CustomerView",
-    component: CustomerView,
-    children: [
-      {
-        path: "",
-        name: "CustomerOrder",
-        component: CustomerOrder,
-      },
-      {
-        path: "/regist",
-        name: "CustomerRegist",
-        component: CustomerRegist,
-      },
-    ],
-  },
-  {
-    path: "/adminRegist",
-    name: "AdminRegist",
-    component: AdminRegist,
-  },
-  {
-    path: "/errorView",
-    name: "ErrorView",
-    component: ErrorView,
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    redirect: "/errorView",
-  },
-];
+    {
+        path: '/',
+        name: 'MainView',
+        component: MainView,
+    },
+    {
+        path: '/admin',
+        name: 'AdminView',
+        component: AdminView,
+        children: [
+            {
+                path: '',
+                name: 'AdminMainView',
+                component: AdminMainView,
+            },
+            {
+                path: 'date',
+                name: 'OrderByDate',
+                component: OrderByDate,
+            },
+            {
+                path: 'logistics',
+                name: 'MainLogistics',
+                component: MainLogistics,
+            },
+            {
+                path: 'blueprint',
+                name: 'MainBluePrint',
+                component: MainBluePrint,
+            },
+            {
+                path: 'machine',
+                name: 'MainMachine',
+                component: MainMachine,
+            },
+            {
+                path: 'graph',
+                name: 'MainGraph',
+                component: MainGraph,
+            },
+            {
+                path: "region",
+                name: 'OrderByRegion',
+                component: OrderByRegion,
+            }
+        ]
+    },
+    {
+        path: '/adminLogin',
+        name: 'AdminLogin',
+        component: AdminLogin,
+    },
+    {
+        path: '/customerLogin',
+        name: 'CustomerLogin',
+        component: CustomerLogin,
+    },
+    {
+        path: '/customer',
+        name: 'CustomerView',
+        component: CustomerView,
+        children: [
+            {
+                path: '',
+                name: 'CustomerOrder',
+                component: CustomerOrder,
+            },
+            {
+                path: '/regist',
+                name: 'CustomerRegist',
+                component: CustomerRegist,
+            }
+        ]
+    },
+    {
+        path: '/adminRegist',
+        name: 'AdminRegist',
+        component: AdminRegist,
+    },
+    {
+        path: '/errorView',
+        name: 'ErrorView',
+        component: ErrorView,
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        redirect: "/errorView"
+    },
+
+]
 
 // 라우터 생성
 // 루트를 내부에 생성해도 되지만 코드가 복잡해지기 때문에 외부에 배열 형태로 생성한다
