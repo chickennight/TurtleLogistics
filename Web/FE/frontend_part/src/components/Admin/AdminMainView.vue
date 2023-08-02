@@ -64,9 +64,12 @@ export default {
     SampleBluePrint,
     SampleGraph,
   },
+  created() {
+    this.getMachineStatus();
+  },
   methods: {
     getMachineStatus() {
-      this.$store.dispatch("getMachineStatus");
+      this.$store.dispatch("machine/getMachineStatus");
     },
   },
   computed: {

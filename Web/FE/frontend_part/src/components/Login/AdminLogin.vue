@@ -55,8 +55,8 @@ export default {
       doAdminLogin(){
         console.log(this.admin.admin_id);
         console.log(this.admin.password);
-
-        this.$store.dispatch("adminLogin", this.admin);
+        
+        this.$store.dispatch("admin/adminLogin", this.admin);
 
       }
     }
