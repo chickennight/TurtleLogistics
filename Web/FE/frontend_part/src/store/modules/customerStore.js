@@ -3,23 +3,21 @@ import router from "@/router";
 
 const customerStore = {
   namespaced: true,
-  state: {
-    customerToken: null,
-  },
+  state: {},
   getters: {},
   mutations: {
     CUSTOMER_REGIST() {
       alert("회원가입이 완료되었습니다. 로그인해주세요.");
     },
     CUSTOMER_LOGIN(state, data) {
-      state.customerToken = data.accessToken; //토큰 저장
+      state;
       localStorage.setItem("customerToken", data.accessToken); // 로컬스토리지에 accessToken 저장
       localStorage.setItem("customerRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
     },
-    LOGOUT(state) {
-      state.customerToken = null;
+    LOGOUT() {
       localStorage.removeItem("customerToken");
       localStorage.removeItem("customerRefreshToken");
+      router.push("/");
     },
   },
   actions: {
