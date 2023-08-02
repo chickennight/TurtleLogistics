@@ -1,4 +1,4 @@
-import { publicApi, authorizedApi } from "./axiosInstances";
+import { publicApi } from "./index";
 
 // 기기 상태 정보 반환
 const getMachineStatus = async () => {

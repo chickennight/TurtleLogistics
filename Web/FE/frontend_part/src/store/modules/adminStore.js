@@ -1,5 +1,5 @@
-import adminAPI from "../api/adminAPI";
-import router from "../router";
+import adminAPI from "@/api/admin";
+import router from "@/router";
 
 const adminStore = {
   namespaced: true,
@@ -9,7 +9,7 @@ const adminStore = {
   },
   getters: {},
   mutations: {
-    ADMIN_REGIST(state, data) {
+    ADMIN_REGIST() {
       alert("관리자 등록이 완료되었습니다. 로그인해주세요.");
       router.push("/adminLogin");
     },

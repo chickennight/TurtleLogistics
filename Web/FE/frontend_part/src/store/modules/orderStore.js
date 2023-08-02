@@ -1,4 +1,4 @@
-import orderAPI from "../api/order";
+import orderAPI from "@/api/order";
 
 const orderStore = {
   namespaced: true,
@@ -50,7 +50,7 @@ const orderStore = {
       try {
         const response = await orderAPI.orderNow();
         let calculate = [0, 0, 0, 0, 0, 0];
-        for (let item of res.data) {
+        for (let item of response.data) {
           switch (item.status) {
             case "주문 접수":
               calculate[0] += 1;

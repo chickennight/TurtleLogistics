@@ -1,4 +1,4 @@
-import { publicApi, authorizedApi } from "./axiosInstances";
+import { publicApi, authorizedApi } from "./index";
 
 // 관리자 등록
 const registerAdmin = async (adminDto) => {

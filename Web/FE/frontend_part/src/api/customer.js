@@ -1,4 +1,4 @@
-import { publicApi, authorizedApi } from "./axiosInstances";
+import { publicApi, authorizedApi } from "./index";
 
 // 사용자 등록
 const registerCustomer = async (customerDto) => {
