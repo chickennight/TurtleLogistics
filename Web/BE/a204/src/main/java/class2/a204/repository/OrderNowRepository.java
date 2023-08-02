@@ -1,10 +1,12 @@
 package class2.a204.repository;
 
+import class2.a204.dto.AnalysisRegionDTO;
 import class2.a204.entity.OrderNow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderNowRepository extends JpaRepository<OrderNow, Long> {
 
@@ -28,4 +30,6 @@ public interface OrderNowRepository extends JpaRepository<OrderNow, Long> {
      * */
     @Query("SELECT n FROM OrderNow n WHERE n.status = ?1")
     List<OrderNow> findAllByStatus(Integer status);
-}
+
+    @Query("SELECT o.status,count(o.status) FROM OrderNow o WHERE o.order.address = ?1 GROUP BY o.status ORDER BY o.status")
+    List<Long[]> analysisRegion(Integer regioncode);}
