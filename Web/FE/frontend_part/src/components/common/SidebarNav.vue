@@ -16,7 +16,10 @@
         <v-btn elevation="8" block variant="outlined">메인화면</v-btn>
       </router-link>
       <router-link :to="{ name: 'OrderByDate' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">주문내역</v-btn>
+        <v-btn elevation="8" block variant="outlined">기간주문내역</v-btn>
+      </router-link>
+      <router-link :to="{ name: 'OrderByRegion' }" class="SideMenu">
+        <v-btn elevation="8" block variant="outlined">지역주문내역</v-btn>
       </router-link>
       <router-link :to="{ name: 'MainGraph' }" class="SideMenu">
         <v-btn elevation="8" block variant="outlined">주문현황</v-btn>
