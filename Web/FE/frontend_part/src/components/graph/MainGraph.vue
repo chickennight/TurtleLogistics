@@ -1,27 +1,27 @@
 <template>
-<div class="OrderNowContainer">
-  <div >주문 현황</div>
-  <div class="OrderNowGraph">
-    <Line :data="chartData" :options="chartOptions" style="color: white" :key="renderCount" />
+  <div class="OrderNowContainer">
+    <div>주문 현황</div>
+    <div class="OrderNowGraph">
+      <Line :data="chartData" :options="chartOptions" style="color: white" :key="renderCount" />
+    </div>
+    <hr color="gray" />
+    <div class="OrderNowTableContainer">
+      <v-table density="compact" theme="dark">
+        <thead>
+          <tr>
+            <th class="text-left">주문번호</th>
+            <th class="text-left">현황</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in orderNowList" :key="item.order_num">
+            <td>{{ item.order_num }}</td>
+            <td>{{ item.status }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
   </div>
-  <hr color="gray">
-  <div class="OrderNowTableContainer">
-    <v-table density="compact" theme="dark">
-      <thead>
-        <tr>
-          <th class="text-left">주문번호</th>
-          <th class="text-left">현황</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in orderNowList" :key="item.order_num">
-          <td>{{ item.order_num }}</td>
-          <td>{{ item.status }}</td>
-        </tr>
-      </tbody>
-    </v-table>
-  </div>
-</div>
 </template>
 
 <script>
@@ -81,7 +81,7 @@ export default {
   },
   mounted() {
     this.myTimer = setInterval(this.get_order_nows, 5000);
-    this.renderCount += 1;
+    this.chart_update();
   },
   watch: {
     // orderNowcalculate 데이터의 변화를 감시
@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     get_order_nows() {
-      
       this.$store.dispatch("order/getOrderNows");
     },
     chart_update() {
@@ -124,7 +123,7 @@ export default {
 .OrderNowTableContainer {
   margin: 20px;
 }
-.OrderNowGraph{
+.OrderNowGraph {
   padding: 10px;
   margin: 20px;
   box-shadow: 2px 2px 3px 3px black;
