@@ -112,22 +112,22 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("order/getOrderWeekData", date);
+    this.$store.dispatch("order/getOrderData", date);
 
     var idx = 0;
     this.chartData.labels = [];
     this.chartData.datasets.data = [];
 
-    for (let key in this.orderWeekData) {
+    for (let key in this.orderData) {
       this.chartData.labels[idx] = key.substr(4);
-      this.chartData.datasets[0].data[idx] = this.orderWeekData[key];
+      this.chartData.datasets[0].data[idx] = this.orderData[key];
       idx++;
     }
 
     this.renderCount += 1;
   },
   computed: {
-    ...mapState(["orderWeekData", "orderData"]),
+    ...mapState(["orderData"]),
   },
   methods: {
     check() {
