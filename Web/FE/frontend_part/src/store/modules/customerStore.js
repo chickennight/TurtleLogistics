@@ -1,5 +1,5 @@
-import customerAPI from "../api/customer";
-import router from "../router";
+import customerAPI from "@/api/customer";
+import router from "@/router";
 
 const customerStore = {
   namespaced: true,
@@ -8,9 +8,8 @@ const customerStore = {
   },
   getters: {},
   mutations: {
-    CUSTOMER_REGIST(state, data) {
+    CUSTOMER_REGIST() {
       alert("회원가입이 완료되었습니다. 로그인해주세요.");
-      router.push("/adminLogin");
     },
     CUSTOMER_LOGIN(state, data) {
       state.customerToken = data.accessToken; //토큰 저장

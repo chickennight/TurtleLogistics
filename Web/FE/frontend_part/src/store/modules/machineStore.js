@@ -1,4 +1,4 @@
-import machineAPI from "../api/machine";
+import machineAPI from "@/api/machine";
 
 const machineStore = {
   namespaced: true,

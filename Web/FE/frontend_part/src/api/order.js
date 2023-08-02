@@ -1,4 +1,4 @@
-import { publicApi, authorizedApi } from "./axiosInstances";
+import { publicApi, authorizedApi } from "./index";
 
 // 일자별 주문 분석
 const dataAnalysisDay = async (startDay, endDay) => {

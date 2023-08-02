@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "../store";
+import store from "@/store";
 
 // 토큰이 필요 없는 인스턴스
 const publicApi = axios.create({

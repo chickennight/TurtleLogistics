@@ -1,5 +1,5 @@
 // import Vue from "vue";
-// import createPersistedState from "vuex-persistedstate";
+import createPersistedState from "vuex-persistedstate";
 import { createStore } from "vuex";
 import adminStore from "./modules/adminStore";
 import customerStore from "./modules/customerStore";
