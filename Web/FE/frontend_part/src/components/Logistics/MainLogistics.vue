@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     get_logistic_analysis() {
-      this.$store.dispatch("getLogisticAnalysis");
+      this.$store.dispatch("admin/getLogisticAnalysis");
     },
   },
 };

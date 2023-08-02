@@ -69,7 +69,7 @@ export default {
         start : start_day,
       }
       
-      this.$store.dispatch("getOrderWeekData", date);
+      this.$store.dispatch("order/getOrderWeekData", date);
 
       var idx = 0;
       this.chartData.labels = [];

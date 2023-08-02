@@ -112,7 +112,7 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("getOrderWeekData", date);
+    this.$store.dispatch("order/getOrderWeekData", date);
 
     var idx = 0;
     this.chartData.labels = [];
@@ -147,7 +147,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
@@ -177,7 +177,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("order/getOrderData", date);
       this.chartData.labels = [];
       this.chartData.datasets.data = [];
       var idx = 0;
@@ -208,7 +208,7 @@ export default {
 
       var idx = 0;
 
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("order/getOrderData", date);
 
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -246,7 +246,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("order/getOrderData", date);
       var idx = 0;
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -284,7 +284,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("getOrderData", date);
+      this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
