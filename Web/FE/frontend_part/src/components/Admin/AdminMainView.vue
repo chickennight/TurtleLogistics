@@ -73,7 +73,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["machineStatus"]),
+    ...mapState("machine", ["machineStatus"]),
   },
 };
 </script>
