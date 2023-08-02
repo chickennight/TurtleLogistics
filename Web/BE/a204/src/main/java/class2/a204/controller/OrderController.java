@@ -61,15 +61,15 @@ public class OrderController {
         }
     }
 
-    @ApiOperation(value = "지역별 주문 분석", notes = "입력 기간에 따른 주문의 지역별 자료를 반환")
-    @GetMapping("/analysis/region")
-    public ResponseEntity<?> dataAnalysisRegion(Integer year, Integer month) {
-        try {
-            return new ResponseEntity<>(orderService.dataRegion(year, month), HttpStatus.OK);
-        } catch (Exception e) {
-            return errorHandler.errorMessage(e);
-        }
-    }
+//    @ApiOperation(value = "지역별 주문 분석", notes = "입력 기간에 따른 주문의 지역별 자료를 반환")
+//    @GetMapping("/analysis/region")
+//    public ResponseEntity<?> dataAnalysisRegion(Integer year, Integer month) {
+//        try {
+//            return new ResponseEntity<>(orderService.dataRegion(year, month), HttpStatus.OK);
+//        } catch (Exception e) {
+//            return errorHandler.errorMessage(e);
+//        }
+//    }
 
     @ApiOperation(value = "포장이 필요한 주문 반환", notes = "포장 시스템에서 필요로 하는 주문 반환")
     @GetMapping("/start")
@@ -207,6 +207,16 @@ public class OrderController {
         l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);
         l.updateMachine(machineService.findMachine(0));
         return l;
+    }
+
+    @ApiOperation(value = "지역코드별 주문 분석", notes = "지역별 주문 정보 반환")
+    @GetMapping("/analysis/regioncode")
+    public ResponseEntity<?> dataAnalysisRegionCode(Integer regioncode) {
+        try {
+            return new ResponseEntity<>(orderService.dataRegionCode(regioncode), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
     }
 
 }
