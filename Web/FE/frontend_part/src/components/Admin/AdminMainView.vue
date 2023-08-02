@@ -32,10 +32,10 @@
         <v-table density="compact" theme="dark">
           <thead>
             <tr>
-              <th class="text-left">로그번호</th>
-              <th class="text-left">로그 발생 날짜</th>
+              <th class="text-left">로그</th>
+              <th class="text-left">날짜</th>
               <th class="text-left">메세지</th>
-              <th class="text-left">기계번호</th>
+              <th class="text-left">기계</th>
             </tr>
           </thead>
           <tbody>
