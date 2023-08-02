@@ -106,7 +106,7 @@ export default {
       adminRegist(){
 
         if(this.admin.adminCode == "a204"){
-          this.$store.dispatch("adminRegist", this.admin);
+          this.$store.dispatch("admin/adminRegist", this.admin);
         }
         else{
           alert("관리자 코드가 일치하지 않습니다. 다시 확인해주세요.");
