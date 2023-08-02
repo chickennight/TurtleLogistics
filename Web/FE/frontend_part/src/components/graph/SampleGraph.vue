@@ -99,7 +99,7 @@ export default {
     this.renderCount += 1;
   },
   computed: {
-    ...mapState(["orderData"]),
+    ...mapState("order", ["orderData"]),
   },
 };
 </script>
