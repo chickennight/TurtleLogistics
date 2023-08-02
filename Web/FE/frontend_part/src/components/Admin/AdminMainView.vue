@@ -77,7 +77,7 @@ export default {
     },
   methods: {
     getMachineStatus(){
-      this.$store.dispatch("getMachineStatus");
+      this.$store.dispatch("machine/getMachineStatus");
     }
   },
   computed:{

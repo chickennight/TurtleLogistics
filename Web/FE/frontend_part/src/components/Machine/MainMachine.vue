@@ -34,7 +34,7 @@ export default {
   name: "MainMachine",
   methods: {
     getMachineLog() {
-      this.$store.dispatch("getMachineLog");
+      this.$store.dispatch("machine/getMachineLog");
       console.log(this.machineLog);
     },
   },
