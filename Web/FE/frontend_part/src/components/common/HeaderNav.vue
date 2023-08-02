@@ -13,7 +13,7 @@ export default {
   methods: {
     logout() {
       alert("로그아웃되었습니다.");
-      this.$router.push("/");
+      this.$store.dispatch("admin/Logout");
     },
   },
 };

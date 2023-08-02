@@ -14,6 +14,7 @@ const registerAdmin = async (adminDto) => {
 const login = async (adminLoginDto) => {
   try {
     const response = await publicApi.post("/admin/login", adminLoginDto);
+    console.log(response);
     return response;
   } catch (error) {
     throw new Error(`관리자 로그인 에러: ${error.message}`);
