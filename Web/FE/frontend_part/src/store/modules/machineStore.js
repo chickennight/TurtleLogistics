@@ -34,6 +34,39 @@ const machineStore = {
         console.log(error);
       }
     },
+    //기기 전원 종료 명령
+    async machineOff({ commit }) {
+      try {
+        const payload = {
+          topic: "/mod/web/power",
+          message: `{"power":"-1"}`,
+        };
+        const response = await machineAPI.machineControl(payload);
+        if (response.status == 200) {
+          commit;
+        } else {
+          alert("통신이상");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async machineOn({ commit }) {
+      try {
+        const payload = {
+          topic: "/mod/web/power",
+          message: `{"power":"1"}`,
+        };
+        const response = await machineAPI.machineControl(payload);
+        if (response.status == 200) {
+          commit;
+        } else {
+          alert("통신이상");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 

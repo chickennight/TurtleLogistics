@@ -1,9 +1,14 @@
 <template>
   <div class="MachineContainer">
     기기제어
-    <v-btn @click="getMachineLog" background-color="rgb(53, 53, 53)" variant="outlined">
-      새로고침
-    </v-btn>
+    <span>
+      <v-btn @click="getMachineOff" background-color="rgb(53, 53, 53)" variant="outlined">
+        전원 종료
+      </v-btn>
+      <v-btn @click="getMachineOn" background-color="rgb(53, 53, 53)" variant="outlined">
+        전원 시작
+      </v-btn>
+    </span>
   </div>
   <div class="LogTableContainer">
     <v-table density="compact" theme="dark">
@@ -35,17 +40,28 @@ export default {
   methods: {
     getMachineLog() {
       this.$store.dispatch("machine/getMachineLog");
-      console.log(this.machineLog);
+    },
+    getMachineOff() {
+      this.$store.dispatch("machine/machineOff");
+    },
+    getMachineOn() {
+      this.$store.dispatch("machine/machineOn");
     },
   },
   computed: {
     ...mapState("machine", ["machineLog"]),
+  },
+  mounted() {
+    this.getMachineLog();
   },
 };
 </script>
 
 <style scoped>
 .MachineContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin: 20px;
   border: 1px solid white;
 }
