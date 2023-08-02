@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in machineStatus[`로그`]" :key="item.log_num">
+            <tr v-for="item in machineStatus['로그']" :key="item.log_num">
               <td>{{ item.log_num }}</td>
               <td>{{ item.error_date }}</td>
               <td>{{ item.error_message }}</td>

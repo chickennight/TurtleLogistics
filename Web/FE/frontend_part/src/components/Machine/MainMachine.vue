@@ -39,7 +39,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["machineLog"]),
+    ...mapState("machine", ["machineLog"]),
   },
 };
 </script>
