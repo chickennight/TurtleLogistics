@@ -99,8 +99,8 @@ export default {
     clearInterval(this.myTimer);
   },
   computed: {
-    ...mapState(["orderNowList"]),
-    ...mapState(["orderNowcalculate"]),
+    ...mapState("order", ["orderNowList"]),
+    ...mapState("order", ["orderNowcalculate"]),
   },
   methods: {
     get_order_nows() {

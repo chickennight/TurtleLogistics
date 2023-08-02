@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["logisticAnalysis"]),
+    ...mapState("admin", ["logisticAnalysis"]),
   },
   mounted() {
     this.get_logistic_analysis();
