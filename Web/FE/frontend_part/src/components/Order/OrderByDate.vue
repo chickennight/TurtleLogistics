@@ -21,8 +21,6 @@
       <v-btn @click="getOrderDataYear" background-color="rgb(53, 53, 53)" variant="outlined">
         1년
       </v-btn>
-
-      <v-btn @click="check" background-color="rgb(53, 53, 53)" variant="outlined"> 1년 </v-btn>
     </div>
     <div class="OrderGraphContainer">
       <hr />

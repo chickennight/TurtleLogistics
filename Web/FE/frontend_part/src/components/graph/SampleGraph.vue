@@ -84,22 +84,22 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("order/getOrderData", date);
+    this.$store.dispatch("order/getOrderWeekData", date);
 
     var idx = 0;
     this.chartData.labels = [];
     this.chartData.datasets.data = [];
 
-    for (let key in this.orderData) {
+    for (let key in this.orderWeekData) {
       this.chartData.labels[idx] = key.substr(4);
-      this.chartData.datasets[0].data[idx] = this.orderData[key];
+      this.chartData.datasets[0].data[idx] = this.orderWeekData[key];
       idx++;
     }
 
     this.renderCount += 1;
   },
   computed: {
-    ...mapState("order", ["orderData"]),
+    ...mapState("order", ["orderWeekData"]),
   },
 };
 </script>
