@@ -104,7 +104,8 @@ export default {
   },
   methods: {
     get_order_nows() {
-      this.$store.dispatch("getOrderNows");
+      
+      this.$store.dispatch("order/getOrderNows");
     },
     chart_update() {
       this.chartData.datasets[0].data = this.orderNowcalculate;
