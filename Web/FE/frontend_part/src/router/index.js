@@ -12,7 +12,7 @@ import CustomerLogin from "../components/Login/CustomerLogin.vue";
 import MainLogistics from "../components/Logistics/MainLogistics.vue";
 import MainMachine from "../components/Machine/MainMachine.vue";
 import OrderByDate from "../components/Order/OrderByDate.vue";
-// import OrderByRegion from "../components/Order/OrderByRegion.vue";
+import OrderByRegion from "../components/Order/OrderByRegion.vue";
 import AdminRegist from "../components/Regist/AdminRegist.vue";
 import CustomerRegist from "../components/Regist/CustomerRegist.vue";
 import CustomerOrder from "../components/Order/CustomerOrder.vue";
@@ -59,6 +59,11 @@ const routes = [
                 path: 'graph',
                 name: 'MainGraph',
                 component: MainGraph,
+            },
+            {
+                path: "region",
+                name: 'OrderByRegion',
+                component: OrderByRegion,
             }
         ]
     },
@@ -102,7 +107,8 @@ const routes = [
     {
         path: "/:pathMatch(.*)*",
         redirect: "/errorView"
-    }
+    },
+
 ]
 
 // 라우터 생성
