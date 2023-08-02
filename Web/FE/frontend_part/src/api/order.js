@@ -70,7 +70,7 @@ const orderNow = async () => {
   }
 };
 
-const orderService = {
+const orderAPI = {
   dataAnalysisDay,
   dataAnalysisRegion,
   packageList,
@@ -79,4 +79,4 @@ const orderService = {
   orderNow,
 };
 
-export default orderService;
+export default orderAPI;

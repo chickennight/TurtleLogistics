@@ -10,13 +10,13 @@ const getMachineStatus = async () => {
   }
 };
 
-// 모든 로그 가져오기
+// 기기 로그 가져오기
 const getLogs = async () => {
   try {
     const response = await publicApi.get("/machine/log");
     return response;
   } catch (error) {
-    throw new Error(`모든 로그 가져오기 에러: ${error.message}`);
+    throw new Error(`기기 로그 가져오기 에러: ${error.message}`);
   }
 };
 
