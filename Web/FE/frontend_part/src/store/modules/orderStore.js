@@ -1,94 +1,84 @@
 import orderAPI from "../api/order";
 
-const state = {
-  orderList: [],
-  packageList: [],
-  analysisDayData: [],
-  analysisRegionData: [],
-};
-
-const actions = {
-  async fetchOrderList({ commit }) {
-    try {
-      const data = await orderAPI.orderNow();
-      commit("SET_ORDER_LIST", data);
-    } catch (error) {
-      console.error(error);
-    }
+const orderStore = {
+  namespaced: true,
+  state: {
+    orderData: [],
+    orderNowList: [],
+    orderNowcalculate: [],
   },
-
-  async fetchPackageList({ commit }) {
-    try {
-      const data = await orderAPI.packageList();
-      commit("SET_PACKAGE_LIST", data);
-    } catch (error) {
-      console.error(error);
-    }
+  getters: {},
+  mutations: {
+    GET_ORDER_DATE(state, date) {
+      state.orderData = date;
+    },
+    GET_ORDER_WEEK_DATE(state, date) {
+      state.orderWeekData = date;
+    },
+    GET_ORDER_NOWS(state, data) {
+      state.orderNowList = data;
+    },
+    GET_CALCULATE(state, data) {
+      state.orderNowcalculate = data;
+    },
   },
-
-  async fetchDataAnalysisDay({ commit }, { startDay, endDay }) {
-    try {
-      const data = await orderAPI.dataAnalysisDay(startDay, endDay);
-      commit("SET_ANALYSIS_DAY_DATA", data);
-    } catch (error) {
-      console.error(error);
-    }
-  },
-
-  async fetchDataAnalysisRegion({ commit }, { year, month }) {
-    try {
-      const data = await orderAPI.dataAnalysisRegion(year, month);
-      commit("SET_ANALYSIS_REGION_DATA", data);
-    } catch (error) {
-      console.error(error);
-    }
-  },
-
-  async createOrder({ commit }, newOrderDto) {
-    try {
-      const data = await orderAPI.newOrder(newOrderDto);
-      commit("ADD_ORDER", data);
-    } catch (error) {
-      console.error(error);
-    }
-  },
-
-  async updateOrder({ commit }, orderUpdateDto) {
-    try {
-      const data = await orderAPI.orderUpdate(orderUpdateDto);
-      commit("UPDATE_ORDER", data);
-    } catch (error) {
-      console.error(error);
-    }
-  },
-};
-
-const mutations = {
-  SET_ORDER_LIST(state, data) {
-    state.orderList = data;
-  },
-  SET_PACKAGE_LIST(state, data) {
-    state.packageList = data;
-  },
-  SET_ANALYSIS_DAY_DATA(state, data) {
-    state.analysisDayData = data;
-  },
-  SET_ANALYSIS_REGION_DATA(state, data) {
-    state.analysisRegionData = data;
-  },
-  ADD_ORDER(state, data) {
-    state.orderList.push(data);
-  },
-  UPDATE_ORDER(state, data) {
-    const index = state.orderList.findIndex((order) => order.id === data.id);
-    if (index !== -1) {
-      state.orderList.splice(index, 1, data);
-    }
+  actions: {
+    //일자별 주문 분석
+    async getOrderData({ commit }, date) {
+      try {
+        let startDay = date.start;
+        let endDay = date.end;
+        const response = await orderAPI.dataAnalysisDay(startDay, endDay);
+        commit("GET_ORDER_DATE", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //주간별 주문 분석
+    async getOrderWeekData({ commit }, date) {
+      try {
+        let startDay = date.start;
+        let endDay = date.end;
+        const response = await orderAPI.dataAnalysisDay(startDay, endDay);
+        commit("GET_ORDER_WEEK_DATE", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    //현재 진행중인 주문 목록
+    async getOrderNows({ commit }) {
+      try {
+        const response = await orderAPI.orderNow();
+        let calculate = [0, 0, 0, 0, 0, 0];
+        for (let item of res.data) {
+          switch (item.status) {
+            case "주문 접수":
+              calculate[0] += 1;
+              break;
+            case "포장 과정":
+              calculate[1] += 1;
+              break;
+            case "분류 과정":
+              calculate[2] += 1;
+              break;
+            case "분류 완료":
+              calculate[3] += 1;
+              break;
+            case "배송 과정":
+              calculate[4] += 1;
+              break;
+            case "이상 발생":
+              calculate[5] += 1;
+              break;
+          }
+        }
+        commit("GET_CALCULATE", calculate);
+        commit("GET_ORDER_NOWS", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 
-export default {
-  state,
-  actions,
-  mutations,
-};
+export default orderStore;

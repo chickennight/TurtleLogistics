@@ -1,7 +1,7 @@
 import { publicApi, authorizedApi } from "./axiosInstances";
 
 // 사용자 등록
-const registercustomer = async (customerDto) => {
+const registerCustomer = async (customerDto) => {
   try {
     const response = await publicApi.post("/customer/register", customerDto);
     return response;
@@ -29,3 +29,11 @@ const refreshToken = async (refreshTokenDTO) => {
     throw new Error(`Access Token 갱신 에러: ${error.message}`);
   }
 };
+
+const customerAPI = {
+  registerCustomer,
+  login,
+  refreshToken,
+};
+
+export default customerAPI;
