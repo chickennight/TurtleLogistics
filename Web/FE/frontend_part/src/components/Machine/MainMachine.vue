@@ -12,6 +12,7 @@
       </span>
     </div>
     <div class="LogTableContainer">
+      <div><img class="machineImg" :src="errorImg" width="300" height="300" /></div>
       <v-table density="compact" theme="dark">
         <thead>
           <tr>
@@ -22,11 +23,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in machineLog" :key="item.log_num">
+          <tr v-for="item in machineLog" :key="item.log_num" @click="changeImg(item.machine_id)">
             <td>{{ item.log_num }}</td>
             <td>{{ item.error_date }}</td>
             <td>{{ item.error_message }}</td>
-            <td>{{ item.error_message }}</td>
+            <td>{{ item.machine_id }}</td>
           </tr>
         </tbody>
       </v-table>
@@ -39,6 +40,9 @@ import { mapState } from "vuex";
 
 export default {
   name: "MainMachine",
+  data: () => ({
+    errorImg: "/errorImg/2000_error.PNG",
+  }),
   methods: {
     getMachineLog() {
       this.$store.dispatch("machine/getMachineLog");
@@ -53,6 +57,10 @@ export default {
       const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
       // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
       this.$emit("childContentHeightChanged", container);
+    },
+    changeImg(machine_id) {
+      console.log(machine_id);
+      this.errorImg = `/errorImg/${machine_id}_error.PNG`;
     },
   },
   computed: {
@@ -80,6 +88,9 @@ export default {
 }
 .LogTableContainer {
   margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .MachineMainContainer {
   display: flex;

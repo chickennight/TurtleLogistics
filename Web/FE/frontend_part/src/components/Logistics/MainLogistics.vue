@@ -1,6 +1,9 @@
 <template>
   <div class="LogisticContainer">
-    <div class="LogisticsHeader"><h1>물류현황</h1></div>
+    <div class="LogisticsHeader">
+      <h1>물류현황</h1>
+      <h1>{{ this.currentTime }}</h1>
+    </div>
     <div class="ProductStatusContainer">
       <v-table density="compact" theme="dark">
         <thead>
@@ -47,6 +50,7 @@ export default {
   data() {
     return {
       myTimer: null,
+      currentTime: "",
     };
   },
   computed: {
@@ -63,6 +67,29 @@ export default {
   },
   methods: {
     get_logistic_analysis() {
+      let today = new Date();
+
+      let month = today.getMonth() + 1; // 월
+      let date = today.getDate(); // 날짜
+
+      let hours = today.getHours(); // 시
+      let minutes = today.getMinutes(); // 분
+      let seconds = today.getSeconds(); // 초
+
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+
+      this.currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
+
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
     updateParentHeight() {
@@ -87,5 +114,8 @@ export default {
   margin: 20px;
   box-shadow: 2px 2px 3px 3px black;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

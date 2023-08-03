@@ -2,7 +2,7 @@
   <div id="sideBar">
     <div id="SideLogo">
       <div id="LogoImage">
-        <img class="SubTurtle" src="./SubTurtle.png" />
+        <img class="SubTurtle" src="/SubTurtle.png" />
       </div>
       <div id="MainTL">
         <router-link to="/">
