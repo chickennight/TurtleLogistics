@@ -1,9 +1,9 @@
 <template>
-  <div id="adminMainContainer">
+  <div id="adminMainContainer" :style="{ height: appHeight + 'px' }">
     <sidebar-nav></sidebar-nav>
     <div class="adminSubContainer">
       <header-nav></header-nav>
-      <router-view />
+      <router-view @childContentHeightChanged="updateAppHeight" />
     </div>
   </div>
 </template>
@@ -15,7 +15,19 @@ import SidebarNav from "@/components/common/SidebarNav.vue";
 
 export default {
   name: "AdminView",
-
+  data: () => ({
+    appHeight: 900,
+  }),
+  methods: {
+    updateAppHeight(childContentHeight) {
+      // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
+      if (childContentHeight > 800) {
+        this.appHeight = childContentHeight + 300;
+      } else {
+        this.appHeight = 900;
+      }
+    },
+  },
   components: {
     HeaderNav,
     SidebarNav,
@@ -27,7 +39,7 @@ export default {
 #adminMainContainer {
   display: flex;
   width: 100%;
-  height: 200vh;
+  height: 1500px;
 }
 
 .adminSubContainer {

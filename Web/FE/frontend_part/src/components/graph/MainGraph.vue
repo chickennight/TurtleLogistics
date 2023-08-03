@@ -1,10 +1,11 @@
 <template>
   <div class="OrderNowContainer">
-    <div>주문 현황</div>
+    <div class="OrderNowHeader"><h1>주문 현황</h1></div>
+    &nbsp;
     <div class="OrderNowGraph">
       <Line :data="chartData" :options="chartOptions" style="color: white" :key="renderCount" />
     </div>
-    <hr color="gray" />
+    &nbsp;
     <div class="OrderNowTableContainer">
       <v-table density="compact" theme="dark">
         <thead>
@@ -82,6 +83,7 @@ export default {
   mounted() {
     this.myTimer = setInterval(this.get_order_nows, 5000);
     this.chart_update();
+    this.updateParentHeight();
   },
   watch: {
     // orderNowcalculate 데이터의 변화를 감시
@@ -97,6 +99,7 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
+    window.removeEventListener("resize", this.updateParentHeight);
   },
   computed: {
     ...mapState("order", ["orderNowList"]),
@@ -110,22 +113,28 @@ export default {
       this.chartData.datasets[0].data = this.orderNowcalculate;
       this.renderCount += 1;
     },
+    updateParentHeight() {
+      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
+      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
+      this.$emit("childContentHeightChanged", container);
+    },
   },
 };
 </script>
 
 <style scoped>
 .OrderNowContainer {
-  padding: 20px;
   margin: 20px;
-  box-shadow: 2px 2px 3px 3px black;
 }
 .OrderNowTableContainer {
-  margin: 20px;
 }
 .OrderNowGraph {
-  padding: 10px;
-  margin: 20px;
+  padding: 20px;
+
+  box-shadow: 2px 2px 3px 3px black;
+}
+.OrderNowHeader {
+  padding: 20px;
   box-shadow: 2px 2px 3px 3px black;
 }
 </style>

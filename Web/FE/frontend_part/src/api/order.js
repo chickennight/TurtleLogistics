@@ -16,12 +16,11 @@ const dataAnalysisDay = async (startDay, endDay) => {
 };
 
 // 지역별 주문 분석
-const dataAnalysisRegion = async (year, month) => {
+const dataAnalysisRegion = async (regioncode) => {
   try {
-    const response = await authorizedApi.get("/order/analysis/region", {
+    const response = await authorizedApi.get("/order/analysis/regioncode", {
       params: {
-        year,
-        month,
+        regioncode
       },
     });
     return response;

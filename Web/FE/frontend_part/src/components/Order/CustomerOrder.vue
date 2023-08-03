@@ -82,7 +82,9 @@ export default {
   }),
   created() {},
   methods: {
-    doOrder() {},
+    doOrder() {
+      this.$store.dispatch("order/doOrder", this.order);
+    },
   },
 };
 </script>
