@@ -1,162 +1,146 @@
-// Div_Servo1(ESP12E)
-// Pub : Supervisor(/div/res) {orderno, result}
-// Sub : Div_Veri(/div/info) {orderno}
-
-#include "8266secrets.h"
+#include "TLClient.h"
+#include <Servo.h>
 
 #define THINGNAME "Div_Servo2"
-// PUBLISH TOPIC
-#define TOPIC_DIV_RES "/div/res"
-// SUBSCRIBE TOPIC
-#define TOPIC_DIV_VERI "/div/info"
-// IRSENSOR PIN NUM
-#define SENSORPIN 4
-// SERVO MOTOR PIN NUM
-#define SERVOPIN 3
-// IR SENSOR TIME LIMIT
-#define TIMELIMIT 2000
-// Servo Motor Angle LIMIT
-#define ANGLELIMIT 90
 
-WiFiClientSecure wifiClient;
-PubSubClient mqttClient(wifiClient);
+#define TOPIC_WEB_LOG "/log"
+#define TOPIC_DIV_RES "/div/res"
+#define TOPIC_DIV_INFO "/div/servo2/info"
+#define TOPIC_MOD_SER_ANG "/mod/div/servo2/angle"
+#define TOPIC_MOD_SER_INT "/mod/div/servo2/servo_interval"
+#define TOPIC_MOD_WA_INT "/mod/div/servo2/wait_interval"
+#define TOPIC_MOD_IR_INT "/mod/div/servo2/ir_interval"
+
+
+TLClient Div_Servo(THINGNAME);
+
+void Publish_callback(int orderno, int flag);
+void Subscribe_callback(char *topic, byte *payload, unsigned int length);
+void Device_function();
+
+#define SENSORPIN 5
+#define SERVOPIN 3
 Servo divider;
 
-BearSSL::X509List cert(AWS_CERT_CA);
-BearSSL::X509List client_crt(DIV_SER1_CERT);
-BearSSL::PrivateKey key(DIV_SER1_PRIKEY);
+int servo_interval = 4000;
+int wait_interval = 4000;
+int ir_interval = 2000;
+int angle = 65;
 
 
-void pubres(int orderno,int flag){
-  StaticJsonDocument<100> temp;
+void moveservo();
+void pubres(int orderno,int flag);
+int verify();
+void MSG(String str);
+
+void setup() {
+  Serial.begin(115200);
+  Div_Servo.connect_AWS();
+  Div_Servo.setCallback(Subscribe_callback);
+  Div_Servo.subscribe(TOPIC_DIV_INFO); 
+  Div_Servo.subscribe(TOPIC_MOD_SER_ANG);
+  Div_Servo.subscribe(TOPIC_MOD_SER_INT);
+  Div_Servo.subscribe(TOPIC_MOD_IR_INT);
+  Div_Servo.subscribe(TOPIC_MOD_WA_INT);
+  MSG("AWS Connect Success");
+
+  pinMode(SENSORPIN,INPUT);
+  divider.attach(SERVOPIN);
+  divider.write(0);
+}
+
+void loop() {
+  Div_Servo.mqttLoop();
+}
+
+void Publish_callback(int orderno,int flag){
+  StaticJsonDocument<200> temp;
   temp["order_num"] = orderno;
   temp["result"] = flag;
-  char buf[100];
-  serializeJson(temp,buf);
-
-  if(!mqttClient.publish(TOPIC_DIV_RES,buf)){
-    Serial.println("Publish Fail");
-  }
-  else{
-    Serial.println("Publish Success");
-  }
+  char buf[200];
+  serializeJson(temp,buf,sizeof(buf));
 }
 
-int verify(){
-  // Mover ServoMotor 
-  moveservo(&divider,90);
-  int flag=0,val=0;
-  unsigned long prev = millis();
-  // Check IR Sensor
-  Serial.println("IR Sensor Checking...");
-  while(millis() - prev <=TIMELIMIT){
-    ESP.wdtDisable();
-    val=digitalRead(SENSORPIN);
-    if(val==LOW){
-      Serial.println("Find!!");
-      flag=1;
-      break;
-    }
-  }
-  return flag;
-}
-
-void messageReceived(char *topic, byte *payload, unsigned int length)
-{
-  Serial.println("Message Received!");
+void Subscribe_callback(char *topic, byte *payload, unsigned int length){
   StaticJsonDocument<200> doc;
   DeserializationError error = deserializeJson(doc, payload, length);
   char res[100];
   serializeJson(doc,res);
 
-  int orderno = doc["order_num"].as<int>();
-  delay(1000);
-  pubres(orderno,verify());
-}
-
-void connectAWS()
-{
-  delay(1000);
- 
-  wifiClient.setTrustAnchors(&cert);
-  wifiClient.setClientRSACert(&client_crt, &key);
-
-  mqttClient.setServer(AWS_IOT_ENDPOINT, 8883);
-  mqttClient.setCallback(messageReceived);
- 
-  Serial.println("Connecting to AWS IOT");
- 
-  while (!mqttClient.connect(THINGNAME))
+  if(strcmp(TOPIC_DIV_INFO, topic)==0){
+    const char* orderno = doc["order_num"];
+    delay(servo_interval);
+    pubres(orderno,verify());
+  }
+  else if(strcmp(TOPIC_MOD_SER_ANG, topic)==0){
+    angle = (int)doc["angle"];
+    MSG("Angle Changed");
+  }
+  else if(strcmp(TOPIC_MOD_SER_INT, topic)==0){
+    servo_interval = (int)doc["servo_interval"];
+    MSG("Servo Interval Changed");
+  }
+  else if(strcmp(TOPIC_MOD_IR_INT, topic)==0){
+    ir_interval = (int)doc["ir_interval"];
+    MSG("Servo Interval Changed");
+  }
+  else if(strcmp(TOPIC_MOD_WA_INT,topic)==0)
   {
-    Serial.print(".");
-    delay(1000);
+    wait_interval = (int)doc["wait_interval"];
+    MSG("Servo Wait Interval Changed");
   }
- 
-  if (!mqttClient.connected()) {
-    Serial.println("AWS IoT Timeout!");
-    return;
-  }
-  // Subscribe to a topic
-  mqttClient.subscribe(TOPIC_DIV_VERI);
- 
-  Serial.println("AWS IoT Connected!");
 }
 
-void setupWifi(){
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    Serial.println(String("Attempting to connect to SSID: ") + String(WIFI_SSID));
+void pubres(const char* orderno,int flag){
+  StaticJsonDocument<100> temp;
+  temp["order_num"] = orderno;
+  temp["type"]="1";
+  temp["result"] = String(flag);
+  char buf[100];
+  serializeJson(temp,buf);
 
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        delay(1000);
-        Serial.println("Connecting...");
+  if(flag==1){
+    MSG("Divide Success");
+  }
+  else{
+    MSG("Divide Error");
+  }
+
+  if(Div_Servo.publish(TOPIC_DIV_RES,buf)){
+    MSG("Publish Result Success");
+  }
+  else{
+    MSG("Publish Result Fail");
+  }
+}
+
+int verify(){
+  moveservo();
+  int flag=1,val=0;
+  unsigned long prev = millis();
+  
+  prev = millis();
+
+  while(1){
+    val=digitalRead(SENSORPIN);
+    if(val==LOW){
+      flag=0;
+      break;
     }
-    Serial.println("WiFi Connect Success!");
-}
-
-void syncTimeWithNTP()
-{
-    configTime(9 * 3600, 0, "pool.ntp.org", "time.nist.gov"); // GMT+9 (한국 표준시)로 설정, 원하는 시간대로 변경 가능
-    time_t now = time(nullptr);
-    while (now < 1610880000) // 기준 시간 (Unix timestamp) 이전까지 대기 (2021년 1월 17일 00:00:00)
-    {
-        delay(500);
-        now = time(nullptr);
-    }
-
-    now = time(nullptr);
-    struct tm timeinfo;
-    gmtime_r(&now, &timeinfo);
-
-}
-
-void setup() 
-{
-  Serial.begin(115200);
-
-  setupWifi();
-  syncTimeWithNTP();
-  connectAWS();
-
-  pinMode(SENSORPIN,INPUT);
-
-  divider.attach(SERVOPIN);
-  divider.write(0);
-}
-
-void loop() 
-{
-  if(WiFi.status() != WL_CONNECTED){
-    setupWifi();
+    if(millis() - prev >=ir_interval) break;
   }
-  if (!mqttClient.connected()) {
-    Serial.println("AWS IoT Timeout!");
-  }
-  while (!mqttClient.connect(THINGNAME))
-  {
-    Serial.print(".");
-    delay(1000);
-  }
-  mqttClient.loop();
+
+  return flag;
 }
+
+void moveservo() {
+    divider.write(angle);
+    delay(servo_interval);
+    divider.write(0);
+}
+void MSG(String str){
+  String base="{\"dev\":\"Div_Servo2\",\"content\":\"";
+  String base2="\"}";
+  Div_Servo.publish(TOPIC_WEB_LOG, (base+str+base2).c_str());
+}
+
