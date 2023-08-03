@@ -2,11 +2,15 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "log")
 public class Log {
     @JsonProperty("log_num")
@@ -30,44 +34,15 @@ public class Log {
     @NotNull
     private Machine machine;
 
-    //기본생성자
-    public Log() {
+//    public Log(Machine machine2, String logForBrokenMachine) {
+//    }
+
+    public void updateMachine(Machine machine) {
+        this.machine = machine;
     }
 
-    public Log(Machine machine2, String logForBrokenMachine) {
-    }
-
-    //getters and setters
-
-    public Integer getLogNum() {
-        return logNum;
-    }
-
-    public void setLogNum(Integer logNum) {
-        this.logNum = logNum;
-    }
-
-    public LocalDateTime getErrorDate() {
-        return errorDate;
-    }
-
-    public void setErrorDate(LocalDateTime errorDate) {
-        this.errorDate = errorDate;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
+    public void updateErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
-    public Machine getMachine() {
-        return machine;
-    }
-
-    public void setMachine(Machine machine) {
-        this.machine = machine;
-    }
 }

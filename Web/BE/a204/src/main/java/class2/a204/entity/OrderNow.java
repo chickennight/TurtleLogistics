@@ -1,10 +1,14 @@
 package class2.a204.entity;
 
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "ordernow")
 public class OrderNow {
 
@@ -23,35 +27,12 @@ public class OrderNow {
     @NotNull
     private Integer status;
 
-
-    //기본생성자
-    public OrderNow() {
-    }
-
-    //getters and setters
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
+    public OrderNow(Order order, Integer status){
         this.order = order;
+        this.status = status;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
+    public void changeStatus(int status) {
         this.status = status;
     }
 }

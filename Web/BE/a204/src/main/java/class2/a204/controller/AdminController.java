@@ -1,65 +1,114 @@
 package class2.a204.controller;
 
-import class2.a204.entity.Admin;
+import class2.a204.dto.AdminDTO;
+import class2.a204.dto.AdminLoginDTO;
+import class2.a204.dto.MessageDTO;
+import class2.a204.dto.RefreshTokenDTO;
+import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.service.AdminService;
 import class2.a204.service.OrderService;
+import class2.a204.service.SmsService;
 import class2.a204.util.ErrorHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin("*")
 @RestController
+@Api(tags = "Admin")
 @RequestMapping("/admin")
 public class AdminController {
-    private final AdminService AS;
-    private final OrderService OS;
-    private final ErrorHandler Handler;
+    private final AdminService adminService;
+    private final OrderService orderService;
+    private final ErrorHandler errorHandler;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final SmsService smsService;
 
-    @Autowired
-    public AdminController(AdminService as, OrderService os, ErrorHandler handler) {
-        this.AS = as;
-        this.OS = os;
-        this.Handler = handler;
+    public AdminController(AdminService adminService, OrderService orderService, ErrorHandler errorHandler, JwtTokenProvider jwtTokenProvider, SmsService smsService) {
+        this.adminService = adminService;
+        this.orderService = orderService;
+        this.errorHandler = errorHandler;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.smsService = smsService;
     }
 
+    @ApiOperation(value = "관리자 등록", notes = "신규 관리자 등록")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Admin admin) {
-        System.out.println(admin.getAdminId());
+    public ResponseEntity<?> register(@RequestBody AdminDTO adminDto) {
         try {
-            AS.registerAdmin(admin);
+            adminService.registerAdmin(adminDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
-            return Handler.errorMessage(e);
+            return errorHandler.errorMessage(e);
         }
     }
 
+    @ApiOperation(value = "관리자 로그인", notes = "관리자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> Info) {
-
+    public ResponseEntity<?> login(@RequestBody AdminLoginDTO adminLoginDto) {
         try {
-            String id = Info.get("admin_id");
-            String password = Info.get("password");
-            String token = AS.login(id, password);
-            if(token != null){
-                return new ResponseEntity<>(token,HttpStatus.OK);
+            Map<String, String> tokens = adminService.login(adminLoginDto);
+            if (tokens != null) {
+                return new ResponseEntity<>(tokens, HttpStatus.OK);
             }
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } catch (Exception e){
-            return Handler.errorMessage(e);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
         }
     }
 
+    @ApiOperation(value = "주문 정보 가져오기", notes = "전체 주문정보 가져오기")
     @GetMapping("/orders")
     public ResponseEntity<?> getOrders() {
         try {
-            List<?> orders = OS.findAllOrders();
+            List<?> orders = orderService.findAllOrders();
             return new ResponseEntity<>(orders, HttpStatus.OK);
         } catch (Exception e) {
-            return Handler.errorMessage(e);
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "Access Token 갱신", notes = "Refresh Token을 이용하여 Access Token 갱신")
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDTO) {
+        try {
+            String newAccessToken = adminService.refreshAccessToken(refreshTokenDTO.getRefreshToken());
+            Map<String, String> response = new HashMap<>();
+            response.put("accessToken", newAccessToken);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "기기 이상 알림", notes = "기기 이상 발생시 메세지 전송")
+    @GetMapping("/msg")
+    public ResponseEntity<?> sendMessage(@RequestParam("machine_detail") String machineDetail, ServletRequest request) {
+        try {
+            String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail + " 기계 이상 발생");
+            smsService.sendSms(sms);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "물류 분석 자료", notes = "상품별 소모량 제공")
+    @GetMapping("/logistic")
+    public ResponseEntity<?> logisticAnalysis() {
+        try {
+            return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
         }
     }
 }

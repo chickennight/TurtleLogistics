@@ -1,13 +1,16 @@
 package class2.a204.entity;
 
-import class2.a204.jwt.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "customer")
 public class Customer {
 
@@ -36,60 +39,19 @@ public class Customer {
     @NotNull
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
-
-    //기본생성자
-    public Customer() {
-    }
-
-    //getters and setters
-
-    public Integer getCustomerNum() {
-        return customerNum;
-    }
-
-    public void setCustomerNum(Integer customerNum) {
-        this.customerNum = customerNum;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
+    //CustomerDTO에서 toEntity() 를 위한 생성자
+    public Customer(String customerId, String password, String address, String phoneNumber){
         this.customerId = customerId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    //비밀번호 암호화
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+
+
 }
