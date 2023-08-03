@@ -1,169 +1,177 @@
+from PySide2.QtWidgets import *
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from ui import Ui_MainWindow
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-import paho.mqtt.client as mqtt
-import RPi.GPIO as GPIO
+import threading
+import PySide2
+import json
 import time
 import cv2
-import json
 
-## PUBLISH TOPIC
-PUB_DIV_SERVO = "/div/servo"
-PUB_LOG = "/log"
-PUB_DIV_MOTOR = "/mod/div/motor/power"
 
-SUB_DIV_INFO = "/sup/div/veri/info"
-SUB_DIV_CAM = "/div/cam"
-SUB_MOD_ITV = "/mod/div/veri/interval"
-SUB_MOD_DIST = "/mod/div/veri/distance"
-SUB_WEB_POWER ="/mod/web/power"
+TOPIC_DIV_CAM = "/div/cam"
+TOPIC_DIV_SERVO = "/div/servo"
+TOPIC_DIV_INFO = "/sup/div/veri/info"
 
-CA = "/home/ssafy09204/TL/CA1.pem"
-PRIKEY = "/home/ssafy09204/TL/PRIVATE.key"
-CERT = "/home/ssafy09204/TL/CERT.crt"
+TOPIC_WEB_LOG = "/log"
+TOPIC_WEB_POWER = "/mod/web/power"
+
+TOPIC_MOD_ITV = "/mod/div/veri/interval"
+
+CA = "/home/pi/TL/CA1.pem"
+PRIKEY = "/home/pi/TL/PRIVATE.key"
+CERT = "/home/pi/TL/CERT.crt"
+
 END_POINT = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com"
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-TRIG=23
-ECHO=24
-
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
-
-GPIO.output(TRIG,False)
-print("init ultra sensor")
-time.sleep(2)
-
-## Ul Sensor detect or not
-global detect
-global distance
 global interval
-global QR_value
 global power
-global already
+global tot
+global Address_Info
+global Address_Lists
+global Order_Lists
+
+interval = 1.5
+power = 1
+tot=0
 
 
-detect = 0
-already=1
-power=1
-distance = 5
-interval = 2
-QR_value = -1
-QR_finish = 0
-Order_Lists=[]
 Address_Info={}
-Address_list=["1","2","3"]
+Address_Lists=["1","2","3"]
+Order_Lists=[]
 
-myMQTTClient = AWSIoTMQTTClient("clientid")
 
-myMQTTClient.configureEndpoint(END_POINT,8883)
-myMQTTClient.configureCredentials(CA,PRIKEY,CERT)
+def printImage(imgBGR):
+    imgRGB = cv2.cvtColor(imgBGR,cv2.COLOR_BGR2RGB)
+    h,w,byte = imgRGB.shape
+    img = QImage(imgRGB,w,h,byte*w, QImage.Format_RGB888)
+    pix_img = QPixmap(img)
+    return pix_img
 
-myMQTTClient.configureOfflinePublishQueueing(-1)
-myMQTTClient.configureDrainingFrequency(2)
-myMQTTClient.configureConnectDisconnectTimeout(10)
-myMQTTClient.configureMQTTOperationTimeout(5)
+class MyThread(QThread):
+    mySignal = Signal(QPixmap)
 
-print("MQTTClient configure Success")
+    def __init__(self):
+        super().__init__()
+        self.cam = cv2.VideoCapture(0)
+        self.cam.set(3,640)
+        self.cam.set(4,480)
+        self.detector = cv2.QRCodeDetector()
+        self.prev_time = time.time()
+        self.myMQTTClient = AWSIoTMQTTClient("clientid")
+        self.myMQTTClient.configureEndpoint(END_POINT, 8883)
+        self.myMQTTClient.configureCredentials(CA, PRIKEY, CERT)
 
-def add_Order(self,params,packet):
-    global power
-    if(power!=1):power=1
-    data = json.loads(packet.payload)
-    order_num = int(data["order_num"])
-    Order_Lists.append(order_num)
-    Address_Info[str(order_num)] = str(data["address"])
-    myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Add Order List Success\",\"order_num\":\"{str(order_num)}\"}}",0)
+        self.myMQTTClient.configureOfflinePublishQueueing(-1)
+        self.myMQTTClient.configureDrainingFrequency(2)
+        self.myMQTTClient.configureConnectDisconnectTimeout(10)
+        self.myMQTTClient.configureMQTTOperationTimeout(5)
 
-def read_QR(self,params,packet):
-    global QR_value , detect
-    time.sleep(interval)
-    camera = cv2.VideoCapture(0)
-    camera.set(3,640)
-    camera.set(4,480)
+        print("MQTTClient configure Success")
+        print("MQTT Connect Try")
+        self.myMQTTClient.connect()
+        print("MQTT Connect Success")
+        self.MSG("AWS Connect Success")
+        self.myMQTTClient.subscribe(TOPIC_DIV_INFO,0,self.add_Order)
+        self.myMQTTClient.subscribe(TOPIC_WEB_POWER,0,self.change_Power)
 
-    myMQTTClient.publish(PUB_DIV_MOTOR,"{\"type\":-1}",0)
-    ret, img = camera.read()
-    print("Capture!")
-    cv2.imwrite('image.jpg',img)
-    QR_temp = cv2.QRCodeDetector()
-    order_num, box, st_qrcode = QR_temp.detectAndDecode(img)
+    def run(self):
+        global Order_Lists,Address_Info,tot
+        while True:
+            ret,self.img = self.cam.read()
+            if ret:
+                self.o_num,_,_ = self.detector.detectAndDecode(self.img)
+                print(self.o_num)
+                try:
+                    self.o_num =int(self.o_num)
+                    if(self.o_num in Order_Lists):
+                        print(OrderList)
+                        print("self.o_num is in OrderLIST")
 
-    myMQTTClient.publish(PUB_DIV_MOTOR,"{\"type\":1}",0)
-    if(order_num==None):
-        myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Div_Veifier\",\"content\":\"Order Number is empty\"}",0)
-        return
-    if(int(order_num) in Order_Lists):
-        if(Address_Info[str(order_num)] not in Address_list):
-            myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Address not in Address List\",\"order_num\":{order_num}}}",0)
+                        if(Address_Info[str(self.o_num)] not in Address_Lists):
+                            MSG(f"Order Num({self.o_num}) Address not in Address
+                            print("self.o_num's address not exist")
+                        else:
+                            print("self.o_num's address is exist")
+                            addr = Address_Info[str(self.o_num)]
+                            print(f"Addr = {addr}")
+                            MSG(f"Get Address({addr}) Success")
+                            print("MSG Success")
+                            tot=tot+1
+                            Order_Lists.remove(int(self.o_num))
+                            del Address_Info[str(self.o_num)]
+                            print(Order_Lists)
+                            print(Address_Info)
+                except:
+                    print("EXCEPT!!!!!!!!!!",end='')
+                    pass
+                self.mySignal.emit(printImage(self.img))
+            else:
+                print("Capture Fail")
+            time.sleep(0.01)
+
+    def add_Order(self,self2,params,packet):
+        global power,Order_Lists,Address_Info
+        if (power != 1):
+            power = 1
+        data = json.loads(packet.payload)
+
+        order_num = int(data["order_num"])
+        if(order_num not in Order_Lists):
+            Order_Lists.append(order_num)
+            Address_Info[str(order_num)] = str(data["address"])
+            self.MSG(f"Order Num({order_num}) Add Success")
         else:
-            myMQTTClient.publish(PUB_DIV_SERVO+Address_Info[order_num]+"/info",f"{{\"order_num\" : \"{order_num}\"}}",0)
-            myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Div_Veifier\",\"content\":\"Get Address Success\"}",0)
-            Order_Lists.remove(int(order_num))
-            del Address_Info[str(order_num)]
-
-    else:
-      myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Order Number is Weird\",\"order_num\":\"{order_num}\"}}",0)
-    detect = 0
-
-def change_Distance(self,params,packet):
-    global distance
-    data = json.loads(packet.payload)
-    distance = int(data["distance"])
-    print(f"Change Distance : {distance}")
-    myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Change Distance\",\"order_num\":\"{distance}\"}}",0)
-
-def change_Interval(self,params,packet):
-    global interval
-    data = json.loads(packet.payload)
-    interval = int(data["interval"])
-    print(f"Change Interval : {interval}")
-    myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Change Interval\",\"order_num\":\"{interval}\"}}",0)
-
-def change_Power(self,params,packet):
-    global power
-    data = json.loads(packet.payload)
-    power = int(data["type"])
-    print(f"Change Power : {power}")
-    myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Div_Veifier\",\"content\":\"Change Power\",\"type\":\"{power}\"}}",0)
+            self.MSG(f"Order Num({order_num}) Already exist")
+        print(Address_Info)
+        print(Order_Lists)
 
 
-myMQTTClient.connect()
-myMQTTClient.subscribe(SUB_DIV_INFO,0,add_Order)
-myMQTTClient.subscribe(SUB_DIV_CAM,0,read_QR)
+    def change_Power(self,self2,params,packet):
+        global power
+        data = json.loads(packet.payload)
+        power = int(data["power"])
 
-myMQTTClient.subscribe(SUB_MOD_ITV,0,change_Interval)
-myMQTTClient.subscribe(SUB_MOD_DIST,0,change_Distance)
-myMQTTClient.subscribe(SUB_WEB_POWER,0,change_Power)
+    def MSG(self,str):
+        self.myMQTTClient.publish(TOPIC_WEB_LOG, f"{{\"dev\":\"Div_Veirifier\",\"
 
-myMQTTClient.publish(PUB_LOG,"{\"dev\":\"Div_Veifier\",\"content\":\"AWS Connect Success\"}",0)
 
-while True:
+class MyApp(QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint)
+        self.main()
+        self.showNum()
 
-    if(len(Order_Lists)>0 & power==1):
-        ## 초음파 센서 감지 loop
-        ## 감지 완료
-        if(detect==1 & already==0):
-            # 카메라 센서에 찍으라고 PUB
-            myMQTTClient.publish(SUB_DIV_CAM,"{\"func\":\"1\"}",0)
-            detect=0
-            already=1
+    def main(self):
+        self.th = MyThread()
+        self.th.mySignal.connect(self.setImage)
+        self.logo = cv2.imread("./logo.jpg")
+        self.ui.Logo.setPixmap(printImage(self.logo))
+        self.th.start()
+ 
+    def showNum(self):
+        if(len(Order_Lists)>0):
+            self.ui.OrderNum.display(Order_Lists[0])
         else:
-          while True:
-              GPIO.output(TRIG, True)
-              time.sleep(0.00001) # 10uS의 펄스 발생을 위한 딜레이
+            self.ui.OrderNum.display(0)
+        self.ui.TotalCnt.display(tot)
 
-          while GPIO.input(ECHO)==0:
-              start = time.time() # ECHO핀 상승 시간값 저장
+        self.showth = threading.Timer(1,self.showNum)
+        self.showth.start()
 
-          while GPIO.input(ECHO)==1:
-              stop = time.time() # ECHO핀 하강 시간값 저장
+    def setImage(self,img):
+        self.ui.ShowImg.setPixmap(img)
+    def closeEvent(self,event):
+        self.th.terminate()
+        self.th.wait(3000)
+        self.close()
 
-              check_time = stop-start
-              dist = check_time * 34300 / 2
-              if(detect==0 & already==1):## already 0으로 바꾸기 위한 감지
-                  if(dist > distance):
-                      already=0
-              if(detect==0 & already==0):## detect 1으로 바꾸기 위한 감지
-                  if (dist < distance):
-                      detect=1
+
+app=QApplication()
+win=MyApp()
+win.showMaximized()
+app.exec_()
