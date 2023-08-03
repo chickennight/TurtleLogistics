@@ -1,7 +1,7 @@
 <template>
   <div class="CustomerContainer">
     <div>
-      <img class="MainTurtle" src="./MainTurtle.png">
+      <img class="MainTurtle" src="./MainTurtle.png" />
     </div>
     &nbsp;
     <div class="OrderForm">
@@ -57,68 +57,54 @@
           ></v-text-field>
 
           <div class="d-flex flex-column">
-            <v-btn
-              color="success"
-              class="mt-4"
-              block
-              @click="doOrder"
-            >
-              주문하기
-            </v-btn>
+            <v-btn color="success" class="mt-4" block @click="doOrder"> 주문하기 </v-btn>
           </div>
         </v-form>
       </v-sheet>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    name : 'CustomerOrder',
-    data: () => ({
-      order : {
-        customer_num : "",
-        products:[
-          {"product_num": 1, "stock": ''},
-          {"product_num": 2, "stock": ''},
-          {"product_num": 3, "stock": ''},
-        ],
-        address: "",
-        detailAddress: "",
-      }
-    }),
-    created(){
-      console.log(this.order.products[0].stock);
-      console.log(this.order.products[0]);
+  name: "CustomerOrder",
+  data: () => ({
+    order: {
+      customer_num: "",
+      products: [
+        { product_num: 1, stock: "" },
+        { product_num: 2, stock: "" },
+        { product_num: 3, stock: "" },
+      ],
+      address: "",
+      detailAddress: "",
     },
-    methods: {
-      doOrder(){
-        console.log(111);
-        console.log(this.order);
-        console.log(this.order.products)
-      }
-    }
-}
+  }),
+  created() {},
+  methods: {
+    doOrder() {},
+  },
+};
 </script>
 
 <style scoped>
-.CustomerContainer{
-  display : flex;
+.CustomerContainer {
+  display: flex;
   flex-direction: column;
   height: 200vh;
   text-align: center;
 }
-.OrderForm *{
+.OrderForm * {
   background-color: rgb(53, 53, 53);
 }
-.MainTurtle{
+.MainTurtle {
   height: 150px;
   width: 150px;
   object-fit: contain;
   margin: auto;
   display: block;
 }
-.test *{
+.test * {
   background-color: red !important;
 }
 </style>

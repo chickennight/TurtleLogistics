@@ -37,4 +37,11 @@ public class LogisticAnalysisDTO {
         todayAmount = 0;
         errorMessage = "";
     }
+
+    public void addStatus(AnalysisGetDTO analysisGetDTO) {
+        this.yearAvg = analysisGetDTO.getYearAvg().intValue();
+        this.monthAvg = analysisGetDTO.getMonthAvg().intValue();
+        this.weekAvg = analysisGetDTO.getWeekAvg().intValue();
+        this.todayAmount = analysisGetDTO.getTodayAmount().intValue();
+    }
 }
