@@ -80,13 +80,9 @@ export default {
       detailAddress: "",
     },
   }),
-  created() {
-    console.log(this.order.products[0].stock);
-    console.log(this.order.products[0]);
-  },
+  created() {},
   methods: {
     doOrder() {
-      console.log(111);
       this.$store.dispatch("order/doOrder", this.order);
     },
   },
