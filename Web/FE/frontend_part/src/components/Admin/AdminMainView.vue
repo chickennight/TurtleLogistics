@@ -66,14 +66,20 @@ export default {
   },
   created() {
     this.getMachineStatus();
+    this.getlogisticAnalysis();
+    
   },
   methods: {
     getMachineStatus() {
       this.$store.dispatch("machine/getMachineStatus");
     },
+    getlogisticAnalysis() {
+      this.$store.dispatch("admin/getLogisticAnalysis");
+    },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
+    ...mapState("admin", ["logisticAnalysis"]),
   },
 };
 </script>
