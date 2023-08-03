@@ -94,38 +94,23 @@ class MyThread(QThread):
                     self.mySignal.emit(printImage(self.img))
                     try:
                         self.o_num,_,_ = detector.detectAndDecode(self.img)
-                        print(self.o_num)
                         self.o_num =int(self.o_num)
-                        print(Order_Lists)
-                        if(self.o_num in Order_Lists):
-                            print(Order_Lists)
-                            print("self.o_num is in OrderLIST")
-    
+                        print(f"Order Number : {self.o_num}")
+                        if(self.o_num in Order_Lists):   
                             if(Address_Info[str(self.o_num)] not in Address_Lists):
                                 self.MSG(f"Order Num({self.o_num}) Address not in Address")
                                 print("self.o_num's address not exist")
                             else:
                                 print("self.o_num's address is exist")
                                 addr = Address_Info[str(self.o_num)]
-                                print(type(addr))
-                                print(f"Addr = {addr}")
                                 TOPIC=TOPIC_DIV_SERVO+addr+"/info"
-                                print(TOPIC)
-                                self.myMQTTClient.publish(TOPIC,"\"msg\":\"go\"",0)
+                                self.myMQTTClient.publish(TOPIC,f"\"order_num\":\"{self.o_num}\"",0)
                                 self.MSG(f"Get Address({addr}) Success")
-                                print("MSG Success")
                                 tot=tot+1
-                                print("tot plus")
                                 Order_Lists.remove(int(self.o_num))
-                                print("Order List remove")
                                 del Address_Info[str(self.o_num)]
-                                print(Order_Lists)
-                                print(Address_Info)
                     except Exception as e:
-                        print(f"Error:{e}")
-                    
-                else:
-                    print("Capture Fail")
+                        print(f"Error:{e}")                   
             except KeyboardInterrupt:
                 sys.exit()
             time.sleep(0.01)
@@ -143,9 +128,6 @@ class MyThread(QThread):
             self.MSG(f"Order Num({order_num}) Add Success")
         else:
             self.MSG(f"Order Num({order_num}) Already exist")
-        print(Address_Info)
-        print(Order_Lists)
-
 
     def change_Power(self,self2,params,packet):
         global power
