@@ -2,14 +2,14 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "log")
 public class Log {
@@ -34,7 +34,15 @@ public class Log {
     @NotNull
     private Machine machine;
 
-    public Log(Machine machine2, String logForBrokenMachine) {
+//    public Log(Machine machine2, String logForBrokenMachine) {
+//    }
+
+    public void updateMachine(Machine machine) {
+        this.machine = machine;
+    }
+
+    public void updateErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }
