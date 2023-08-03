@@ -87,22 +87,6 @@ public class OrderService {
         orderNowRepository.save(temp);
     }
 
-//    public Map<String, Long> dataRegion(Integer year, Integer month) {
-//        List<AnalysisRegionDTO> list;
-//        if (month == 0) list = orderRepository.findRegionCountByYear(year);
-////        else list = orderRepository.findRegionCountByYearMonth(year, month);
-//
-//        Map<String, Long> result = new HashMap<>();
-//
-//        for (int i = 1; i <= 17; ++i)
-//            result.put(String.valueOf(i), 0L);
-//
-//        for (AnalysisRegionDTO dto : list) {
-//            result.put(String.valueOf(dto.getRegion()), dto.getCount());
-//        }
-//        return result;
-//    }
-
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
         List<AnalysisDayDTO> list = orderRepository.findDayCount(startDay, endDay);
         Map<String, Long> result = new TreeMap<>();
@@ -131,10 +115,8 @@ public class OrderService {
         orderNowRepository.delete(orderNow);
     }
 
-    public AnalysisRegionDTO dataRegionCode(Integer regioncode) {
-        List<Long[]> list;
-        list = orderNowRepository.analysisRegion(regioncode);
-        AnalysisRegionDTO result = new AnalysisRegionDTO(list);
-        return result;
+    public AnalysisRegionDTO dataRegionCode(Integer regionCode) {
+        List<Long[]> list = orderNowRepository.analysisRegion(regionCode);
+        return new AnalysisRegionDTO(list);
     }
 }
