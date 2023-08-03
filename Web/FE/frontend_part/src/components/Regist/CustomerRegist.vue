@@ -1,7 +1,7 @@
 <template>
-    <div class="CustomerContainer">
+  <div class="CustomerContainer">
     <div>
-      <img class="MainTurtle" src="./MainTurtle.png">
+      <img class="MainTurtle" src="./MainTurtle.png" />
     </div>
     &nbsp;
     <div class="CustomerRegistForm">
@@ -39,72 +39,61 @@
             :rules="nameRules"
             label="전화번호"
             required
-         ></v-text-field>
+          ></v-text-field>
 
           <v-text-field
             v-model="customer.address"
             :rules="nameRules"
             label="지역"
             required
-         ></v-text-field>
+          ></v-text-field>
 
           <div class="d-flex flex-column">
-            <v-btn
-              color="success"
-              class="mt-4"
-              block
-              @click="customerRegist"
-            >
-              가입하기
-            </v-btn>
+            <v-btn color="success" class="mt-4" block @click="customerRegist"> 가입하기 </v-btn>
           </div>
         </v-form>
       </v-sheet>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "CustomerRegist",
-    data: () => ({
-      customer:{
-        customer_id: '',
-        password: '',
-        passwordCheck: '',
-        phone_number: '',
-        address: '',
-      },
-        nameRules: [
-            v => !!v || '해당 칸을 입력해주세요',
-        ],
-        select: null,
-    }),
-    methods: {
-      customerRegist(){
-        console.log(this.customer);
-        this.$store.dispatch("customer/customerRegist", this.customer);
-      }
-    }
-}
+  name: "CustomerRegist",
+  data: () => ({
+    customer: {
+      customer_id: "",
+      password: "",
+      passwordCheck: "",
+      phone_number: "",
+      address: "",
+    },
+    nameRules: [(v) => !!v || "해당 칸을 입력해주세요"],
+    select: null,
+  }),
+  methods: {
+    customerRegist() {
+      this.$store.dispatch("customer/customerRegist", this.customer);
+    },
+  },
+};
 </script>
 
 <style scoped>
-.CustomerContainer{
-  display : flex;
+.CustomerContainer {
+  display: flex;
   flex-direction: column;
   height: 200vh;
   text-align: center;
 }
-.CustomerRegistForm *{
+.CustomerRegistForm * {
   background-color: rgb(53, 53, 53);
 }
-.MainTurtle{
+.MainTurtle {
   height: 150px;
   width: 150px;
   object-fit: contain;
   margin: auto;
   display: block;
 }
-
 </style>

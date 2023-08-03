@@ -200,7 +200,6 @@ export default {
     getRegion(value) {
       let region = document.getElementById(value).textContent;
       this.currentRegion = region;
-      console.log(this.currentRegion);
     },
     showRegion(value) {
       let regionText = document.getElementById(value);

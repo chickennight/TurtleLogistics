@@ -14,8 +14,8 @@ const adminStore = {
     },
     ADMIN_LOGIN(state, data) {
       state;
-      localStorage.setItem("adminToken", data.accessToken); // 로컬스토리지에 accessToken 저장
-      localStorage.setItem("adminRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
+      localStorage.setItem("adminToken", data.accessToken);
+      localStorage.setItem("adminRefreshToken", data.refreshToken);
     },
     LOGOUT() {
       localStorage.removeItem("adminToken");
@@ -42,7 +42,6 @@ const adminStore = {
         const response = await adminAPI.login(admin);
         if (response.status == 200) {
           commit("ADMIN_LOGIN", response.data);
-          console.log(response.data);
           router.push("/admin");
         } else {
           alert("아이디 또는 비밀번호를 확인해주세요");
