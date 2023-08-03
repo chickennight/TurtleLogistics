@@ -2,6 +2,8 @@ package class2.a204.service;
 
 import com.amazonaws.services.iot.client.AWSIotException;
 import com.amazonaws.services.iot.client.AWSIotMqttClient;
+import com.amazonaws.services.iot.client.AWSIotQos;
+import com.amazonaws.services.iot.client.AWSIotTimeoutException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,24 @@ public class MqttService {
     @Value("${aws.iot.awsSecretAccessKey}")
     private String awsSecretAccessKey;
 
-    public void publish(String topic, String message) throws AWSIotException, JsonProcessingException {
+    public void publish(String topic, String message) throws JsonProcessingException, AWSIotException {
         ObjectMapper objectMapper = new ObjectMapper();
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("order", "이것은 테스트 메세지 입니다.");
 //        String jsonString = objectMapper.writeValueAsString(map);
-        String jsonString = objectMapper.writeValueAsString(message);
         AWSIotMqttClient client = new AWSIotMqttClient(clientEndpoint, clientId, awsAccessKeyId, awsSecretAccessKey, null);
+        String jsonString = objectMapper.writeValueAsString(message);
         client.connect();
-        client.publish(topic, jsonString);
+        client.publish(topic, message);
         client.disconnect();
+//        try {
+//            client.connect();
+//            client.publish(topic, message);
+//            client.publish(topic, jsonString);
+//            client.disconnect();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+
     }
 }
