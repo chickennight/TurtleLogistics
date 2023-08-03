@@ -200,6 +200,7 @@ export default {
     getRegion(value) {
       let region = document.getElementById(value).textContent;
       this.currentRegion = region;
+      console.log(this.currentRegion);
     },
     showRegion(value) {
       let regionText = document.getElementById(value);
@@ -231,7 +232,6 @@ path:hover {
   font-size: 16;
   font-weight: bold;
   text-anchor: middle;
-  alignment-baseline: middle;
   visibility: hidden;
 }
 path:hover > .TEXT {
