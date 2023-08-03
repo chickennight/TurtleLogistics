@@ -43,5 +43,14 @@ public class LogisticAnalysisDTO {
         this.monthAvg = analysisGetDTO.getMonthAvg().intValue();
         this.weekAvg = analysisGetDTO.getWeekAvg().intValue();
         this.todayAmount = analysisGetDTO.getTodayAmount().intValue();
+        if (stock <= 7 * Math.max(Math.max(yearAvg, monthAvg), weekAvg))
+            errorMessage = ("재고 소진 임박");
+
+        if (todayAmount >= 3 * Math.max(Math.max(yearAvg, monthAvg), weekAvg)) {
+            if (errorMessage.equals(""))
+                errorMessage = "주문 폭주";
+            else
+                errorMessage = "주문 폭주! 재고 즉시 확인";
+        }
     }
 }
