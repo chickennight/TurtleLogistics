@@ -125,6 +125,8 @@
 
 ### 2. Development & Test
 
+- H/W Development
+
 - Jira를 통한 일정관리
   - 매 주 월요일에 주 단위 이슈를 생성하고 금요일까지 40의 Story Point를 완료하기 위해 노력함
 
