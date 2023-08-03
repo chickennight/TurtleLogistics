@@ -14,7 +14,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="item in logisticAnalysis"
+              v-for="item in sortedLogisticAnalysis()"
               :key="item.product_num"
               :class="{ 'red-text': item.error_message !== `` }"
             >
@@ -75,6 +75,18 @@ export default {
     getlogisticAnalysis() {
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
+    sortedLogisticAnalysis() {
+      // Sort the array in such a way that items with 'error_message' are on top
+      return this.logisticAnalysis.sort((a, b) => {
+        if (a.error_message !== "" && b.error_message === "") {
+          return -1; // 'a' has an error_message and should come before 'b'
+        } else if (a.error_message === "" && b.error_message !== "") {
+          return 1; // 'b' has an error_message and should come before 'a'
+        } else {
+          return 0; // Maintain the current order if both have an error_message or none
+        }
+      });
+    },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
@@ -108,15 +120,20 @@ export default {
   box-shadow: 2px 2px 3px 3px black;
   width: 35%;
   margin-left: 30px;
+  overflow-y: auto;
 }
 .LogTableContainer {
   padding: 10px;
   box-shadow: 2px 2px 3px 3px black;
   width: 40%;
+  overflow-y: auto;
 }
 .BlueprintContainer {
   box-shadow: 2px 2px 3px 3px black;
   width: 55%;
   margin-left: 30px;
+}
+.red-text td {
+  color: red;
 }
 </style>
