@@ -175,31 +175,59 @@
       </svg>
     </div>
     &nbsp;
-    <hr />
+    <div class="RegionString">
+      <h3>{{ this.currentRegion }} 지역</h3>
+    </div>
     <div class="RegionTable">
-      <h3>{{ this.currentRegion }}</h3>
+      <v-table density="compact" theme="dark">
+        <thead>
+          <tr>
+            <th class="text-left">주문 접수</th>
+            <th class="text-left">포장 과정</th>
+            <th class="text-left">분류 과정</th>
+            <th class="text-left">분류 완료</th>
+            <th class="text-left">배송 과정</th>
+            <th class="text-left">이상 발생</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ this.orderRegion[`주문 접수`] }}</td>
+            <td>{{ this.orderRegion[`포장 과정`] }}</td>
+            <td>{{ this.orderRegion[`분류 과정`] }}</td>
+            <td>{{ this.orderRegion[`분류 완료`] }}</td>
+            <td>{{ this.orderRegion[`배송 과정`] }}</td>
+            <td>{{ this.orderRegion[`이상 발생`] }}</td>
+          </tr>
+        </tbody>
+      </v-table>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "OrderByRegion",
   data: () => ({
     currentRegion: "",
   }),
   mounted() {
-    // const svg = document.querySelectorAll("path");
-    // svg.forEach((path) => {
-    //   path.addEventListener("mouseover", (e) => {
-    //     e;
-    //   });
-    // });
+    // 컴포넌트가 마운트될 때 실행되는 로직
+    window.addEventListener("resize", this.updateParentHeight);
+    this.updateParentHeight();
+  },
+  beforeUnmount() {
+    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
+    window.removeEventListener("resize", this.updateParentHeight);
   },
   methods: {
     getRegion(value) {
       let region = document.getElementById(value).textContent;
       this.currentRegion = region;
+
+      this.$store.dispatch("order/getDataAnalysisRegion", value);
     },
     showRegion(value) {
       let regionText = document.getElementById(value);
@@ -209,6 +237,14 @@ export default {
       let regionText = document.getElementById(value);
       regionText.style.visibility = "hidden";
     },
+    updateParentHeight() {
+      const regionContainer = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
+      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
+      this.$emit("childContentHeightChanged", regionContainer);
+    },
+  },
+  computed: {
+    ...mapState("order", ["orderRegion"]),
   },
 };
 </script>
@@ -238,15 +274,21 @@ path:hover > .TEXT {
 }
 .regionContainer {
   margin: 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .map-container {
   text-align: center;
+  box-shadow: 2px 2px 3px 3px black;
+  padding: 20px;
+}
+.RegionString {
+  width: 100%;
+  padding: 20px;
 }
 .RegionTable {
   width: 100%;
-  padding: 20px;
 }
 </style>

@@ -1,9 +1,11 @@
 <template>
   <div class="SampleContainer">
-    공정현황!!!!(단면도너낌)
-    <v-btn @click="getMachineStatus" background-color="rgb(53, 53, 53)" variant="outlined">
-      공정현황 버튼
-    </v-btn>
+    <h1>공정현황</h1>
+    <span>
+      <v-btn @click="getMachineStatus" background-color="rgb(53, 53, 53)" variant="outlined">
+        공정현황 버튼
+      </v-btn>
+    </span>
   </div>
   <div class="LogTableContainer">
     <v-table density="compact" theme="dark">
@@ -69,9 +71,22 @@ import { mapState } from "vuex";
 export default {
   name: "MainBluePrint",
   data: () => ({}),
+  mounted() {
+    // 컴포넌트가 마운트될 때 실행되는 로직
+    this.updateParentHeight();
+  },
+  beforeUnmount() {
+    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
+    window.removeEventListener("resize", this.updateParentHeight);
+  },
   methods: {
     getMachineStatus() {
       this.$store.dispatch("machine/getMachineStatus");
+    },
+    updateParentHeight() {
+      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
+      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
+      this.$emit("childContentHeightChanged", container);
     },
   },
   computed: {
@@ -83,6 +98,13 @@ export default {
 <style scoped>
 .SampleContainer {
   margin: 20px;
-  border: 1px solid white;
+  padding: 20px;
+  box-shadow: 2px 2px 3px 3px black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.LogTableContainer {
+  margin: 20px;
 }
 </style>
