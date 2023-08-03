@@ -239,8 +239,6 @@ export default {
     },
     updateParentHeight() {
       const regionContainer = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      console.log(1);
-      console.log(regionContainer);
       // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
       this.$emit("childContentHeightChanged", regionContainer);
     },
