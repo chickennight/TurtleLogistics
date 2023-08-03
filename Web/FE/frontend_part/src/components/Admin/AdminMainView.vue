@@ -67,9 +67,24 @@ export default {
   created() {
     this.getMachineStatus();
   },
+  mounted() {
+    // 컴포넌트가 마운트될 때 실행되는 로직
+    this.updateParentHeight();
+    window.addEventListener("resize", this.updateParentHeight);
+  },
+  beforeUnmount() {
+    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
+    window.removeEventListener("resize", this.updateParentHeight);
+    console.log("감기만이람닝ㄹ");
+  },
   methods: {
     getMachineStatus() {
       this.$store.dispatch("machine/getMachineStatus");
+    },
+    updateParentHeight() {
+      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
+      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
+      this.$emit("childContentHeightChanged", container);
     },
   },
   computed: {

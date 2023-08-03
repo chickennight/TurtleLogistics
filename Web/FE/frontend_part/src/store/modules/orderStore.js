@@ -7,6 +7,7 @@ const orderStore = {
     orderWeekData: [],
     orderNowList: [],
     orderNowcalculate: [],
+    orderRegion: [],
   },
   getters: {},
   mutations: {
@@ -21,6 +22,9 @@ const orderStore = {
     },
     GET_CALCULATE(state, data) {
       state.orderNowcalculate = data;
+    },
+    GET_DATA_ANALYSIS_REGION(state, data) {
+      state.orderRegion = data;
     },
   },
   actions: {
@@ -79,6 +83,23 @@ const orderStore = {
         console.log(error);
       }
     },
+    // 지역별 주문 분석
+    async getDataAnalysisRegion({ commit }, regioncode) {
+      try {
+        const response = await orderAPI.dataAnalysisRegion(regioncode);
+        commit("GET_DATA_ANALYSIS_REGION", response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async doOrder({commit}, order) {
+      try {
+        orderAPI.newOrder(order);
+        commit;
+      } catch(error) {
+        console.log(error)
+      }
+    }
   },
 };
 
