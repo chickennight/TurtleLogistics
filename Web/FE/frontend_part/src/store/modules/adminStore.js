@@ -22,7 +22,6 @@ const adminStore = {
       localStorage.removeItem("adminRefreshToken");
     },
     GET_LOGISTIC_ANALYSIS(state, data) {
-      console.log(data);
       state.logisticAnalysis = data;
     },
   },
