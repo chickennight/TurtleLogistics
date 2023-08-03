@@ -8,14 +8,14 @@
         <v-text-field
           v-model="customer.customer_id"
           label="아이디"
-          :rules="firstNameRules"
+          :rules="nameRules"
         ></v-text-field>
 
         <v-text-field
           v-model="customer.password"
           label="비밀번호"
           type="password"
-          :rules="lastNameRules"
+          :rules="nameRules"
         ></v-text-field>
 
         <v-btn @click="doCustomerLogin" block class="mt-2">로그인</v-btn>
@@ -36,20 +36,7 @@ export default {
       customer_id: "",
       password: "",
     },
-    firstNameRules: [
-      (value) => {
-        if (value?.length > 3) return true;
-
-        return "First name must be at least 3 characters.";
-      },
-    ],
-    lastNameRules: [
-      (value) => {
-        if (/[^0-9]/.test(value)) return true;
-
-        return "Last name can not contain digits.";
-      },
-    ],
+    nameRules: [(v) => !!v || "해당 칸을 입력해주세요"],
   }),
   methods: {
     doCustomerLogin() {
