@@ -1,7 +1,0 @@
-From Supervisor(/sup/init)
-
-: 주문이 시작되면, 모터 돌라고 지시
-
-: 강제 종료(From BE) (/web/power)
-	: 전역변수 powered 기준(-1/1)
-	: 전달 받은 지시 값과 다르면 toggle
