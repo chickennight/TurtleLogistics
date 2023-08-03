@@ -6,10 +6,10 @@
         <v-table density="compact" theme="dark">
           <thead>
             <tr>
-              <th class="text-left" rowspan="2">상품번호</th>
+              <th class="text-left" rowspan="2">번호</th>
               <th class="text-left" rowspan="2">상품명</th>
-              <th class="text-left" rowspan="2">상품재고</th>
-              <th class="text-left" rowspan="2">이상 발생</th>
+              <th class="text-left" rowspan="2">재고</th>
+              <th class="text-left" rowspan="2">이상</th>
             </tr>
           </thead>
           <tbody>
@@ -67,7 +67,6 @@ export default {
   created() {
     this.getMachineStatus();
     this.getlogisticAnalysis();
-    
   },
   methods: {
     getMachineStatus() {
@@ -113,11 +112,11 @@ export default {
 .LogTableContainer {
   padding: 10px;
   box-shadow: 2px 2px 3px 3px black;
-  width: 35%;
+  width: 40%;
 }
 .BlueprintContainer {
   box-shadow: 2px 2px 3px 3px black;
-  width: 60%;
+  width: 55%;
   margin-left: 30px;
 }
 </style>

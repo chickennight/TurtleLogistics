@@ -231,7 +231,6 @@ path:hover {
   font-size: 16;
   font-weight: bold;
   text-anchor: middle;
-  alignment-baseline: middle;
   visibility: hidden;
 }
 path:hover > .TEXT {
