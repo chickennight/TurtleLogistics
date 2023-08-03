@@ -111,7 +111,7 @@ class MyThread(QThread):
                                 print(f"Addr = {addr}")
                                 TOPIC=TOPIC_DIV_SERVO+addr+"/info"
                                 print(TOPIC)
-                                self.myMQTTClient.publish(TOPIC,"\"msg\":\"go\"",0)
+                                self.myMQTTClient.publish(TOPIC,"{\"msg\":\"go\"}",0)
                                 self.MSG(f"Get Address({addr}) Success")
                                 print("MSG Success")
                                 tot=tot+1
