@@ -100,42 +100,6 @@ public class AdminService {
                 if(la.getProductNum().equals(ag.getProductNum()))
                     la.addStatus(ag);
 
-
-
-//        for (LogisticAnalysisDTO la : ans) {
-//            for (Long[] arr : yearSum) {
-//                if (la.getProductNum() == arr[0].intValue())
-//                    la.setYearAvg((int) Math.ceil((double) (arr[1] / 365)));
-//            }
-//            for (Long[] arr : monthSum) {
-//                if (la.getProductNum() == arr[0].intValue())
-//                    la.setYearAvg((int) Math.ceil((double) (arr[1] / 365)));
-//            }
-//            for (Long[] arr : yearSum) {
-//                if (la.getProductNum() == arr[0].intValue())
-//                    la.setYearAvg((int) Math.ceil((double) (arr[1] / 365)));
-//            }
-//            for (Long[] arr : yearSum) {
-//                if (la.getProductNum() == arr[0].intValue())
-//                    la.setYearAvg((int) Math.ceil((double) (arr[1] / 365)));
-//            }
-//
-//        }
-//
-//        // 주의 여부
-//        if (input.getStock() <= 7 * Math.max(Math.max(input.getYearAvg(), input.getWeekAvg()), input.getMonthAvg()))
-//            input.setErrorMessage("재고 소진 임박");
-//
-//        if (input.getTodayAmount() >= 3 * Math.max(Math.max(input.getYearAvg(), input.getWeekAvg()), input.getMonthAvg())) {
-//            if (input.getErrorMessage().equals(""))
-//                input.setErrorMessage("주문 폭주");
-//            else
-//                input.setErrorMessage("주문 폭주! 재고 즉시 확인");
-//        }
-//
-//
-//        ans.add(input);
-
         return ans;
 
     }
