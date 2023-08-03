@@ -128,11 +128,6 @@ export default {
     ...mapState("order", ["orderData"]),
   },
   methods: {
-    check() {
-      for (let key in this.orderData) {
-        console.log(this.orderData[key]);
-      }
-    },
     getOrderDataWeek() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
@@ -167,9 +162,6 @@ export default {
       const month = new Date(today.setMonth(today.getMonth() - 1));
       const start_day = month.toISOString();
 
-      console.log(end_day);
-      console.log(start_day);
-
       const date = {
         end: end_day,
         start: start_day,
@@ -195,9 +187,6 @@ export default {
       const end_day = today.toISOString();
       const month = new Date(today.setMonth(today.getMonth() - 3));
       const start_day = month.toISOString();
-
-      console.log(end_day);
-      console.log(start_day);
 
       const date = {
         end: end_day,
@@ -236,9 +225,6 @@ export default {
       const month = new Date(today.setMonth(today.getMonth() - 6));
       const start_day = month.toISOString();
 
-      console.log(end_day);
-      console.log(start_day);
-
       const date = {
         end: end_day,
         start: start_day,
@@ -273,9 +259,6 @@ export default {
       const end_day = today.toISOString();
       const month = new Date(today.setFullYear(today.getFullYear() - 1));
       const start_day = month.toISOString();
-
-      console.log(end_day);
-      console.log(start_day);
 
       const date = {
         end: end_day,
