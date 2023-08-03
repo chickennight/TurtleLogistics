@@ -40,7 +40,6 @@ export default {
   }),
   methods: {
     doCustomerLogin() {
-      console.log(this.customer);
       this.$store.dispatch("customer/customerLogin", this.customer);
     },
   },
