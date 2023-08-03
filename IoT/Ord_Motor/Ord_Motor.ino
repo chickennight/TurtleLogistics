@@ -7,7 +7,7 @@
 #define TOPIC_WEB_LOG "/log"
 
 int power=-1;
-int speed = 190;
+int speed = 210;
 
 int motor1Pin1 = 27; 
 int motor1Pin2 = 26; 
