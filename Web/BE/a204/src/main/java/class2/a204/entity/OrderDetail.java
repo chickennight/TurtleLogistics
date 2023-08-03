@@ -2,10 +2,14 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "orderdetail")
 public class OrderDetail {
 
@@ -29,41 +33,10 @@ public class OrderDetail {
     @NotNull
     private Order order;
 
-    //기본생성자
-    public OrderDetail() {
-    }
-
-    //getters and setters
-
-    public Long getOrderDetailId() {
-        return orderDetailId;
-    }
-
-    public void setOrderDetailId(Long orderDetailId) {
-        this.orderDetailId = orderDetailId;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
+    public OrderDetail(Order order, Product product, Integer amount){
+        this.order = order;
+        this.product = product;
         this.amount = amount;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

@@ -2,10 +2,15 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "admin")
 public class Admin {
     @JsonProperty("admin_num")
@@ -29,42 +34,18 @@ public class Admin {
     @NotNull
     private String phoneNumber;
 
-    //기본생성자
-    public Admin() {
-    }
-
-    //getters and setters
-
-
-    public int getAdminNum() {
-        return adminNum;
-    }
-
-    public void setAdminNum(int adminNum) {
-        this.adminNum = adminNum;
-    }
-
-    public String getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+    //AdminDTO에서 toEntity() 를 위한 생성자
+    public Admin(String adminId, String password, String phoneNumber) {
+        this.adminId= adminId;
         this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    //비밀번호 암호화
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
+
+
+
 }

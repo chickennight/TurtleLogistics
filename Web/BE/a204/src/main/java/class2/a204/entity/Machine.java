@@ -3,11 +3,15 @@ package class2.a204.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "machine")
 public class Machine {
 
@@ -30,10 +34,6 @@ public class Machine {
     @JsonIgnore
     private List<Log> logs;
 
-    //기본생성자
-    public Machine() {
-    }
-
     public Machine(Integer machineId, String machineDetail, Boolean broken, List<Log> logs) {
         this.machineId = machineId;
         this.machineDetail = machineDetail;
@@ -41,11 +41,18 @@ public class Machine {
         this.logs = logs;
     }
 
-    public Machine(Integer machineId, String machineDetail, Boolean broken) {
-        this.machineId = machineId;
+    public Machine(String machineDetail, Boolean broken) {
         this.machineDetail = machineDetail;
         this.broken = broken;
     }
+
+    public void changeDetail(String machineDetail){
+        this.machineDetail = machineDetail;
+    }
+    public void changeBroken(Boolean broken){
+        this.broken  = broken;
+    }
+
 
     public Machine(Integer machineId, String machineDetail) {
         this.machineId = machineId;
@@ -56,37 +63,4 @@ public class Machine {
         this.broken = broken;
     }
 
-    //getters and setters
-
-    public Integer getMachineId() {
-        return machineId;
-    }
-
-    public void setMachineId(Integer machineId) {
-        this.machineId = machineId;
-    }
-
-    public String getMachineDetail() {
-        return machineDetail;
-    }
-
-    public void setMachineDetail(String machineDetail) {
-        this.machineDetail = machineDetail;
-    }
-
-    public Boolean getBroken() {
-        return broken;
-    }
-
-    public void setBroken(Boolean broken) {
-        this.broken = broken;
-    }
-
-    public List<Log> getLogs() {
-        return logs;
-    }
-
-    public void setLogs(List<Log> logs) {
-        this.logs = logs;
-    }
 }
