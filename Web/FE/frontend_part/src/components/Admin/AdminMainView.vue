@@ -76,7 +76,6 @@ export default {
   beforeUnmount() {
     // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
     window.removeEventListener("resize", this.updateParentHeight);
-    console.log("감기만이람닝ㄹ");
   },
   methods: {
     getMachineStatus() {
