@@ -119,6 +119,7 @@ const router = createRouter({
   routes,
 });
 
+//주소 직접 접근시 토큰검사
 router.beforeEach((to, from, next) => {
   const adminToken = localStorage.getItem("adminToken");
   const customerToken = localStorage.getItem("customerToken");
