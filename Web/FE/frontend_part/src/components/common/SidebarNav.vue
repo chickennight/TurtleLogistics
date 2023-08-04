@@ -40,15 +40,6 @@
 <script>
 export default {
   name: "SidebarNav",
-  data: () => ({
-    ex11: "",
-  }),
-  methods: {
-    showMode() {
-      this.$store.state.mode = this.ex11;
-      console.log(this.$store.state.mode);
-    },
-  },
 };
 </script>
 
