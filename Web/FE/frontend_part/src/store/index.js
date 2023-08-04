@@ -7,6 +7,9 @@ import machineStore from "./modules/machineStore";
 import orderStore from "./modules/orderStore";
 
 const store = createStore({
+  state: {
+    mode : false,
+  },
   modules: {
     admin: adminStore,
     customer: customerStore,
