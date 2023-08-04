@@ -20,102 +20,133 @@ import ErrorView from "../views/ErrorView.vue";
 
 // 라우터 설계
 const routes = [
-    {
-        path: '/',
-        name: 'MainView',
-        component: MainView,
-    },
-    {
-        path: '/admin',
-        name: 'AdminView',
-        component: AdminView,
-        children: [
-            {
-                path: '',
-                name: 'AdminMainView',
-                component: AdminMainView,
-            },
-            {
-                path: 'date',
-                name: 'OrderByDate',
-                component: OrderByDate,
-            },
-            {
-                path: 'logistics',
-                name: 'MainLogistics',
-                component: MainLogistics,
-            },
-            {
-                path: 'blueprint',
-                name: 'MainBluePrint',
-                component: MainBluePrint,
-            },
-            {
-                path: 'machine',
-                name: 'MainMachine',
-                component: MainMachine,
-            },
-            {
-                path: 'graph',
-                name: 'MainGraph',
-                component: MainGraph,
-            },
-            {
-                path: "region",
-                name: 'OrderByRegion',
-                component: OrderByRegion,
-            }
-        ]
-    },
-    {
-        path: '/adminLogin',
-        name: 'AdminLogin',
-        component: AdminLogin,
-    },
-    {
-        path: '/customerLogin',
-        name: 'CustomerLogin',
-        component: CustomerLogin,
-    },
-    {
-        path: '/customer',
-        name: 'CustomerView',
-        component: CustomerView,
-        children: [
-            {
-                path: '',
-                name: 'CustomerOrder',
-                component: CustomerOrder,
-            },
-            {
-                path: '/regist',
-                name: 'CustomerRegist',
-                component: CustomerRegist,
-            }
-        ]
-    },
-    {
-        path: '/adminRegist',
-        name: 'AdminRegist',
-        component: AdminRegist,
-    },
-    {
-        path: '/errorView',
-        name: 'ErrorView',
-        component: ErrorView,
-    },
-    {
-        path: "/:pathMatch(.*)*",
-        redirect: "/errorView"
-    },
-
-]
+  {
+    path: "/",
+    name: "MainView",
+    component: MainView,
+  },
+  {
+    path: "/admin",
+    name: "AdminView",
+    component: AdminView,
+    meta: { auth: true, role: "admin" },
+    children: [
+      {
+        path: "",
+        name: "AdminMainView",
+        component: AdminMainView,
+      },
+      {
+        path: "date",
+        name: "OrderByDate",
+        component: OrderByDate,
+      },
+      {
+        path: "logistics",
+        name: "MainLogistics",
+        component: MainLogistics,
+      },
+      {
+        path: "blueprint",
+        name: "MainBluePrint",
+        component: MainBluePrint,
+      },
+      {
+        path: "machine",
+        name: "MainMachine",
+        component: MainMachine,
+      },
+      {
+        path: "graph",
+        name: "MainGraph",
+        component: MainGraph,
+      },
+      {
+        path: "region",
+        name: "OrderByRegion",
+        component: OrderByRegion,
+      },
+    ],
+  },
+  {
+    path: "/adminLogin",
+    name: "AdminLogin",
+    component: AdminLogin,
+  },
+  {
+    path: "/customerLogin",
+    name: "CustomerLogin",
+    component: CustomerLogin,
+  },
+  {
+    path: "/customer",
+    name: "CustomerView",
+    component: CustomerView,
+    children: [
+      {
+        path: "",
+        name: "CustomerOrder",
+        component: CustomerOrder,
+        meta: { auth: true, role: "customer" },
+      },
+      {
+        path: "/regist",
+        name: "CustomerRegist",
+        component: CustomerRegist,
+      },
+    ],
+  },
+  {
+    path: "/adminRegist",
+    name: "AdminRegist",
+    component: AdminRegist,
+  },
+  {
+    path: "/errorView",
+    name: "ErrorView",
+    component: ErrorView,
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/errorView",
+  },
+];
 
 // 라우터 생성
 // 루트를 내부에 생성해도 되지만 코드가 복잡해지기 때문에 외부에 배열 형태로 생성한다
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+//주소 직접 접근시 토큰검사
+router.beforeEach((to, from, next) => {
+  const adminToken = localStorage.getItem("adminToken");
+  const customerToken = localStorage.getItem("customerToken");
+
+  let requiresAuth = false;
+  let requiredRole = null;
+
+  to.matched.forEach((routeRecord) => {
+    if (routeRecord.meta.auth) {
+      requiresAuth = routeRecord.meta.auth;
+      requiredRole = routeRecord.meta.role;
+    }
+  });
+
+  if (requiresAuth) {
+    if (requiredRole == "admin" && !adminToken) {
+      alert("관리자 권한이 필요합니다");
+      next("/");
+      return;
+    }
+    if (requiredRole == "customer" && !customerToken) {
+      alert("로그인이 필요합니다");
+      next("/");
+      return;
+    }
+  }
+  next();
 });
 
 // 라우터 추출
