@@ -17,6 +17,7 @@ import AdminRegist from "../components/Regist/AdminRegist.vue";
 import CustomerRegist from "../components/Regist/CustomerRegist.vue";
 import CustomerOrder from "../components/Order/CustomerOrder.vue";
 import ErrorView from "../views/ErrorView.vue";
+import CamTest from "../components/common/CamTest.vue";
 
 // 라우터 설계
 const routes = [
@@ -110,6 +111,11 @@ const routes = [
     path: "/:pathMatch(.*)*",
     redirect: "/errorView",
   },
+  {
+    path: "/camtest",
+    name: "CamTest",
+    component: CamTest,
+  }
 ];
 
 // 라우터 생성
