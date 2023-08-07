@@ -130,3 +130,6 @@ CREATE TABLE IF NOT EXISTS `ordernow` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
+
+CREATE INDEX idx_orderdetail_product_date_amount ON orderdetail(product_num, order_date, amount);
+
