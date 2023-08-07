@@ -64,14 +64,14 @@ const adminStore = {
         console.log(error);
       }
     },
-    SendSMS({commit}, machineDetail) {
+    SendSMS({ commit }, machineDetail) {
       try {
         adminAPI.sendMessage(machineDetail);
         commit;
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
 };
 

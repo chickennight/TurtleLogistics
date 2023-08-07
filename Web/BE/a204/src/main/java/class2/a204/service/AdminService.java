@@ -93,10 +93,7 @@ public class AdminService {
         LocalDateTime weekAgo = now.minusDays(7L);
         // 금일 개수 조회
         LocalDateTime today = now.toLocalDate().atStartOfDay();
-        long be = System.currentTimeMillis();
         List<AnalysisGetDTO> list = orderDetailRepository.findAllInfo(changeForm(today), changeForm(weekAgo), changeForm(monthAgo), changeForm(yearAgo));
-        long af = System.currentTimeMillis();
-        System.out.println((af - be) + "ms 소요");
         for (LogisticAnalysisDTO la : ans)
             for (AnalysisGetDTO ag : list)
                 if (la.getProductNum().equals(ag.getProductNum()))
