@@ -39,7 +39,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 //            "SUM(CASE WHEN od.order_date >= :yearAgo THEN od.amount END) / 365 AS yearAvg " +
 //            "FROM orderdetail od +
 //            "GROUP BY od.product_num",nativeQuery = true)
-    @Query("SELECT new class2.a204.dto.AnalysisGetDTO(od.product.productNum, SUM(CASE WHEN od.orderDate >= :today THEN od.amount ELSE 0 END), SUM(CASE WHEN od.orderDate >= :weekAgo THEN od.amount END), SUM(CASE WHEN od.orderDate >= :monthAgo THEN od.amount END), SUM(CASE WHEN od.orderDate >= :yearAgo THEN od.amount END) ) FROM OrderDetail od GROUP BY od.product.productNum")
+    @Query("SELECT new class2.a204.dto.AnalysisGetDTO(od.product.productNum, SUM(CASE WHEN od.orderDate = :today THEN od.amount ELSE 0 END), SUM(CASE WHEN od.orderDate >= :weekAgo and od.orderDate <= :today THEN od.amount END), SUM(CASE WHEN od.orderDate >= :monthAgo and od.orderDate <= :today THEN od.amount END), SUM(CASE WHEN od.orderDate >= :yearAgo and od.orderDate <= :today THEN od.amount END) ) FROM OrderDetail od GROUP BY od.product.productNum")
     List<AnalysisGetDTO> findAllInfo(@Param("today") Integer today,
                                      @Param("weekAgo") Integer weekAgo,
                                      @Param("monthAgo") Integer monthAgo,

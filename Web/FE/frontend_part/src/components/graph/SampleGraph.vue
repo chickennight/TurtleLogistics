@@ -64,6 +64,7 @@ export default {
           },
         },
         y: {
+          beginAtZero: true,
           ticks: {
             color: "white", // y축 레이블의 글자색을 지정합니다.
           },
