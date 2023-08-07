@@ -117,7 +117,7 @@ public class MachineController {
 
     @ApiOperation(value = "기기 제어", notes = "특정 기기를 제어하기 위한 MQTT 메시지를 발행")
     @PostMapping("/control")
-    public ResponseEntity<?> MachineControl(@RequestBody PayloadDTO payloadDto) {
+    public ResponseEntity<?> controlMachine(@RequestBody PayloadDTO payloadDto) {
         try {
             mqttService.publish(payloadDto.getTopic(), payloadDto.getMessage());
             return new ResponseEntity<>(HttpStatus.OK);
