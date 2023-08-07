@@ -73,7 +73,7 @@ export default {
     },
     renderCount: 0,
   }),
-  mounted() {
+  async mounted() {
     const offset = new Date().getTimezoneOffset() * 60000;
     const today = new Date(Date.now() - offset);
     const end_day = today.toISOString();
@@ -85,7 +85,7 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("order/getOrderWeekData", date);
+    await this.$store.dispatch("order/getOrderWeekData", date);
 
     var idx = 0;
     this.chartData.labels = [];
