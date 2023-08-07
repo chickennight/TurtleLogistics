@@ -100,7 +100,7 @@ export default {
     },
     renderCount: 0,
   }),
-  mounted() {
+  async mounted() {
     this.updateParentHeight();
 
     const offset = new Date().getTimezoneOffset() * 60000;
@@ -114,7 +114,7 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("order/getOrderData", date);
+    await this.$store.dispatch("order/getOrderData", date);
 
     var idx = 0;
     this.chartData.labels = [];
