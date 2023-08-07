@@ -87,19 +87,19 @@ const orderStore = {
     async getDataAnalysisRegion({ commit }, regioncode) {
       try {
         const response = await orderAPI.dataAnalysisRegion(regioncode);
-        commit("GET_DATA_ANALYSIS_REGION", response.data)
+        commit("GET_DATA_ANALYSIS_REGION", response.data);
       } catch (error) {
         console.log(error);
       }
     },
-    async doOrder({commit}, order) {
+    async doOrder({ commit }, order) {
       try {
         orderAPI.newOrder(order);
         commit;
-      } catch(error) {
-        console.log(error)
+      } catch (error) {
+        console.log(error);
       }
-    }
+    },
   },
 };
 

@@ -74,6 +74,19 @@ export default {
       },
       chartOptions: {
         animation: false,
+        scales: {
+          x: {
+            ticks: {
+              color: "white", // x축 레이블의 글자색을 지정합니다.
+            },
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: "white", // y축 레이블의 글자색을 지정합니다.
+            },
+          },
+        },
       },
     };
   },
@@ -125,8 +138,6 @@ export default {
 <style scoped>
 .OrderNowContainer {
   margin: 20px;
-}
-.OrderNowTableContainer {
 }
 .OrderNowGraph {
   padding: 20px;
