@@ -39,9 +39,9 @@ public class LogisticAnalysisDTO {
     }
 
     public void addStatus(AnalysisGetDTO analysisGetDTO) {
-        this.yearAvg = analysisGetDTO.getYearAvg().intValue();
-        this.monthAvg = analysisGetDTO.getMonthAvg().intValue();
-        this.weekAvg = analysisGetDTO.getWeekAvg().intValue();
+        this.yearAvg = analysisGetDTO.getYearAvg().intValue() / 365;
+        this.monthAvg = analysisGetDTO.getMonthAvg().intValue() / 30;
+        this.weekAvg = analysisGetDTO.getWeekAvg().intValue() / 7;
         this.todayAmount = analysisGetDTO.getTodayAmount().intValue();
         if (stock <= 7 * Math.max(Math.max(yearAvg, monthAvg), weekAvg))
             errorMessage = ("재고 소진 임박");
