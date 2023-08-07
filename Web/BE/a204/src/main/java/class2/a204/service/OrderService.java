@@ -50,7 +50,7 @@ public class OrderService {
         orderRepository.save(input);
 
         for (Product p : newOrderDto.getProducts()) {
-            OrderDetail in = new OrderDetail(input, p, p.getStock(),changeForm(LocalDateTime.now()));
+            OrderDetail in = new OrderDetail(input, p, p.getStock(), changeForm(LocalDateTime.now()));
             orderDetailRepository.save(in);
             productRepository.updateStock(p.getProductNum(), p.getStock());
         }
@@ -87,7 +87,10 @@ public class OrderService {
     }
 
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
+        long be = System.currentTimeMillis();
         List<AnalysisDayDTO> list = orderRepository.findDayCount(startDay, endDay);
+        long af = System.currentTimeMillis();
+        System.out.println((af - be) + "ms 소요");
         Map<String, Long> result = new TreeMap<>();
         LocalDateTime now = startDay;
         endDay = endDay.plusDays(1);
@@ -118,7 +121,8 @@ public class OrderService {
         List<Long[]> list = orderNowRepository.analysisRegion(regionCode);
         return new AnalysisRegionDTO(list);
     }
-    private int changeForm(LocalDateTime ldt){
+
+    private int changeForm(LocalDateTime ldt) {
         int year = ldt.getYear();
         int month = ldt.getMonthValue();
         int day = ldt.getDayOfMonth();
