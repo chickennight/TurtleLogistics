@@ -94,7 +94,7 @@ public class AdminController {
     public ResponseEntity<?> sendMessage(@RequestParam("machine_detail") String machineDetail, ServletRequest request) {
         try {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail + " 기계 이상 발생");
+            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail);
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
