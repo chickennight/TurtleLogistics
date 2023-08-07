@@ -139,8 +139,6 @@ export default {
 .OrderNowContainer {
   margin: 20px;
 }
-.OrderNowTableContainer {
-}
 .OrderNowGraph {
   padding: 20px;
 
