@@ -47,11 +47,10 @@ public class OrderService {
         Customer customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
         Order input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer);
 
-        System.out.println(input);
         orderRepository.save(input);
 
         for (Product p : newOrderDto.getProducts()) {
-            OrderDetail in = new OrderDetail(input, p, p.getStock());
+            OrderDetail in = new OrderDetail(input, p, p.getStock(),changeForm(LocalDateTime.now()));
             orderDetailRepository.save(in);
             productRepository.updateStock(p.getProductNum(), p.getStock());
         }
@@ -118,5 +117,11 @@ public class OrderService {
     public AnalysisRegionDTO dataRegionCode(Integer regionCode) {
         List<Long[]> list = orderNowRepository.analysisRegion(regionCode);
         return new AnalysisRegionDTO(list);
+    }
+    private int changeForm(LocalDateTime ldt){
+        int year = ldt.getYear();
+        int month = ldt.getMonthValue();
+        int day = ldt.getDayOfMonth();
+        return year * 10000 + month * 100 + day;
     }
 }

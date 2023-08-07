@@ -23,20 +23,25 @@ public class OrderDetail {
     @NotNull
     private Integer amount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_num")
     @NotNull
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_num")
     @NotNull
     private Order order;
 
-    public OrderDetail(Order order, Product product, Integer amount){
+    @JoinColumn(name = "order_date")
+    @NotNull
+    private Integer orderDate;
+
+    public OrderDetail(Order order, Product product, Integer amount, Integer orderDate) {
         this.order = order;
         this.product = product;
         this.amount = amount;
+        this.orderDate = orderDate;
     }
 
 }
