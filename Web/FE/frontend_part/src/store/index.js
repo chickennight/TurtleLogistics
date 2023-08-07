@@ -19,7 +19,7 @@ const store = createStore({
   devtools: true,
   plugins: [
     createPersistedState({
-      whiteList: ["orderWeekData"],
+      storage: window.sessionStorage,
     }),
   ],
 });
