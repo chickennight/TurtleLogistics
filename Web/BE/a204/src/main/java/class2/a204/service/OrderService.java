@@ -87,10 +87,8 @@ public class OrderService {
     }
 
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
-        long be = System.currentTimeMillis();
-        List<AnalysisDayDTO> list = orderRepository.findDayCount(startDay, endDay);
-        long af = System.currentTimeMillis();
-        System.out.println((af - be) + "ms 소요");
+        LocalDateTime startOfDay = startDay.toLocalDate().atStartOfDay();
+        List<AnalysisDayDTO> list = orderRepository.findDayCount(startOfDay, endDay);
         Map<String, Long> result = new TreeMap<>();
         LocalDateTime now = startDay;
         endDay = endDay.plusDays(1);
