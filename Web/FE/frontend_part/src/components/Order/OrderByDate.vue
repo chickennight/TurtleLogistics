@@ -135,7 +135,7 @@ export default {
     ...mapState("order", ["orderData"]),
   },
   methods: {
-    getOrderDataWeek() {
+    async getOrderDataWeek() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -147,7 +147,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
@@ -162,7 +162,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderDataMonth() {
+    async getOrderDataMonth() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -174,7 +174,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
       this.chartData.labels = [];
       this.chartData.datasets.data = [];
       var idx = 0;
@@ -188,7 +188,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderData3Month() {
+    async getOrderData3Month() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -202,7 +202,7 @@ export default {
 
       var idx = 0;
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -225,7 +225,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderData6Month() {
+    async getOrderData6Month() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -237,7 +237,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
       var idx = 0;
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -260,7 +260,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderDataYear() {
+    async getOrderDataYear() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -272,7 +272,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
