@@ -182,6 +182,8 @@ export default {
 
       setTimeout(() => {
         for (let key in this.orderData) {
+          console.log(key);
+          console.log(this.orderData[key]);
           this.chartData.labels[idx] = key.substr(4);
           this.chartData.datasets[0].data[idx] = this.orderData[key];
           idx++;
@@ -200,7 +202,7 @@ export default {
         end: end_day,
         start: start_day,
       };
-
+      console.log(date);
       var idx = 0;
 
       await this.$store.dispatch("order/getOrderData", date);
