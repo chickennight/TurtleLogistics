@@ -33,13 +33,10 @@ public class Order {
     private Integer address;
 
     @JsonProperty("customer_num")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_num")
     @NotNull
     private Customer customer;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
 
     public Order(Long orderNum, String detailAddress, Integer address, Customer customer) {
         this.orderNum = orderNum;
