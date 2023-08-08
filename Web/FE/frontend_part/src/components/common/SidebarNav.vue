@@ -33,6 +33,9 @@
       <router-link :to="{ name: 'MainMachine' }" class="SideMenu">
         <v-btn elevation="8" block variant="outlined">기기제어</v-btn>
       </router-link>
+      <router-link :to="{ name: 'MainCctv' }" class="SideMenu">
+        <v-btn elevation="8" block variant="outlined">CCTV</v-btn>
+      </router-link>
     </div>
   </div>
 </template>
