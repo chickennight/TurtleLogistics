@@ -1,5 +1,6 @@
 <template>
   <div class="CustomerContainer">
+    <header-nav></header-nav>
     <div>
       <img class="MainTurtle" src="./MainTurtle.png" />
     </div>
@@ -66,6 +67,7 @@
 </template>
 
 <script>
+import HeaderNav from "@/components/common/HeaderNav.vue";
 export default {
   name: "CustomerOrder",
   data: () => ({
@@ -85,6 +87,9 @@ export default {
     doOrder() {
       this.$store.dispatch("order/doOrder", this.order);
     },
+  },
+  components: {
+    HeaderNav,
   },
 };
 </script>
