@@ -22,7 +22,7 @@ public class Image {
     @NotNull
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "log_num")
     private Log log;
 
