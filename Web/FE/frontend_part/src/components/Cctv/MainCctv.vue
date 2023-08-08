@@ -4,10 +4,15 @@
     <div class="CctvHeader"><h1>CCTV</h1></div>
     &nbsp;
     <div class="SubCctvContainer">
-      <video class="VideoContainer" ref="videoElement" autoplay></video>
-      <button @click="takeScreenshot">Take Screenshot</button>
-      <canvas ref="canvasElement" style="display: none"></canvas>
-      <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
+      <div class="CctvUpperContainer">
+        <video class="VideoContainer" ref="videoElement" autoplay></video>
+        <video class="VideoContainer" ref="notebookVideo" autoplay></video>
+      </div>
+      <div class="CctvLowerContainer">
+        <button @click="takeScreenshot">Take Screenshot</button>
+        <canvas ref="canvasElement" style="display: none"></canvas>
+        <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
+      </div>
     </div>
   </div>
 </template>
@@ -26,8 +31,24 @@ export default {
   methods: {
     async initWebcam() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        this.$refs.videoElement.srcObject = stream;
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const notebookCamera = devices.find(
+          (device) => device.kind === "videoinput" && device.label.includes("Web Camera")
+        );
+
+        console.log(devices);
+
+        if (notebookCamera) {
+          const notebookStream = await navigator.mediaDevices.getUserMedia({
+            video: { deviceId: notebookCamera.deviceId },
+          });
+          this.$refs.notebookVideo.srcObject = notebookStream; // 노트북 카메라 비디오 요소
+        } else {
+          console.error("Notebook camera not found.");
+        }
+
+        const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
@@ -55,7 +76,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .CctvContainer {
   margin: 20px;
   padding: 20px;
@@ -67,11 +88,11 @@ export default {
   box-shadow: 2px 2px 3px 3px black;
 }
 .VideoContainer {
+  width: 450px;
 }
 .SubCctvContainer {
   box-shadow: 2px 2px 3px 3px black;
   display: flex;
   flex-direction: column;
-  width: 500px;
 }
 </style>
