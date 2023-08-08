@@ -46,7 +46,13 @@
             label="지역"
             color="warning"
             required
-          ></v-text-field>
+            ><select name="12" id="33">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select></v-text-field
+          >
 
           <v-text-field
             v-model="order.detailAddress"
