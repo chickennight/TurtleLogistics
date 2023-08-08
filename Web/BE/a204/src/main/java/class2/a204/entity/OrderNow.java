@@ -18,7 +18,7 @@ public class OrderNow {
     @NotNull
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "order_num")
     @NotNull
     private Order order;

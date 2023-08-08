@@ -23,12 +23,12 @@ public class OrderDetail {
     @NotNull
     private Integer amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "product_num")
     @NotNull
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "order_num")
     @NotNull
     private Order order;
