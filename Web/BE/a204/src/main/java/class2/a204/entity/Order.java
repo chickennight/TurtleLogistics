@@ -38,9 +38,6 @@ public class Order {
     @NotNull
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
-
     public Order(Long orderNum, String detailAddress, Integer address, Customer customer) {
         this.orderNum = orderNum;
         this.detailAddress = detailAddress;
