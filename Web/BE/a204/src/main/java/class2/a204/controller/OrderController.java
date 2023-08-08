@@ -77,7 +77,7 @@ public class OrderController {
         try {
             List<OrderNow> list = orderService.findPackageOrders();
 
-            if (list.size() == 0)
+            if (list.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
             List<Map<String, ?>> answer = new ArrayList<>();
@@ -211,9 +211,9 @@ public class OrderController {
 
     @ApiOperation(value = "지역코드별 주문 분석", notes = "지역별 주문 정보 반환")
     @GetMapping("/analysis/regioncode")
-    public ResponseEntity<?> dataAnalysisRegionCode(Integer regioncode) {
+    public ResponseEntity<?> dataAnalysisRegionCode(Integer regionCode) {
         try {
-            return new ResponseEntity<>(orderService.dataRegionCode(regioncode), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.dataRegionCode(regionCode), HttpStatus.OK);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
