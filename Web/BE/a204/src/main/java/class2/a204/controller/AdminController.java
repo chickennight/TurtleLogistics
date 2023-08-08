@@ -6,6 +6,7 @@ import class2.a204.dto.MessageDTO;
 import class2.a204.dto.RefreshTokenDTO;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.service.AdminService;
+import class2.a204.service.ImageService;
 import class2.a204.service.OrderService;
 import class2.a204.service.SmsService;
 import class2.a204.util.ErrorHandler;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -31,13 +33,15 @@ public class AdminController {
     private final ErrorHandler errorHandler;
     private final JwtTokenProvider jwtTokenProvider;
     private final SmsService smsService;
+    private final ImageService imageService;
 
-    public AdminController(AdminService adminService, OrderService orderService, ErrorHandler errorHandler, JwtTokenProvider jwtTokenProvider, SmsService smsService) {
+    public AdminController(AdminService adminService, OrderService orderService, ErrorHandler errorHandler, JwtTokenProvider jwtTokenProvider, SmsService smsService, ImageService imageService) {
         this.adminService = adminService;
         this.orderService = orderService;
         this.errorHandler = errorHandler;
         this.jwtTokenProvider = jwtTokenProvider;
         this.smsService = smsService;
+        this.imageService = imageService;
     }
 
     @ApiOperation(value = "관리자 등록", notes = "신규 관리자 등록")
@@ -107,6 +111,27 @@ public class AdminController {
     public ResponseEntity<?> logisticAnalysis() {
         try {
             return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "사진 저장", notes = "문제 발생시 해당 상황 사진 저장")
+    @PostMapping("/image")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, @RequestParam("log_num") int logNum) {
+        try {
+            adminService.uploadImage(image, logNum);
+            return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
+        } catch (Exception e) {
+            return errorHandler.errorMessage(e);
+        }
+    }
+
+    @ApiOperation(value = "사진 조회", notes = "로그 번호와 매칭 되는 사진 조회")
+    @GetMapping("/image/{name}")
+    public ResponseEntity<?> downloadImage(@PathVariable("name") String name) {
+        try {
+            return imageService.downloadImage(name);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }

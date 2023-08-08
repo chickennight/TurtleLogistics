@@ -5,35 +5,41 @@ import class2.a204.dto.AdminLoginDTO;
 import class2.a204.dto.AnalysisGetDTO;
 import class2.a204.dto.LogisticAnalysisDTO;
 import class2.a204.entity.Admin;
+import class2.a204.entity.Image;
 import class2.a204.entity.Product;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.jwt.Role;
-import class2.a204.repository.AdminRepository;
-import class2.a204.repository.OrderDetailRepository;
-import class2.a204.repository.ProductRepository;
+import class2.a204.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class AdminService {
     private final AdminRepository adminRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder passwordEncoder;
     private final ProductRepository productRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final LogRepository logRepository;
+    private final ImageRepository imageRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
+    private final ImageService imageService;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, ProductRepository productRepository, OrderDetailRepository orderDetailRepository) {
+    public AdminService(AdminRepository adminRepository, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, ProductRepository productRepository, OrderDetailRepository orderDetailRepository, LogRepository logRepository, ImageRepository imageRepository, ImageService imageService) {
         this.adminRepository = adminRepository;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.productRepository = productRepository;
         this.orderDetailRepository = orderDetailRepository;
+        this.logRepository = logRepository;
+        this.imageRepository = imageRepository;
+        this.imageService = imageService;
     }
 
 //    public Admin findAdminById(String id) {
@@ -108,5 +114,11 @@ public class AdminService {
         int month = ldt.getMonthValue();
         int day = ldt.getDayOfMonth();
         return year * 10000 + month * 100 + day;
+    }
+
+    public void uploadImage(MultipartFile image, int logNum) throws IOException {
+        imageService.uploadImage(image);
+        Image input = new Image(logRepository.findById(logNum).get(), image.getContentType());
+        imageRepository.save(input);
     }
 }
