@@ -2,7 +2,7 @@
   <div id="sideBar">
     <div id="SideLogo">
       <div id="LogoImage">
-        <img class="SubTurtle" src="/SubTurtle.png" />
+        <img class="SubTurtle" :src="subSrc" @click="EasterEgg" />
       </div>
       <div id="MainTL">
         <router-link to="/">
@@ -43,6 +43,18 @@
 <script>
 export default {
   name: "SidebarNav",
+  data: () => ({
+    subSrc: "/SubTurtle.png",
+  }),
+  methods: {
+    EasterEgg() {
+      if (this.subSrc == "/SubTurtle.png") {
+        this.subSrc = "/SubTurtle_Easter.png";
+      } else {
+        this.subSrc = "/SubTurtle.png";
+      }
+    },
+  },
 };
 </script>
 
