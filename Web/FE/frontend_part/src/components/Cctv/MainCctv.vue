@@ -1,16 +1,20 @@
 <!-- Webcam.vue -->
 <template>
-  <div>
-    <video ref="videoElement" autoplay></video>
-    <button @click="takeScreenshot">Take Screenshot</button>
-    <canvas ref="canvasElement" style="display: none"></canvas>
-    <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
+  <div class="CctvContainer">
+    <div class="CctvHeader"><h1>CCTV</h1></div>
+    &nbsp;
+    <div class="SubCctvContainer">
+      <video class="VideoContainer" ref="videoElement" autoplay></video>
+      <button @click="takeScreenshot">Take Screenshot</button>
+      <canvas ref="canvasElement" style="display: none"></canvas>
+      <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CamTest",
+  name: "MainCctv",
   data() {
     return {
       screenshot: null,
@@ -52,5 +56,22 @@ export default {
 </script>
 
 <style>
-/* Add some CSS styling for the video element if needed */
+.CctvContainer {
+  margin: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.CctvHeader {
+  padding: 20px;
+  box-shadow: 2px 2px 3px 3px black;
+}
+.VideoContainer {
+}
+.SubCctvContainer {
+  box-shadow: 2px 2px 3px 3px black;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
 </style>

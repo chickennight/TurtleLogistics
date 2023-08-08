@@ -141,7 +141,6 @@ export default {
 }
 .OrderNowGraph {
   padding: 20px;
-
   box-shadow: 2px 2px 3px 3px black;
 }
 .OrderNowHeader {
