@@ -25,7 +25,7 @@ export default {
   font-family: "GmarketSansTTFLight";
   src: url("../public/fonts/GmarketSansTTFLight.ttf");
 }
-* {
+*:not(.v-overlay-container *) {
   font-family: "GmarketSansTTFMedium";
   text-decoration: none;
 
