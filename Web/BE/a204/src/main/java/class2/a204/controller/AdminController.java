@@ -12,7 +12,6 @@ import class2.a204.service.SmsService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -128,14 +127,11 @@ public class AdminController {
         }
     }
 
-    @ApiOperation(value = "사진 조회", notes = "로그 번호 또는 특정 요건과 매칭 되는 사진 조회")
+    @ApiOperation(value = "사진 조회", notes = "로그 번호와 매칭 되는 사진 조회")
     @GetMapping("/image/{name}")
     public ResponseEntity<?> downloadImage(@PathVariable("name") String name) {
         try {
-            Resource resource = imageService.downloadImage(name);
-            if (resource.exists() && resource.isReadable())
-                return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return imageService.downloadImage(name);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
