@@ -22,12 +22,13 @@
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
+|Pub|to Web|/log|{"dev":"Supervisor", "content":"message"}|
 |Pub|to Order_Scheduler|sup/ord/sch/info|{"order_num":"1001","productA":"1","productB":"2","productC":"0"}|
 |Pub|to Order_Verifier|sup/ord/veri/info|{"order_num":"1001","productA":"1","productB":"2","productC":"0"}|
-|Pub|to Divide_Verifier|sup/div/veri/info||
-|Sub|from Order_Verifier|||
-|Sub|from Divide_Verifier|||
+|Pub|to Divide_Verifier|sup/div/veri/info|{"order_num":"1001", "address":"1"}|
 |Sub|from Web|web/mod/power|{"power":"1"}|
+|Sub|from Order_Verifier|/ord/res|{"order_num":"1001", "result":"1"}|
+|Sub|from Divide_Divider|/div/res|{"order_num":"1001", "result":"1"}|
 
 
 ## Order_Schdeuler
@@ -47,29 +48,36 @@
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
-|||||
+|Pub|to Web|/log|{"dev":"Ord_Scheduler", "content":"message"}|
+|Sub|from Web|/web/mod/power|{"power":"1"}|
+|Sub|from Supervisor|/sup/ord/sch/info|{"order_num":"1001","productA":"1","productB":"2","productC":"0"}|
 
-## 주문 - 검증기
+## Order_Verifier
 
 - ##### 기능
-	- 
+	-  상품의 QR을 인식하여 현재 주문 목록에 포함되는지 확인
+		- 주문 목록에 포함되지 않은 상품이 인식된다면 DC모터에 정지 신호를 게시
+		- 주문 목록 검증 결과를 Supervisor에 게시
 
 
 - ##### H/W 스펙
-	- 
+	- Rasberry Pi4
+	- Rasberry Pi Camera Rev 1.3
 
 
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
-|||||
+|Pub|to Web|/log|{"dev":"Ord_Verifier", "content":"message"}|
+|Pub|to Order_Motor|/mod/ord/motor/power|{"power":"-1"}|
+|Pub|to Supervisor|/ord/res|{"order_num":"1001", "result":"1"}|
 
 
-## 주문 - 모터
+## Order_Motor
 
 - ##### 기능
-	- 
-
+	-  컨베이어 벨트를 작동시키는 DC 모터
+		- 주문 검증기에서 오류 신호를 게시하면 작동을 중지
 
 - ##### H/W 스펙
 	-  esp32 : 1ea
@@ -81,4 +89,48 @@
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
-|||||
+|Pub|to Web|/log|{"dev":"Ord_Motor", "content":"message"}|
+|Sub|from Web|/mod/ord/motor/speed|{"speed":"180"}|
+|Sub|from Web|/web/mod/power|{"power":"1"}|
+|Sub|from Order_Verifier|/mod/ord/motor/power|{"power":"-1"}|
+
+
+##  Divide_Verifier
+
+- ##### 기능
+
+
+- ##### H/W 스펙
+
+
+- ##### Topic description
+|Pub/Sub|Direction|Topic|Detail|
+|----------|----------|----------|----------|
+
+
+## Divide_Motor
+
+- ##### 기능
+
+
+- ##### H/W 스펙
+
+
+- ##### Topic description
+|Pub/Sub|Direction|Topic|Detail|
+|----------|----------|----------|----------|
+
+
+## Divide_Divider[3]
+
+- ##### 기능
+
+
+- ##### H/W 스펙
+
+
+- ##### Topic description
+|Pub/Sub|Direction|Topic|Detail|
+|----------|----------|----------|----------|
+
+
