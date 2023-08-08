@@ -33,7 +33,7 @@ public class Order {
     private Integer address;
 
     @JsonProperty("customer_num")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_num")
     @NotNull
     private Customer customer;
