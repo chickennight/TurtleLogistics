@@ -17,7 +17,6 @@ const customerStore = {
     LOGOUT() {
       localStorage.removeItem("customerToken");
       localStorage.removeItem("customerRefreshToken");
-      router.push("/");
     },
   },
   actions: {
@@ -44,6 +43,11 @@ const customerStore = {
       } catch (error) {
         console.log(error);
       }
+    },
+    //로그아웃
+    Logout({ commit }) {
+      commit("LOGOUT");
+      router.push("/");
     },
   },
 };

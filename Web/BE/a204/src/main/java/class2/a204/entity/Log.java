@@ -30,7 +30,7 @@ public class Log {
     @Column(name = "error_message")
     private String errorMessage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "machine_id")
     @NotNull
     private Machine machine;
