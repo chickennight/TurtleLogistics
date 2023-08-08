@@ -22,29 +22,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     int todayCount(int today);
 
     /**
-     *
-     * 특정 년도의 지역별 모든 주문 수를 표시하는 AnalysisRegionDTO 객체 리스트
-     *
-     * @param year 주문 데이터를 검색할 년도
-     * @return 각각 지역번호와 해당 지역의 주문수를 포함하는 AnalysisRegionDTO객체 리스트
-     *
-     * */
-//    @Query(value = "SELECT new class2.a204.dto.AnalysisRegionDTO(o.address, COUNT(o)) FROM Order o WHERE YEAR(o.orderDate) = ?1 GROUP BY o.address")
-//    List<AnalysisRegionDTO> findRegionCountByYear(Integer year);
-
-    /**
-     *
-     * 특졍 년도 월의 지역별 모든 주문 수를 표시하는 AnalysisRegionDTO 객체 리스트
-     *
-     * @param year 주문 데이터를 검색할 년도
-     * @param month 주문 데이터를 검색할 월
-     * @return 각각 지역번호와 해당 지역의 주문수를 포함하는 AnalysisRegionDTO객체 리스트
-     *
-     * */
-//    @Query(value = "SELECT new class2.a204.dto.AnalysisRegionDTO(o.address, COUNT(o)) FROM Order o WHERE YEAR(o.orderDate) = ?1 AND MONTH(o.orderDate) = ?2 GROUP BY o.address")
-//    List<AnalysisRegionDTO> findRegionCountByYearMonth(Integer year, Integer month);
-
-    /**
      * 지정된 기간 동안에 각 일자별로 주문된 주문 수를 표시하는 AnalysisDayDTO 객체 리스트
      *
      * @param startDay 주문 데이터를 검색할 시작 일자

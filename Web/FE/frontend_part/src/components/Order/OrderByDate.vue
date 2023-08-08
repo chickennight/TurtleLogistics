@@ -1,30 +1,31 @@
 <template>
   <div class="OrderDateContainer">
-    <h1>기간별 조회</h1>
-    <div id="ButtonContainer">
-      <v-btn @click="getOrderDataWeek" background-color="rgb(53, 53, 53)" variant="outlined">
-        일주일
-      </v-btn>
+    <div class="ButtonContainer">
+      <h1>기간별 조회</h1>
+      <span>
+        <v-btn @click="getOrderDataWeek" background-color="rgb(53, 53, 53)" variant="outlined">
+          일주일
+        </v-btn>
 
-      <v-btn @click="getOrderDataMonth" background-color="rgb(53, 53, 53)" variant="outlined">
-        1개월
-      </v-btn>
+        <v-btn @click="getOrderDataMonth" background-color="rgb(53, 53, 53)" variant="outlined">
+          1개월
+        </v-btn>
 
-      <v-btn @click="getOrderData3Month" background-color="rgb(53, 53, 53)" variant="outlined">
-        3개월
-      </v-btn>
+        <v-btn @click="getOrderData3Month" background-color="rgb(53, 53, 53)" variant="outlined">
+          3개월
+        </v-btn>
 
-      <v-btn @click="getOrderData6Month" background-color="rgb(53, 53, 53)" variant="outlined">
-        6개월
-      </v-btn>
+        <v-btn @click="getOrderData6Month" background-color="rgb(53, 53, 53)" variant="outlined">
+          6개월
+        </v-btn>
 
-      <v-btn @click="getOrderDataYear" background-color="rgb(53, 53, 53)" variant="outlined">
-        1년
-      </v-btn>
+        <v-btn @click="getOrderDataYear" background-color="rgb(53, 53, 53)" variant="outlined">
+          1년
+        </v-btn>
+      </span>
     </div>
+    &nbsp;
     <div class="OrderGraphContainer">
-      <hr />
-      <hr />
       <Line :data="chartData" :key="renderCount" :options="chartOptions" />
     </div>
   </div>
@@ -90,6 +91,7 @@ export default {
           },
         },
         y: {
+          beginAtZero: true,
           ticks: {
             color: "white", // y축 레이블의 글자색을 지정합니다.
           },
@@ -98,7 +100,9 @@ export default {
     },
     renderCount: 0,
   }),
-  mounted() {
+  async mounted() {
+    this.updateParentHeight();
+
     const offset = new Date().getTimezoneOffset() * 60000;
     const today = new Date(Date.now() - offset);
     const end_day = today.toISOString();
@@ -110,7 +114,7 @@ export default {
       start: start_day,
     };
 
-    this.$store.dispatch("order/getOrderData", date);
+    await this.$store.dispatch("order/getOrderData", date);
 
     var idx = 0;
     this.chartData.labels = [];
@@ -124,11 +128,15 @@ export default {
 
     this.renderCount += 1;
   },
+  beforeUnmount() {
+    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
+    window.removeEventListener("resize", this.updateParentHeight);
+  },
   computed: {
     ...mapState("order", ["orderData"]),
   },
   methods: {
-    getOrderDataWeek() {
+    async getOrderDataWeek() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -140,7 +148,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
@@ -155,7 +163,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderDataMonth() {
+    async getOrderDataMonth() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -167,13 +175,15 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
       this.chartData.labels = [];
       this.chartData.datasets.data = [];
       var idx = 0;
 
       setTimeout(() => {
         for (let key in this.orderData) {
+          console.log(key);
+          console.log(this.orderData[key]);
           this.chartData.labels[idx] = key.substr(4);
           this.chartData.datasets[0].data[idx] = this.orderData[key];
           idx++;
@@ -181,7 +191,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderData3Month() {
+    async getOrderData3Month() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -192,10 +202,10 @@ export default {
         end: end_day,
         start: start_day,
       };
-
+      console.log(date);
       var idx = 0;
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -218,7 +228,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderData6Month() {
+    async getOrderData6Month() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -230,7 +240,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
       var idx = 0;
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -253,7 +263,7 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
-    getOrderDataYear() {
+    async getOrderDataYear() {
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -265,7 +275,7 @@ export default {
         start: start_day,
       };
 
-      this.$store.dispatch("order/getOrderData", date);
+      await this.$store.dispatch("order/getOrderData", date);
 
       var idx = 0;
       this.chartData.labels = [];
@@ -289,6 +299,11 @@ export default {
         this.renderCount += 1;
       }, 10);
     },
+    updateParentHeight() {
+      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
+      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
+      this.$emit("childContentHeightChanged", container);
+    },
   },
 };
 </script>
@@ -298,12 +313,20 @@ export default {
   margin: 20px;
 }
 .OrderGraphContainer {
-  margin: 20px;
+  padding: 20px;
+  box-shadow: 2px 2px 3px 3px black;
 }
-.graph {
+.b .graph {
   background-color: white;
   border: 2px solid #222;
   width: 300px;
   height: 300px;
+}
+.ButtonContainer {
+  box-shadow: 2px 2px 3px 3px black;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

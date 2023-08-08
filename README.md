@@ -8,9 +8,12 @@
 
 # IV1.0.0
 
+## 기간
+> 2023/07/04 ~ 2023/08/18
+
 ## 서비스 소개
 
-> (프로젝트이름)
+> Turtle Logistics
 
 - 물류 자동화 시스템
 
@@ -37,7 +40,7 @@
 
 ## 기술 스택
 
-- IoT :
+- IoT : QT, RaspberryPI, AWS IoT, MQTT
 - Frontend : Vue.js, Vuex, axios, router
 - Backend : Java, Spring, MySQL, mariaDB
 - Infra : Jenkins, AWS EC2, NginX, Docker
@@ -121,6 +124,19 @@
 <br>
 
 ### 2. Development & Test
+
+- H/W Development
+
+- Jira를 통한 일정관리
+  - 매 주 월요일에 주 단위 이슈를 생성하고 금요일까지 40의 Story Point를 완료하기 위해 노력함
+
+  ![3week_jira](./image/3week_jira.png)
+  3주차 번다운 차트
+
+  ![4week_jira](./image/4week_jira.png)
+  4주차 번다운 차트
+
+- Confluence를 통한 문서 작업 및 기록
 
 ### 3. Operation
 

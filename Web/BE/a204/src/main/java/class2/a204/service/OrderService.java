@@ -47,11 +47,10 @@ public class OrderService {
         Customer customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
         Order input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer);
 
-        System.out.println(input);
         orderRepository.save(input);
 
         for (Product p : newOrderDto.getProducts()) {
-            OrderDetail in = new OrderDetail(input, p, p.getStock());
+            OrderDetail in = new OrderDetail(input, p, p.getStock(), changeForm(LocalDateTime.now()));
             orderDetailRepository.save(in);
             productRepository.updateStock(p.getProductNum(), p.getStock());
         }
@@ -87,24 +86,9 @@ public class OrderService {
         orderNowRepository.save(temp);
     }
 
-//    public Map<String, Long> dataRegion(Integer year, Integer month) {
-//        List<AnalysisRegionDTO> list;
-//        if (month == 0) list = orderRepository.findRegionCountByYear(year);
-////        else list = orderRepository.findRegionCountByYearMonth(year, month);
-//
-//        Map<String, Long> result = new HashMap<>();
-//
-//        for (int i = 1; i <= 17; ++i)
-//            result.put(String.valueOf(i), 0L);
-//
-//        for (AnalysisRegionDTO dto : list) {
-//            result.put(String.valueOf(dto.getRegion()), dto.getCount());
-//        }
-//        return result;
-//    }
-
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {
-        List<AnalysisDayDTO> list = orderRepository.findDayCount(startDay, endDay);
+        LocalDateTime startOfDay = startDay.toLocalDate().atStartOfDay();
+        List<AnalysisDayDTO> list = orderRepository.findDayCount(startOfDay, endDay);
         Map<String, Long> result = new TreeMap<>();
         LocalDateTime now = startDay;
         endDay = endDay.plusDays(1);
@@ -131,10 +115,15 @@ public class OrderService {
         orderNowRepository.delete(orderNow);
     }
 
-    public AnalysisRegionDTO dataRegionCode(Integer regioncode) {
-        List<Long[]> list;
-        list = orderNowRepository.analysisRegion(regioncode);
-        AnalysisRegionDTO result = new AnalysisRegionDTO(list);
-        return result;
+    public AnalysisRegionDTO dataRegionCode(Integer regionCode) {
+        List<Long[]> list = orderNowRepository.analysisRegion(regionCode);
+        return new AnalysisRegionDTO(list);
+    }
+
+    private int changeForm(LocalDateTime ldt) {
+        int year = ldt.getYear();
+        int month = ldt.getMonthValue();
+        int day = ldt.getDayOfMonth();
+        return year * 10000 + month * 100 + day;
     }
 }
