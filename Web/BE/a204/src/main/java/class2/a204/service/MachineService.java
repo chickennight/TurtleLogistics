@@ -66,4 +66,9 @@ public class MachineService {
     public Machine findMachine(Integer machineId) {
         return machineRepository.findByMachineId(machineId);
     }
+
+    public void broken(Machine machine) {
+        machine.changeBroken(true);
+        machineRepository.save(machine);
+    }
 }
