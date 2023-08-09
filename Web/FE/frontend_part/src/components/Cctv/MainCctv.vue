@@ -90,8 +90,12 @@ export default {
         this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: 2 });
       });
     },
-    getImage() {
-      this.$store.dispatch("admin/getImage", 2);
+    async getImage() {
+      try {
+        await this.$store.dispatch("admin/getImage", 2);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };
