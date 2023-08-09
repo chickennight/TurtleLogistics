@@ -1,5 +1,11 @@
 <template>
   <div class="SampleContainer">
+    <div id="LowerContainer">
+      <sample-CCTV class="BlueprintContainer" @click="moveCCTV" />
+      <div class="LogTableContainer" @click="moveMachine">
+        <img class="machineImg" src="/Error_BluePrint/error_nukki.png" />
+      </div>
+    </div>
     <div id="UpperContainer">
       <sample-graph class="GraphContainer" />
       <div class="ProductStatusContainer">
@@ -27,42 +33,19 @@
         </v-table>
       </div>
     </div>
-    <div id="LowerContainer">
-      <div class="LogTableContainer">
-        <v-table density="compact" theme="dark">
-          <thead>
-            <tr>
-              <th class="text-left">로그</th>
-              <th class="text-left">날짜</th>
-              <th class="text-left">메세지</th>
-              <th class="text-left">기계</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in machineStatus['로그']" :key="item.log_num">
-              <td>{{ item.log_num }}</td>
-              <td>{{ item.error_date }}</td>
-              <td>{{ item.error_message }}</td>
-              <td>{{ item.machine_id }}</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </div>
-      <sample-blue-print class="BlueprintContainer" />
-    </div>
   </div>
 </template>
 
 <script>
 import SampleGraph from "../graph/SampleGraph.vue";
-import SampleBluePrint from "../BluePrint/SampleBluePrint.vue";
+import SampleCCTV from "../Cctv/SampleCCTV.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "AdminMainView",
   components: {
-    SampleBluePrint,
     SampleGraph,
+    SampleCCTV,
   },
   created() {
     this.getMachineStatus();
@@ -101,6 +84,12 @@ export default {
         }
       });
     },
+    moveCCTV() {
+      this.$router.push({ name: "MainCctv" });
+    },
+    moveMachine() {
+      this.$router.push({ name: "MainMachine" });
+    },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
@@ -126,28 +115,33 @@ export default {
 }
 .GraphContainer {
   padding: 20px;
-  width: 60%;
+  width: 55%;
   box-shadow: 2px 2px 3px 3px black;
 }
 .ProductStatusContainer {
   padding: 20px;
   box-shadow: 2px 2px 3px 3px black;
-  width: 35%;
+  width: 40%;
   margin-left: 30px;
   overflow-y: auto;
 }
 .LogTableContainer {
   padding: 10px;
   box-shadow: 2px 2px 3px 3px black;
-  width: 40%;
+  width: 55%;
   overflow-y: auto;
+  margin-left: 30px;
 }
 .BlueprintContainer {
   box-shadow: 2px 2px 3px 3px black;
-  width: 55%;
-  margin-left: 30px;
+  width: 40%;
 }
 .red-text td {
   color: red;
+}
+.machineImg {
+  margin-top: 2%;
+  width: 100%;
+  height: 95%;
 }
 </style>
