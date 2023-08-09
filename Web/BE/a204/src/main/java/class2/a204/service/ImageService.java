@@ -47,16 +47,16 @@ public class ImageService {
 
     public ResponseEntity<UrlResource> downloadImage(Integer logNum) throws MalformedURLException {
         Optional<Image> image = imageRepository.findByLogNum(logNum);
+
+        System.out.println(image);
         String contentType = "application/octet-stream";
         if (image.isPresent())
             contentType = image.get().getContentType();
 
         String logNumS = String.valueOf(logNum);
-        Path file = Paths.get(uploadDir).resolve(logNumS);
+        Path file = Paths.get(uploadDir).resolve(logNumS+".png");
         UrlResource resource = new UrlResource(file.toUri());
-        System.out.println(resource);
-        System.out.println(resource.exists());
-        System.out.println(resource.isReadable());
+
         return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
