@@ -13,17 +13,25 @@
         <canvas ref="canvasElement" style="display: none"></canvas>
         <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
       </div>
+      <div class="imageGetContainer">
+        <button @click="getImage">getImage</button>
+        <img v-if="image" :src="image" alt="Image" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "MainCctv",
   data() {
     return {
       screenshot: null,
     };
+  },
+  computed: {
+    ...mapState("admin", ["image"]),
   },
   mounted() {
     this.initWebcam();
@@ -81,6 +89,9 @@ export default {
       fetchImage(dataURL).then((imageFile) => {
         this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: 2 });
       });
+    },
+    getImage() {
+      this.$store.dispatch("admin/getImage", 2);
     },
   },
 };
