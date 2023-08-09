@@ -5,9 +5,25 @@
     &nbsp;
     <div class="SubCctvContainer">
       <div class="CctvUpperContainer">
-        <video class="VideoContainer" ref="videoElement" autoplay></video>
-        <video class="VideoContainer" ref="notebookVideo" autoplay></video>
+        <video
+          class="VideoContainer"
+          ref="videoElement"
+          autoplay
+          @click="showInModal($refs.videoElement)"
+        ></video>
+        <video
+          class="VideoContainer"
+          ref="notebookVideo"
+          autoplay
+          @click="showInModal($refs.notebookVideo)"
+        ></video>
       </div>
+      <!-- 모달추가 -->
+      <cctv-modal
+        :show="isModalVisible"
+        :videoStream="selectedVideoStream"
+        @close="isModalVisible = false"
+      ></cctv-modal>
       <div class="CctvLowerContainer">
         <button @click="takeScreenshot">Take Screenshot</button>
         <canvas ref="canvasElement" style="display: none"></canvas>
@@ -22,12 +38,18 @@
 </template>
 
 <script>
+import CctvModal from "../Modals/CCTVModal.vue";
 import { mapState } from "vuex";
 export default {
   name: "MainCctv",
+  components: {
+    CctvModal,
+  },
   data() {
     return {
       screenshot: null,
+      isModalVisible: false, // 모달 보이기/숨기기 상태
+      selectedVideoStream: null, // 모달에 표시될 비디오 스트림
     };
   },
   computed: {
@@ -96,6 +118,17 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    showInModal(videoElement) {
+      const originalStream = videoElement.srcObject;
+      // srcObject의 값이 null인지 확인 => 화면 안나오는 곳
+      if (!originalStream) {
+        alert("CCTV 고장");
+        return;
+      }
+      const clonedStream = originalStream.clone();
+      this.selectedVideoStream = clonedStream;
+      this.isModalVisible = true;
     },
   },
 };
