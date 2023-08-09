@@ -18,8 +18,6 @@ TOPIC_DIV_RES = "/div/res"
 TOPIC_WEB_LOG = "/log"
 TOPIC_WEB_POWER = "/mod/web/power"
 
-TOPIC_MOD_ITV = "/mod/div/veri/interval"
-
 TOPIC_ENV_INFO = "/sup/div/veri/env/info"
 
 CA = "/home/pi/TL/CA1.pem"
@@ -28,7 +26,6 @@ CERT = "/home/pi/TL/CERT.crt"
 
 END_POINT = "a1s6tkbm4cenud-ats.iot.ap-northeast-2.amazonaws.com"
 
-global interval
 global power
 global suc
 global fail
@@ -36,7 +33,6 @@ global Address_Info
 global Address_Lists
 global Order_Lists
 
-interval = 1.5
 power = 1
 suc = 0
 fail = 0

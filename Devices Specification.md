@@ -123,43 +123,50 @@
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Verifier", "content":"message"}|
-|Pub|to Supervisor|/div/res|{"order_num":"1001", "result":"1"}|
-|Pub|to Divide_Divider|/div/servo[3]/info|{"order_num":"1001"}|
-|Sub|from Web|/web/mod/power|{"power":"1"}|
-|Sub|from Web|/mod/div/veri/interval|{"interval":"1"}|
-|Sub|from Supervisor|/sup/div/veri/info|{"order_num":"1001", "address":"1"}|
-|Sub|from Supervisor|/sup/div/veri/env/info|{"temp":"23", "humid":"55"}|
-
 
 
 
 ## Divide_Motor
 
 - ##### 기능
-
+	- 분류 컨베이어 벨트 작동 모터
 
 - ##### H/W 스펙
-
+	- esp32
 
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Motor", "content":"message"}|
+|Pub|from Web|/mod/web/power|{"power":"-1"}|
+|Pub|from Web|/lmod/div/motor/speed|{"speed":"190"}|
 
 
 
 ## Divide_Divider[3]
 
 - ##### 기능
-
+	- 포장된 상자를 지정된 장소로 분류
+	- Divide_Verifier에게 작동 지시를 받음
+	- Interval 만큼 대기 후 분류 막대기 작동(0º->65º->0º)
+	- 분류 막대기 작동 후 적외선 센서를 통해 2차 검증
+		- type (0:Order, 1:Divider), result (0:Error, 1:Success)
 
 - ##### H/W 스펙
-
+	- esp12E(NodeMCU V3)
+	- esp12F(NodeMCU V2)
+	- esp8266(NodeMCU devkit V0.9)
 
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
-|Pub|to Web|/log|{"dev":"Div_Servo1", "content":"message"}|
-|-|-|-|-|
+|Pub|to Web|/log|{"dev":"Div_Servo[3]", "content":"message"}|
+|Pub|to Supervisor|/div/res|{"order_num":"2308000001", "type":"1",result:"0"}|
+|Sub|from Div_Verifier|/mod/div/servo[3]/info|{"order_num":"230800001"}|
+|Sub|from Web|/mod/div/servo[3]/angle|{"angle":"65"}|
+|Sub|from Web|/mod/div/servo[3]/servo_interval|{"servo_interval":"1000"}|
+|Sub|from Web|/mod/div/servo[3]/wait_interval|{"wait_interval":"1500"}|
+|Sub|from Web|/mod/div/servo[3]/ir_interval|{"ir_interval":"1000"}|
+
 
 
