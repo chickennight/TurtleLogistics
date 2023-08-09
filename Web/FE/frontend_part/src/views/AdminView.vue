@@ -24,7 +24,7 @@ export default {
       if (childContentHeight > 800) {
         this.appHeight = childContentHeight + 300;
       } else {
-        this.appHeight = 900;
+        this.appHeight = 1200;
       }
     },
   },
