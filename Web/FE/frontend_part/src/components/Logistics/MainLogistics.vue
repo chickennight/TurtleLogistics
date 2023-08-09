@@ -102,8 +102,6 @@ export default {
 </script>
 
 <style scoped>
-.LogisticContainer {
-}
 .ProductStatusContainer {
   margin: 20px;
 }
