@@ -11,7 +11,6 @@ import time
 import cv2
 import sys
 
-TOPIC_DIV_CAM = "/div/cam"
 TOPIC_DIV_SERVO = "/div/servo"
 TOPIC_DIV_INFO = "/sup/div/veri/info"
 TOPIC_DIV_RES = "/div/res"
