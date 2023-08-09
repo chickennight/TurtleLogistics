@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
     @Query("SELECT i FROM Image i WHERE i.log.logNum = ?1")
-    Optional<Image> findByLogNum(String logNum);
+    Optional<Image> findByLogNum(Integer logNum);
 }
