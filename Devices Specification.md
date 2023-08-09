@@ -123,13 +123,6 @@
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Verifier", "content":"message"}|
-|Pub|to Supervisor|/div/res|{"order_num":"1001", "result":"1"}|
-|Pub|to Divide_Divider|/div/servo[3]/info|{"order_num":"1001"}|
-|Sub|from Web|/web/mod/power|{"power":"1"}|
-|Sub|from Web|/mod/div/veri/interval|{"interval":"1"}|
-|Sub|from Supervisor|/sup/div/veri/info|{"order_num":"1001", "address":"1"}|
-|Sub|from Supervisor|/sup/div/veri/env/info|{"temp":"23", "humid":"55"}|
-
 
 
 
@@ -171,7 +164,7 @@
 |Pub|to Supervisor|/div/res|{"order_num":"2308000001", "type":"1",result:"0"}|
 |Sub|from Div_Verifier|/mod/div/servo[3]/info|{"order_num":"230800001"}|
 |Sub|from Web|/mod/div/servo[3]/angle|{"angle":"65"}|
-|Sub|from Web|/mod/div/servo[3]/servo_interval{"servo_interval":"1000"}|
+|Sub|from Web|/mod/div/servo[3]/servo_interval|{"servo_interval":"1000"}|
 |Sub|from Web|/mod/div/servo[3]/wait_interval|{"wait_interval":"1500"}|
 |Sub|from Web|/mod/div/servo[3]/ir_interval|{"ir_interval":"1000"}|
 
