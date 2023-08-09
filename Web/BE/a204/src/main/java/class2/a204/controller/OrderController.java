@@ -3,10 +3,7 @@ package class2.a204.controller;
 import class2.a204.dto.MessageDTO;
 import class2.a204.dto.NewOrderDTO;
 import class2.a204.dto.OrderUpdateDTO;
-import class2.a204.entity.Log;
-import class2.a204.entity.OrderDetail;
-import class2.a204.entity.OrderNow;
-import class2.a204.entity.Product;
+import class2.a204.entity.*;
 import class2.a204.service.MachineService;
 import class2.a204.service.OrderService;
 import class2.a204.service.ProductService;
@@ -194,7 +191,9 @@ public class OrderController {
         Log l = new Log();
         //Log entity에 메서드 추가
         l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);
-        l.updateMachine(machineService.findMachine(1000+orderUpdateDto.getProductNum()));
+        Machine machine = machineService.findMachine(1000+orderUpdateDto.getProductNum());
+        l.updateMachine(machine);
+        machineService.broken(machine);
         return l;
     }
 
