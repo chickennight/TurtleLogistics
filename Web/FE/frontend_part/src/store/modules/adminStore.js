@@ -84,9 +84,13 @@ const adminStore = {
     },
     async getImage({ commit }, log_num) {
       try {
-        const image = await adminAPI.downloadImage(log_num);
-        console.log(image);
-        commit("GET_IMAGE", image.data);
+        const response = await adminAPI.downloadImage(log_num);
+        const base64 = btoa(
+          new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), "")
+        );
+        const imageDataUrl = "data:" + response.headers["content-type"] + ";base64," + base64;
+
+        commit("GET_IMAGE", imageDataUrl);
       } catch (error) {
         console.log(error);
       }
