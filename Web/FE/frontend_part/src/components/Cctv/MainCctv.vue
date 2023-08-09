@@ -68,10 +68,19 @@ export default {
       // Get the data URL of the canvas content (base64 encoded image)
       const dataURL = canvasElement.toDataURL("image/png");
 
+      // Convert the dataURL to an image File
+      const fetchImage = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], "screenshot.png", { type: "image/png" });
+      };
+
       // Set the screenshot in the data property to display it on the page
       this.screenshot = dataURL;
 
-      this.$store.dispatch("takeScreenshot", dataURL);
+      fetchImage(dataURL).then((imageFile) => {
+        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: 2 });
+      });
     },
   },
 };
