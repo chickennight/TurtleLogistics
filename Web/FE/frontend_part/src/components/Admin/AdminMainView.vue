@@ -124,6 +124,10 @@ export default {
   width: 40%;
   margin-left: 30px;
   overflow-y: auto;
+  scrollbar-width: 0px;
+}
+.ProductStatusContainer::-webkit-scrollbar {
+  display: none;
 }
 .LogTableContainer {
   padding: 10px;
