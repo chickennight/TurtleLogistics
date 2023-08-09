@@ -71,11 +71,9 @@ const adminStore = {
         console.log(error);
       }
     },
-    async takeScreenshot(_, { image, log_num }) {
+    takeScreenshot(_, { image, log_num }) {
       try {
-        console.log(image);
-        console.log(log_num);
-        await adminAPI.uploadImage(image, log_num);
+        adminAPI.uploadImage(image, log_num);
       } catch (error) {
         console.log(error);
       }
