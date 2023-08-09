@@ -105,4 +105,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.SampleGraphContainer {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+</style>
