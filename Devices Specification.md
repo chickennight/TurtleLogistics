@@ -4,12 +4,12 @@
 	-  웹 서버로부터 받은 데이터를 시스템 내 디바이스들에게 전달
 	-  특정 디바이스들로부터 받은 작동 결과를 웹에 전달
 	-  웹 서버 통신(RSET API)
-		- to Web :
-		- from Web :
+		- to Web : 주문번호, 주문/분류 처리 결과
+		- from Web : 주문번호, 주문목록, 배송지 정보
 	-  시스템 내 디바이스 통신(MQTT)
 		- to Order_Scheduler : 주문 번호 및 주문 목록
 		- to Order_Verifier : 주문 번호 및 주문 목록
-		- to Divde_Verifer : 주문 번호 및 배송지 정보
+		- to Divde_Verifer : 주문 번호 및 배송지 정보, 온습도 정보
 		- from Order_Verifer : 상품 선택 성공 여부
 		- from Divide_Divider : 분류 성공 여부
 
@@ -37,6 +37,7 @@
 - ##### 기능
 	- Supervisor에게 받은 주문 목록에 해당하는 상품 보관함의 피스톤을 작동
 	- 시스템 내 디바이스 통신(MQTT)
+		- from Web : 전원, 피스톤 관련 각도 설정, 피스톤 작동 간격
 		- from Supervisor : 주문 번호 및 주문 목록
 
 
@@ -66,6 +67,11 @@
 	-  상품의 QR을 인식하여 현재 주문 목록에 포함되는지 확인
 		- 주문 목록에 포함되지 않은 상품이 인식된다면 DC모터에 정지 신호를 게시
 		- 주문 목록 검증 결과를 Supervisor에 게시
+	-  시스템 내 디바이스 통신(MQTT)
+		- to Supervisor : 주문 번호 및 주문 목록
+		- to Order_Motor : QR 인식 오류 시 모터 전원 제어
+		- from Web : 전원, QR 인식 간격
+		- from Supervisor : 주문 번호 및 주문 목록
 
 
 - ##### H/W 스펙
@@ -75,13 +81,12 @@
 
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
-|----------|----------|----------|----------|
+	|----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Ord_Verifier", "content":"message"}|
 |Pub|to Order_Motor|/mod/ord/motor/power|{"power":"-1"}|
-|Pub|to Supervisor|/ord/res|{"order_num":"1001", "result":"1"}|
+|Pub|to Supervisor|/ord/res|{"order_num":"1001", "type":"0", "result":"1"}|
 |Sub|from Web|/mod/web/power|{"power":"1"}|
 |Sub|from Web|/mod/ord/veri/interval|{"interval":"0.3"}|
-|Sub|from Web|/mod/web/power|{"power":"1"}|
 |Sub|from Supervisor|/sup/ord/veri/info|{"order_num":"1001","productA":"1","productB":"2","productC":"0"}|
 
 
@@ -91,6 +96,10 @@
 - ##### 기능
 	-  컨베이어 벨트를 작동시키는 DC 모터
 		- 주문 검증기에서 오류 신호를 게시하면 작동을 중지
+	  - 시스템 내 디바이스 통신(MQTT)
+		- from Web : 전원, 모터 속도
+		- from Order_Verifier : QR 인식 오류 시 모터 전원 제어
+
 
 - ##### H/W 스펙
 	-  esp32 : 1ea
@@ -112,6 +121,11 @@
 
 - ##### 기능
 	-  QR을 인식하여 배송지 정보를 알아내고 이에 해당하는 분류기에 신호를 게시
+	- 시스템 내 디바이스 통신(MQTT)
+		- to Supervisor : 분류 성공 여부
+		- to Divde_Divider : 주문번호 
+		- from Web : 전원
+		- from Supervisor : 주문번호 및 배송지 정보, 온습도 정보
 
 
 - ##### H/W 스펙
@@ -123,7 +137,11 @@
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Verifier", "content":"message"}|
-
+|Pub|to Supervisor|/div/res|{"order_num":"1001", "result":"1"}|
+|Pub|to Divide_Divider|/div/servo[3]/info|{"order_num":"1001"}|
+|Sub|from Web|/web/mod/power|{"power":"1"}|
+|Sub|from Supervisor|/sup/div/veri/info|{"order_num":"1001", "address":"1"}|
+|Sub|from Supervisor|/sup/div/veri/env/info|{"temp":"23", "humid":"55"}|
 
 
 ## Divide_Motor
