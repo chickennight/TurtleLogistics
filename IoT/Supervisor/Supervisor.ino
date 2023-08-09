@@ -1,11 +1,15 @@
 #include "TLClient.h"
 #include <HTTPClient.h>
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <DHT_U.h>
 
 #define THINGNAME "Supervisor"
 // PUBLISH TOPIC
 #define TOPIC_ORD_SCH "/sup/ord/sch/info"
 #define TOPIC_ORD_VER "/sup/ord/veri/info"
 #define TOPIC_DIV_VER "/sup/div/veri/info"
+#define TOPIC_ENV_INFO "/sup/div/veri/env/info"
 #define TOPIC_WEB_LOG "/log"
 
 // SUBSCRIBE TOPIC
@@ -14,26 +18,36 @@
 #define TOPIC_WEB_POW "/mod/web/power"
 
 int power=-1;
-unsigned long previousMillis = 0;
+unsigned long httpMillis = 0;
+unsigned long envMillis = 0;
 const long interval = 60000; // 1min
 
+
+DHT_Unified dht(13,DHT11);
 HTTPClient http;
+StaticJsonDocument<200> EnvData;
 TLClient supervisor(THINGNAME);
 
-void checkmotor();
+
 void GETorder();
+void checkmotor();
+void MSG(const char* strcmp);
 void POSTres(const char* jsonData);
 void Subscribe_callback(char *topic, byte *payload, unsigned int length);
 
 void setup() 
 {
   Serial.begin(115200);
-  
-  supervisor.setCallback(Subscribe_callback);
+  sensor_t sensor;
+  dht.begin();
+  dht.temperature().getSensor(&sensor);
+  dht.humidity().getSensor(&sensor);
   supervisor.connect_AWS();
+  supervisor.setCallback(Subscribe_callback);
   supervisor.subscribe(TOPIC_ORD_RES);
   supervisor.subscribe(TOPIC_DIV_RES);
   supervisor.subscribe(TOPIC_WEB_POW);
+
   supervisor.publish(TOPIC_WEB_LOG, "{\"dev\":\"Supervisor\",\"content\":\"AWS Connect Success\"}");
 }
 
@@ -41,17 +55,38 @@ void loop()
 {
   supervisor.mqttLoop();
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= interval && power==1) {
-    previousMillis = currentMillis;
+  if (currentMillis - httpMillis >= interval && power==1) {
+    httpMillis = currentMillis;
     GETorder();
-    supervisor.publish(TOPIC_LOG, "{\"dev\":\"Supervisor\",\"content\":\"Get Order Lists\"}");
+    supervisor.publish(TOPIC_WEB_LOG, "{\"dev\":\"Supervisor\",\"content\":\"Get Order Lists\"}");
   }
+  if (currentMillis - envMillis >= 10000) {
+    envMillis = currentMillis;
+    sensors_event_t event;
+    dht.temperature().getEvent(&event);
+    int temp = event.temperature;
+    EnvData["temp"] = temp;
+    Serial.print("Temperature : ");
+    Serial.println( temp);
+
+    dht.humidity().getEvent(&event);
+    int humid = event.relative_humidity;
+    EnvData["humid"] = humid;
+    Serial.print("Humidity : ");
+    Serial.println(humid);
+
+    supervisor.publish(TOPIC_WEB_LOG, "{\"dev\":\"Supervisor\",\"content\":\"Env Pub\"}");
+    char buf1[200];
+    serializeJson(EnvData,buf1);
+    supervisor.publish(TOPIC_ENV_INFO,buf1);
+  }
+  
 }
 
 void GETorder(){
   if (WiFi.status() == WL_CONNECTED) 
   {
-    http.begin("http://i9A204.p.ssafy.io:8080/order/start");
+    http.begin("https://i9A204.p.ssafy.io/turtle/order/start");
     int httpCode = http.GET();
 
     if (httpCode == 200) 
@@ -61,7 +96,7 @@ void GETorder(){
       DeserializationError error = deserializeJson(jsonDoc, response);
       if (error) 
       {
-          supervisor.publish(TOPIC_LOG,error.c_str());
+          supervisor.publish(TOPIC_WEB_LOG,error.c_str());
       } 
       else 
       {
@@ -129,7 +164,7 @@ void GETorder(){
 }
 
 void POSTres(const char* jsonData){
-  http.begin("http://i9A204.p.ssafy.io:8080/order/update");
+  http.begin("https://i9A204.p.ssafy.io/turtle/order/update");
   http.addHeader("Content-Type","application/json");
 
   int httpCode = http.PUT(jsonData);
@@ -147,16 +182,16 @@ void POSTres(const char* jsonData){
 
 void Subscribe_callback(char *topic, byte *payload, unsigned int length)
 {
+  StaticJsonDocument<100> doc;
+  DeserializationError error = deserializeJson(doc, payload, length);
+  char res[100];
+  serializeJson(doc,res);  
   if(strcmp(topic,TOPIC_ORD_RES)==0 ||strcmp(topic,TOPIC_DIV_RES)==0 )
   { 
       POSTres(res);
   }
   else if(strcmp(topic,TOPIC_WEB_POW)==0)
   { 
-    StaticJsonDocument<100> doc;
-    DeserializationError error = deserializeJson(doc, payload, length);
-    char res[100];
-    serializeJson(doc,res);  
     power = doc["power"].as<int>();
   }
   
