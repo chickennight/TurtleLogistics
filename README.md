@@ -161,9 +161,9 @@
     ![piston_vh3](./image/HW/piston/vh3.png) ![piston_vh31](./image/HW/piston/vh3-1.png)
   - 컨베이어 벨트 <br>
     ### iv.1
-    <img src="./image/HW/belt/ih1.jpg" width="500"> <img src="./image/HW/belt/ih11.jpg" width="500">
+    <img src="./image/HW/belt/ih1.jpg" width="500"> <img src="./image/HW/belt/ih11.png" width="500">
     ### iv.2
-    <img src="./image/HW/belt/ih2.jpg" width="500">
+    <img src="./image/HW/belt/ih2.jpg" width="500"> <br>
     ### iv.3
     <img src="./image/HW/belt/ih3.jpg" width="500">
   - 전체 공정 <br>
