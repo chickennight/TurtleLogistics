@@ -69,7 +69,6 @@ const uploadImage = async (imageFile, logNum) => {
     formData.append("image", imageFile);
     formData.append("log_num", logNum);
 
-    console.log(formData);
     //이 요청만 헤더가 재정의되어서 보내짐
     const response = await authorizedApi.post("/admin/image", formData, {
       headers: {
@@ -86,6 +85,7 @@ const uploadImage = async (imageFile, logNum) => {
 //사진 조회
 const downloadImage = async (imageName) => {
   try {
+    console.log(imageName);
     const response = await authorizedApi.get(`/admin/image/${imageName}`);
     return response;
   } catch (error) {
