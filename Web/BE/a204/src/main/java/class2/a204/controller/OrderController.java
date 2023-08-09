@@ -61,16 +61,6 @@ public class OrderController {
         }
     }
 
-//    @ApiOperation(value = "지역별 주문 분석", notes = "입력 기간에 따른 주문의 지역별 자료를 반환")
-//    @GetMapping("/analysis/region")
-//    public ResponseEntity<?> dataAnalysisRegion(Integer year, Integer month) {
-//        try {
-//            return new ResponseEntity<>(orderService.dataRegion(year, month), HttpStatus.OK);
-//        } catch (Exception e) {
-//            return errorHandler.errorMessage(e);
-//        }
-//    }
-
     @ApiOperation(value = "포장이 필요한 주문 반환", notes = "포장 시스템에서 필요로 하는 주문 반환")
     @GetMapping("/start")
     public ResponseEntity<?> packageList() {
@@ -132,7 +122,6 @@ public class OrderController {
                     machineService.addLog(errorLog(orderUpdateDto, "포장 문제 발생"));
                     return new ResponseEntity<>("PROBLEM RECORD COMPLETE", HttpStatus.ACCEPTED);
                 }
-
                 // 포장 과정 이상 없음
                 if (orderNow.getStatus() == 2) {
                     orderNow.changeStatus(3);
@@ -205,7 +194,7 @@ public class OrderController {
         Log l = new Log();
         //Log entity에 메서드 추가
         l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);
-        l.updateMachine(machineService.findMachine(0));
+        l.updateMachine(machineService.findMachine(1000+orderUpdateDto.getProductNum()));
         return l;
     }
 
