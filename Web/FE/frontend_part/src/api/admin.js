@@ -85,7 +85,6 @@ const uploadImage = async (imageFile, logNum) => {
 //사진 조회
 const downloadImage = async (imageName) => {
   try {
-    console.log(imageName);
     const response = await authorizedApi.get(`/admin/image/${imageName}`, {
       responseType: "arraybuffer",
     });

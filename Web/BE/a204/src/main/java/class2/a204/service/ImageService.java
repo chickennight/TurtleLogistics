@@ -37,9 +37,8 @@ public class ImageService {
         File dest = new File(filePath);
 
         // 디렉토리 생성
-        if (!dest.getParentFile().exists()) {
+        if (!dest.getParentFile().exists())
             dest.getParentFile().mkdirs();
-        }
 
         file.transferTo(dest);
     }
@@ -54,12 +53,13 @@ public class ImageService {
             contentType = image.get().getContentType();
 
         String logNumS = String.valueOf(logNum);
-        Path file = Paths.get(uploadDir).resolve(logNumS+".png");
+        Path file = Paths.get(uploadDir).resolve(logNumS + "." + contentType.split("/")[1]);
         UrlResource resource = new UrlResource(file.toUri());
 
-        return ResponseEntity.ok()
+        if (resource.exists() && resource.isReadable())
+            return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
