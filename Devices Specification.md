@@ -123,12 +123,14 @@
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Verifier", "content":"message"}|
+<<<<<<< HEAD
 |Pub|to Supervisor|/div/res|{"order_num":"1001", "result":"1"}|
 |Pub|to Divide_Divider|/div/servo[3]/info|{"order_num":"1001"}|
 |Sub|from Web|/web/mod/power|{"power":"1"}|
 |Sub|from Web|/mod/div/veri/interval|{"interval":"1"}|
 |Sub|from Supervisor|/sup/div/veri/info|{"order_num":"1001", "address":"1"}|
 |Sub|from Supervisor|/sup/div/veri/env/info|{"temp":"23", "humid":"55"}|
+
 
 
 
