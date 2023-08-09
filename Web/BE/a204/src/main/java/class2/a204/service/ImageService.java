@@ -34,11 +34,10 @@ public class ImageService {
     public void uploadImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String filePath = uploadDir + File.separator + fileName;
-        System.out.println("Saving file to: " + filePath);
         File dest = new File(filePath);
 
         // 디렉토리 생성
-        if (!dest.getParentFile().exists()){
+        if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
 
@@ -46,17 +45,21 @@ public class ImageService {
     }
 
 
-    public ResponseEntity<UrlResource> downloadImage(String logNum) throws MalformedURLException {
+    public ResponseEntity<UrlResource> downloadImage(Integer logNum) throws MalformedURLException {
         Optional<Image> image = imageRepository.findByLogNum(logNum);
         String contentType = "application/octet-stream";
         if (image.isPresent())
             contentType = image.get().getContentType();
-        Path file = Paths.get(uploadDir).resolve(logNum);
+
+        String logNumS = String.valueOf(logNum);
+        Path file = Paths.get(uploadDir).resolve(logNumS);
         UrlResource resource = new UrlResource(file.toUri());
-        if (resource.exists() && resource.isReadable())
-            return ResponseEntity.ok()
+        System.out.println(resource);
+        System.out.println(resource.exists());
+        System.out.println(resource.isReadable());
+        return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

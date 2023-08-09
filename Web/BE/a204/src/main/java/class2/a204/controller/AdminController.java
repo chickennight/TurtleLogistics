@@ -129,7 +129,7 @@ public class AdminController {
 
     @ApiOperation(value = "사진 조회", notes = "로그 번호와 매칭 되는 사진 조회")
     @GetMapping("/image/{name}")
-    public ResponseEntity<?> downloadImage(@PathVariable("name") String name) {
+    public ResponseEntity<?> downloadImage(@PathVariable("name") int name) {
         try {
             return imageService.downloadImage(name);
         } catch (Exception e) {

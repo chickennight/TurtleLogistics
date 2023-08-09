@@ -44,11 +44,11 @@ public class MachineController {
     public ResponseEntity<?> getMachineStatus() {
         try {
             List<Machine> machineList = machineService.findMachineAll();
-            if (machineList.size() == 0)
+            if (machineList.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
                 List<Integer> brokenList = machineService.brokenMachine(machineList);
-                if (brokenList.size() == 0)
+                if (brokenList.isEmpty())
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
                 else {
                     Map<String, List<?>> map = new HashMap<>();
