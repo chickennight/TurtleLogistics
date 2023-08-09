@@ -123,7 +123,6 @@
 |Pub/Sub|Direction|Topic|Detail|
 |----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Div_Verifier", "content":"message"}|
-<<<<<<< HEAD
 |Pub|to Supervisor|/div/res|{"order_num":"1001", "result":"1"}|
 |Pub|to Divide_Divider|/div/servo[3]/info|{"order_num":"1001"}|
 |Sub|from Web|/web/mod/power|{"power":"1"}|
