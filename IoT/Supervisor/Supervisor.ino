@@ -86,7 +86,7 @@ void loop()
 void GETorder(){
   if (WiFi.status() == WL_CONNECTED) 
   {
-    http.begin("http://i9A204.p.ssafy.io:8080/order/start");
+    http.begin("https://i9A204.p.ssafy.io/turtle/order/start");
     int httpCode = http.GET();
 
     if (httpCode == 200) 
@@ -164,7 +164,7 @@ void GETorder(){
 }
 
 void POSTres(const char* jsonData){
-  http.begin("http://i9A204.p.ssafy.io:8080/order/update");
+  http.begin("https://i9A204.p.ssafy.io/turtle/order/update");
   http.addHeader("Content-Type","application/json");
 
   int httpCode = http.PUT(jsonData);
