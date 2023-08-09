@@ -72,7 +72,7 @@ const adminStore = {
         console.log(error);
       }
     },
-    async takeScreenshot({commit}, url, log_num) {
+    async takeScreenshot({ commit }, url, log_num) {
       try {
         await adminAPI.uploadImage(url, log_num);
         commit;
