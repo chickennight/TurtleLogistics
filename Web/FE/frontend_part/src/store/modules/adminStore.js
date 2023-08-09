@@ -64,9 +64,17 @@ const adminStore = {
         console.log(error);
       }
     },
-    SendSMS({ commit }, machineDetail) {
+    async SendSMS({ commit }, machineDetail) {
       try {
-        adminAPI.sendMessage(machineDetail);
+        await adminAPI.sendMessage(machineDetail);
+        commit;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async takeScreenshot({commit}, url, log_num) {
+      try {
+        await adminAPI.uploadImage(url, log_num);
         commit;
       } catch (error) {
         console.log(error);

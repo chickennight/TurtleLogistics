@@ -70,7 +70,8 @@ export default {
 
       // Set the screenshot in the data property to display it on the page
       this.screenshot = dataURL;
-      console.log(this.screenshot);
+
+      this.$store.dispatch("takeScreenshot", dataURL);
     },
   },
 };

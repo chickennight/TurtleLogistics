@@ -14,7 +14,7 @@
       </span>
     </div>
     <div class="LogTableContainer">
-      <div><img class="machineImg" :src="errorImg" width="300" height="300" /></div>
+      <div class="MachineImgContainer"><img class="machineImg" :src="errorImg" /></div>
       <v-table density="compact" theme="dark">
         <thead>
           <tr>
@@ -43,7 +43,7 @@ import { mapState } from "vuex";
 export default {
   name: "MainMachine",
   data: () => ({
-    errorImg: "/errorImg/2000_error.PNG",
+    errorImg: "/Error_BluePrint/error_nukki.png",
     myTimer: null,
     currentTime: "",
     previousMachineLog: [],
@@ -89,7 +89,8 @@ export default {
       this.$emit("childContentHeightChanged", container);
     },
     changeImg(machine_id) {
-      this.errorImg = `/errorImg/${machine_id}_error.PNG`;
+      this.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
+      this.updateParentHeight();
     },
     sendMessage(machineDetail) {
       this.$store.dispatch("admin/SendSMS", machineDetail);
@@ -99,6 +100,7 @@ export default {
     ...mapState("machine", ["machineLog"]),
   },
   mounted() {
+    this.updateParentHeight();
     this.getMachineLog();
     this.myTimer = setInterval(async () => {
       await this.getMachineLog(); // 매 분마다 새 데이터를 가져옵니다.
@@ -165,26 +167,9 @@ export default {
               "[3차 가름막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
             );
             break;
-          case 2001:
-            this.sendMessage(
-              "[1차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2002:
-            this.sendMessage(
-              "[2차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2003:
-            this.sendMessage(
-              "[3차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
         }
       }
     }, 60000);
-
-    this.updateParentHeight();
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
@@ -215,5 +200,12 @@ export default {
 }
 .MachineSpan {
   display: flex;
+}
+.MachineImgContainer {
+  text-align: center;
+}
+.machineImg {
+  width: auto;
+  height: auto;
 }
 </style>
