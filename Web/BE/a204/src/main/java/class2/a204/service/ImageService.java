@@ -34,9 +34,17 @@ public class ImageService {
     public void uploadImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String filePath = uploadDir + File.separator + fileName;
+        System.out.println("Saving file to: " + filePath);
         File dest = new File(filePath);
+
+        // 디렉토리 생성
+        if (!dest.getParentFile().exists()){
+            dest.getParentFile().mkdirs();
+        }
+
         file.transferTo(dest);
     }
+
 
     public ResponseEntity<UrlResource> downloadImage(String logNum) throws MalformedURLException {
         Optional<Image> image = imageRepository.findByLogNum(logNum);
