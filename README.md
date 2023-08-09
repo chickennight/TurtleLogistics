@@ -1,6 +1,6 @@
 # S09P11A204
 
-팀장만P래~~
+팀장만P래~
 
 # V1.3.2
 
@@ -161,11 +161,13 @@
     ![piston_vh3](./image/HW/piston/vh3.png) ![piston_vh31](./image/HW/piston/vh3-1.png)
   - 컨베이어 벨트 <br>
     ### iv.1
-    <img src="./image/HW/belt/ih1.jpg" width="500">
+    <img src="./image/HW/belt/ih1.jpg" width="500"> <img src="./image/HW/belt/ih11.jpg" width="500">
     ### iv.2
+    <img src="./image/HW/belt/ih2.jpg" width="500">
     ### iv.3
-  - 가름막
-  - 전체 공정
+    <img src="./image/HW/belt/ih3.jpg" width="500">
+  - 전체 공정 <br>
+  추후 업데이트 예정~
 
 - Jira를 통한 일정관리
   - 매 주 월요일에 주 단위 이슈를 생성하고 금요일까지 40의 Story Point를 완료하기 위해 노력함
