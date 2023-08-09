@@ -89,7 +89,7 @@ def delete_product(product_num):
           Order_Lists[0][1][product_num] -= 1
           myMQTTClient.publish(PUB_LOG,f"{{\"dev\":\"Ord_Verifier\", \"content\":\"product {product_num+1} counted for order {Order_Lists[0][0]}\"}}",0)
           if (sum(Order_Lists[0][1])==0):
-              myMQTTClient.publish(PUB_RES,f"{{\"order_num\":\"{Order_Lists[0][0]}\", \"result\":\"1\"}}",0)
+              myMQTTClient.publish(PUB_RES,f"{{\"order_num\":\"{Order_Lists[0][0]}\",\"type\":\"0\" , \"result\":\"1\"}}",0)
               Order_Lists.pop(0)
 
       print(Order_Lists)
