@@ -137,7 +137,7 @@
 
 - 아이디어 정리
 - 와이어 프레임
-![image.png](./image.png)
+![image.png](./image/wire.png)
 - ERDCloud
 수정중
 - API 명세서
