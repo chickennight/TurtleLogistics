@@ -118,7 +118,7 @@ public class AdminController {
 
     @ApiOperation(value = "사진 저장", notes = "문제 발생시 해당 상황 사진 저장")
     @PostMapping("/image")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, @RequestParam("log_num") int logNum) {
+    public ResponseEntity<?> uploadImage(@RequestPart("image") MultipartFile image, @RequestParam("log_num") int logNum) {
         try {
             adminService.uploadImage(image, logNum);
             return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
