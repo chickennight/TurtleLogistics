@@ -40,7 +40,7 @@ public class OrderService {
         else throw new DataNotFountException("현재 진행 중인 주문 없음");
     }
 
-    public void addNewOrder(NewOrderDTO newOrderDto) {
+    public void addNewOrder(NewOrderDTO newOrderDto) throws DataNotFountException {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -53,7 +53,7 @@ public class OrderService {
         Order input;
         if (customer.isPresent())
             input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer.get());
-        else throw new EntityNotFoundException();
+        else throw new DataNotFountException("고객 정보 조회 실패");
 
         orderRepository.save(input);
 
