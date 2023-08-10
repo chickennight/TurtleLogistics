@@ -66,8 +66,6 @@ export default {
 
         // addedLogs가 비어있지 않으면, 새로운 로그가 추가되었음을 의미합니다.
         if (addedLogs.length > 0) {
-          console.log("로그길이");
-          console.log(addedLogs.length);
           const plainAddedLogs = addedLogs.map((log) => ({ ...log }));
           // 새로운 로그에 대해 원하는 동작을 수행합니다.
           this.changeImg(plainAddedLogs[0].machine_id);
