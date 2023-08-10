@@ -47,7 +47,7 @@ export default {
   height: 100px;
   display: flex;
   justify-content: flex-end;
-  box-shadow: 6px 1px 3px 3px black;
+  /* box-shadow: 6px 1px 3px 3px black; */
 }
 .AdminProfile,
 .UserProfile {

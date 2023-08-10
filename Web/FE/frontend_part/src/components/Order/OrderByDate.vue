@@ -314,7 +314,9 @@ export default {
 }
 .OrderGraphContainer {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .b .graph {
   background-color: white;
@@ -323,10 +325,12 @@ export default {
   height: 300px;
 }
 .ButtonContainer {
-  box-shadow: 2px 2px 3px 3px black;
   padding: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 </style>
