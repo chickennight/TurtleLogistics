@@ -85,7 +85,9 @@ const uploadImage = async (imageFile, logNum) => {
 //사진 조회
 const downloadImage = async (imageName) => {
   try {
-    const response = await authorizedApi.get(`/admin/image/${imageName}`);
+    const response = await authorizedApi.get(`/admin/image/${imageName}`, {
+      responseType: "arraybuffer",
+    });
     return response;
   } catch (error) {
     throw new Error(`사진 조회 에러 : ${error.message}`);

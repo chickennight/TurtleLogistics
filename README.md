@@ -1,6 +1,6 @@
 # S09P11A204
 
-팀장이 P래~~
+팀장만P래~
 
 # V1.3.2
 
@@ -17,6 +17,28 @@
 
 - 물류 자동화 시스템
 
+## 발표자료
+추후 업데이트 예정
+
+## 기능구현
+- IoT
+  - 수신한 주문 데이터에 따른 상품을 컨베이어 벨트로 이동
+  - 상품 갯수에 따른 피스톤 동작 횟수 입력으로 상품 이동
+  - 카메라 모듈을 통해 QR을 인식하여 주문 데이터와 맞는 상품인지 확인
+  - 주문 데이터의 주소에 따른 가름막 작동으로 분류
+  - 분류가 주소에 알맞게 되었는지 가름막의 센서로 확인 후 정보 전송
+- Web
+  - 관리자 / 사용자 회원가입, 로그인, 로그아웃
+  - 기간별(1주, 1개월, 3개월, 6개월, 1년) 주문 건수 그래프
+  - 지역별(광역시, 도) 주문 상황 조회 지도
+  - 현재 주문 접수, 분류, 배송 상황에 따른 집계 그래프
+  - 분류 시스템의 오류 현황 로그 조회
+  - 오류 발생 지점을 파악하는 단면도 조회
+  - 공정 전체 과정을 관찰하는 CCTV 시스템
+  - 공정 작동
+- DB
+  - DB 최적화 인덱싱 작업을 통해 약 500만개의 데이터에서 빠르게 물류 데이터를 조회
+  - 집계 그래프를 위한 주문 접수, 분류, 배송 상황 정보
 <br>
 
 ## 팀원 소개 및 담당 역할
@@ -115,8 +137,11 @@
 
 - 아이디어 정리
 - 와이어 프레임
+![image.png](./image/wire.png)
 - ERDCloud
+수정중
 - API 명세서
+![API_Image](./image/teamP_API.png)
 - 아키텍처
   <img src="ProfileImage/IoTArci.png">
   <img src="ProfileImage/WebArci.png">
@@ -127,6 +152,23 @@
 
 - H/W Development
 
+  - 피스톤 <br>
+    ### vh.1
+    ![piston_vh1](./image/HW/piston/vh1.png) ![piston_vh11.png](./image/HW/piston/vh1-1.png)
+    ### vh.2
+    ![piston_vh2](./image/HW/piston/vh22.jpg)
+    ### vh.3
+    ![piston_vh3](./image/HW/piston/vh3.png) ![piston_vh31](./image/HW/piston/vh3-1.png)
+  - 컨베이어 벨트 <br>
+    ### iv.1
+    <img src="./image/HW/belt/ih1.jpg" width="500"> <img src="./image/HW/belt/ih11.png" width="500">
+    ### iv.2
+    <img src="./image/HW/belt/ih2.jpg" width="500"> <br>
+    ### iv.3
+    <img src="./image/HW/belt/ih3.jpg" width="500">
+  - 전체 공정 <br>
+  추후 업데이트 예정~
+
 - Jira를 통한 일정관리
   - 매 주 월요일에 주 단위 이슈를 생성하고 금요일까지 40의 Story Point를 완료하기 위해 노력함
 
@@ -135,6 +177,9 @@
 
   ![4week_jira](./image/4week_jira.png)
   4주차 번다운 차트
+
+  ![5week_jira](./image/5week_jira.png)
+  5주차 번다운 차트
 
 - Confluence를 통한 문서 작업 및 기록
 
