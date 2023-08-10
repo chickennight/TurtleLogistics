@@ -136,7 +136,7 @@ export default {
   text-align: center;
 }
 .machineImg {
-  width: auto;
+  width: 1000px;
   height: auto;
 }
 </style>
