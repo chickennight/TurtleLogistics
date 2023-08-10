@@ -1,6 +1,5 @@
 package class2.a204.service;
 
-import class2.a204.dto.MachineDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.repository.LogRepository;
@@ -52,16 +51,13 @@ public class MachineService {
         return lastBrokenLogList;
     }
 
-    public void updateMachine(MachineDTO machineDto, Integer machineId) {
+    public void updateMachine(boolean broken, Integer machineId) {
         Optional<Machine> foundMachine = machineRepository.findById(machineId);
         if (foundMachine.isEmpty()) {
             throw new RuntimeException("등록되지 않은 기기 : " + machineId);
         }
         Machine machine = foundMachine.get();
-        if (machineDto.getMachineDetail() != null) {
-            machine.changeDetail(machineDto.getMachineDetail());
-        }
-        machine.changeBroken(machineDto.getBroken());
+        machine.changeBroken(broken);
         machineRepository.save(machine);
     }
 
@@ -70,10 +66,5 @@ public class MachineService {
         if(machine.isPresent())
         return machine.get();
         else throw new DataNotFountException("기계 조회 실패");
-    }
-
-    public void broken(Machine machine) {
-        machine.changeBroken(true);
-        machineRepository.save(machine);
     }
 }

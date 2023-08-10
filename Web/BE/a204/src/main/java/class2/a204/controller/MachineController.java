@@ -2,7 +2,6 @@ package class2.a204.controller;
 
 import class2.a204.dto.LogAddDTO;
 import class2.a204.dto.LogDTO;
-import class2.a204.dto.MachineDTO;
 import class2.a204.dto.PayloadDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
@@ -49,21 +48,13 @@ public class MachineController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
                 List<Integer> brokenList = machineService.brokenMachine(machineList);
-                if (brokenList.isEmpty())
-                    return new ResponseEntity<>(machineList, HttpStatus.OK);
-                else {
-                    Map<String, List<?>> map = new HashMap<>();
-                    map.put("상태", machineList);
-                    List<Log> temp = machineService.lastBrokenLogs(brokenList);
-                    List<LogDTO> errorLogs = new ArrayList<>();
-                    for (Log l : temp) errorLogs.add(new LogDTO(l));
-                    map.put("로그", errorLogs);
-                    List<Log> orderError = orderService.findOrderError();
-                    List<LogDTO> processErrorLogs = new ArrayList<>();
-                    for (Log l : orderError) processErrorLogs.add(new LogDTO(l));
-                    map.put("인식 오류 로그", processErrorLogs);
-                    return new ResponseEntity<>(map, HttpStatus.OK);
-                }
+                Map<String, List<?>> map = new HashMap<>();
+                map.put("상태", machineList);
+                List<Log> temp = machineService.lastBrokenLogs(brokenList);
+                List<LogDTO> errorLogs = new ArrayList<>();
+                for (Log l : temp) errorLogs.add(new LogDTO(l));
+                map.put("로그", errorLogs);
+                return new ResponseEntity<>(map, HttpStatus.OK);
             }
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
@@ -107,10 +98,10 @@ public class MachineController {
 
     @ApiOperation(value = "기기 정보 업데이트", notes = "기기의 정보를 업데이트")
     @PutMapping("/{machineId}")
-    public ResponseEntity<?> updateMachine(@PathVariable Integer machineId, @RequestBody MachineDTO machineDto) {
+    public ResponseEntity<?> updateMachine(@PathVariable Integer machineId, @RequestBody boolean status) {
         try {
-            machineService.updateMachine(machineDto, machineId);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            machineService.updateMachine(status, machineId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }

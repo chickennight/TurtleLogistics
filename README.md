@@ -62,10 +62,10 @@
 
 ## 기술 스택
 
-- IoT : QT, RaspberryPI, AWS IoT, MQTT
-- Frontend : Vue.js, Vuex, axios, router
-- Backend : Java, Spring, MySQL, mariaDB
-- Infra : Jenkins, AWS EC2, NginX, Docker
+- IoT : PyQT, AWS IoT Core, MQTT, OpenCV, C++, Python
+- Frontend : Vue.js, JS
+- Backend : Java, Spring, MySQL, JPA
+- Infra : Jenkins, AWS EC2, NginX, Docker, Certbot
 
 <br>
 

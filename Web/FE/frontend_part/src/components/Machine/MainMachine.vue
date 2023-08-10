@@ -15,7 +15,7 @@
     </div>
     <div class="LogTableContainer">
       <div class="MachineImgContainer">
-        <img class="machineImg" src="/Error_BluePrint/test_machine.png" alt="image" />
+        <img class="machineImg" :src="errorImg" alt="image" />
       </div>
       <v-table density="compact" theme="dark">
         <thead>
@@ -63,6 +63,35 @@ export default {
       this.imgURL = this.$store.state.errorImg;
       this.updateParentHeight();
     },
+    async getMachineLog() {
+      let today = new Date();
+
+      let month = today.getMonth() + 1; // 월
+      let date = today.getDate(); // 날짜
+
+      let hours = today.getHours(); // 시
+      let minutes = today.getMinutes(); // 분
+      let seconds = today.getSeconds(); // 초
+
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+
+      let currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
+
+      this.$store.state.currentTime = currentTime;
+      this.$store.state.errorImg = "/Error_BluePrint/error_nukki.png";
+
+      await this.$store.dispatch("machine/getMachineLog");
+    },
   },
   computed: {
     ...mapState("machine", ["machineLog"]),
@@ -71,6 +100,7 @@ export default {
   },
   mounted() {
     this.updateParentHeight();
+    this.getMachineLog();
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
