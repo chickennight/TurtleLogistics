@@ -2,6 +2,7 @@ package class2.a204.service;
 
 import class2.a204.entity.Image;
 import class2.a204.repository.ImageRepository;
+import class2.a204.util.DataNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -44,14 +45,13 @@ public class ImageService {
     }
 
 
-    public ResponseEntity<UrlResource> downloadImage(Integer logNum) throws MalformedURLException {
+    public ResponseEntity<UrlResource> downloadImage(Integer logNum) throws MalformedURLException, DataNotFountException {
         Optional<Image> image = imageRepository.findByLogNum(logNum);
 
         System.out.println(image);
         String contentType = "application/octet-stream";
         if (image.isPresent())
             contentType = image.get().getContentType();
-
         String logNumS = String.valueOf(logNum);
         Path file = Paths.get(uploadDir).resolve(logNumS + "." + contentType.split("/")[1]);
         UrlResource resource = new UrlResource(file.toUri());

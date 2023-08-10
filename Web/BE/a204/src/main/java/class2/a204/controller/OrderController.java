@@ -8,6 +8,7 @@ import class2.a204.service.MachineService;
 import class2.a204.service.OrderService;
 import class2.a204.service.ProductService;
 import class2.a204.service.SmsService;
+import class2.a204.util.DataNotFountException;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -187,7 +188,7 @@ public class OrderController {
         }
     }
 
-    private Log errorLog(OrderUpdateDTO orderUpdateDto, String errorMessage) {
+    private Log errorLog(OrderUpdateDTO orderUpdateDto, String errorMessage) throws DataNotFountException {
         Log l = new Log();
         //Log entity에 메서드 추가
         l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);

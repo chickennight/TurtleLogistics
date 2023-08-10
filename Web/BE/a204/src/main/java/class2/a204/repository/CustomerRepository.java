@@ -16,5 +16,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
      * @return 찾아진 고객 객체, 해당 번호를 가진 고객이 없을 경우 null 반환
      */
     @Query("SELECT c FROM Customer c WHERE c.customerNum = ?1")
-    Customer findByCustomerNum(Integer customerNum);
+    Optional<Customer> findByCustomerNum(Integer customerNum);
 }
