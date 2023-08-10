@@ -1,11 +1,28 @@
 <template>
   <div class="SampleContainer">
     <h1>공정현황</h1>
-    <span>
-      <v-btn @click="getMachineStatus" background-color="rgb(53, 53, 53)" variant="outlined">
-        공정현황 버튼
-      </v-btn>
-    </span>
+  </div>
+  <div class="LogTableContainer">
+    <v-table density="compact" theme="dark">
+      <thead>
+        <tr>
+          <th class="text-left">로그번호</th>
+          <th class="text-left">로그 발생 날짜</th>
+          <th class="text-left">메세지</th>
+          <th class="text-left">기계번호</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in machineStatus[`로그`]" :key="item.log_num">
+          <td>{{ item.log_num }}</td>
+          <td>{{ item.error_date }}</td>
+          <td>{{ item.error_message }}</td>
+          <td>{{ item.machine_id }}</td>
+          <td><button @click="machineFixed(item.machine_id)">고장 해결</button></td>
+        </tr>
+      </tbody>
+    </v-table>
   </div>
   <div class="LogTableContainer">
     <v-table density="compact" theme="dark">
@@ -17,48 +34,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in machineStatus[`상태`]" :key="index">
+        <tr
+          v-for="(item, index) in machineStatus[`상태`]"
+          :key="index"
+          :class="{ 'red-text': item.broken === true }"
+        >
           <td>{{ item.machine_id }}</td>
           <td>{{ item.machine_detail }}</td>
           <td>{{ item.broken }}</td>
-        </tr>
-      </tbody>
-    </v-table>
-  </div>
-  <div class="LogTableContainer">
-    <v-table density="compact" theme="dark">
-      <thead>
-        <tr>
-          <th class="text-left">로그번호</th>
-          <th class="text-left">로그 발생 날짜</th>
-          <th class="text-left">메세지</th>
-          <th class="text-left">기계번호</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in machineStatus[`로그`]" :key="item.log_num">
-          <td>{{ item.log_num }}</td>
-          <td>{{ item.error_date }}</td>
-          <td>{{ item.error_message }}</td>
-          <td>{{ item.machine_id }}</td>
-        </tr>
-      </tbody>
-    </v-table>
-  </div>
-  <div class="LogTableContainer">
-    <v-table density="compact" theme="dark">
-      <thead>
-        <tr>
-          <th class="text-left">로그번호</th>
-          <th class="text-left">로그 발생 날짜</th>
-          <th class="text-left">메세지</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in machineStatus[`인식 오류 로그`]" :key="item.log_num">
-          <td>{{ item.log_num }}</td>
-          <td>{{ item.error_date }}</td>
-          <td>{{ item.error_message }}</td>
         </tr>
       </tbody>
     </v-table>
@@ -88,6 +71,9 @@ export default {
       // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
       this.$emit("childContentHeightChanged", container);
     },
+    machineFixed(machine_id) {
+      this.$store.dispatch("machine/machineFixed", machine_id);
+    },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
@@ -106,5 +92,8 @@ export default {
 }
 .LogTableContainer {
   margin: 20px;
+}
+.red-text td {
+  color: red;
 }
 </style>
