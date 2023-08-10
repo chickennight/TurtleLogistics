@@ -116,29 +116,43 @@ export default {
 .GraphContainer {
   padding: 20px;
   width: 55%;
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .ProductStatusContainer {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
   width: 40%;
   margin-left: 30px;
   overflow-y: auto;
   scrollbar-width: 0px;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
+}
+.ProductStatusContainer:hover,
+.LogTableContainer:hover,
+.BlueprintContainer:hover,
+.GraphContainer:hover {
+  background-color: rgb(62, 62, 62);
 }
 .ProductStatusContainer::-webkit-scrollbar {
   display: none;
 }
 .LogTableContainer {
   padding: 10px;
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
   width: 55%;
   overflow-y: auto;
   margin-left: 30px;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .BlueprintContainer {
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
   width: 40%;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .red-text td {
   color: red;

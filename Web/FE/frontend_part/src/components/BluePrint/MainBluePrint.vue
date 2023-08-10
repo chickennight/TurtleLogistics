@@ -83,15 +83,20 @@ export default {
 
 <style scoped>
 .SampleContainer {
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
   margin: 20px;
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 .LogTableContainer {
   margin: 20px;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .red-text td {
   color: red;
