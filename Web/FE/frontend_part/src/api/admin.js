@@ -41,11 +41,9 @@ const refreshToken = async (refreshTokenDTO) => {
 };
 
 // 기기 이상 알림 메세지 전송
-const sendMessage = async (machineDetail) => {
+const sendMessage = async (content) => {
   try {
-    const response = await authorizedApi.get("/admin/msg", {
-      params: { machine_detail: machineDetail },
-    });
+    const response = await authorizedApi.post("/admin/msg", content);
     return response;
   } catch (error) {
     throw new Error(`기기 이상 알림 메세지 전송 에러: ${error.message}`);
