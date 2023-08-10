@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -94,11 +95,11 @@ public class AdminController {
     }
 
     @ApiOperation(value = "기기 이상 알림", notes = "기기 이상 발생시 메세지 전송")
-    @GetMapping("/msg")
-    public ResponseEntity<?> sendMessage(@RequestParam("machine_detail") String machineDetail, ServletRequest request) {
+    @PostMapping("/msg")
+    public ResponseEntity<?> sendMessage(@RequestBody String content, ServletRequest request) {
         try {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail);
+            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), content);
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
