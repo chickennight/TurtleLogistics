@@ -193,12 +193,12 @@ public class OrderController {
         //Log entity에 메서드 추가
         l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);
         Machine machine;
-        if(orderUpdateDto.getType()==0)
-            machine= machineService.findMachine(1000 + orderUpdateDto.getProductNum()*10);
+        if (orderUpdateDto.getType() == 0)
+            machine = machineService.findMachine(1000 + orderUpdateDto.getProductNum() * 10);
         else
-            machine= machineService.findMachine(2000 + orderUpdateDto.getProductNum()*10);
+            machine = machineService.findMachine(2000 + orderUpdateDto.getProductNum() * 10);
         l.updateMachine(machine);
-        machineService.broken(machine);
+        machineService.updateMachine(true, machine.getMachineId());
         return l;
     }
 
