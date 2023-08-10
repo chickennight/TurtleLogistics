@@ -141,10 +141,14 @@ export default {
 }
 .OrderNowGraph {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .OrderNowHeader {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 </style>

@@ -61,7 +61,8 @@ export default {
 <style scoped>
 #sideBar {
   width: 300px;
-  box-shadow: 1px 1px 3px 3px black;
+  /* box-shadow: 1px 1px 3px 3px white; */
+  /* border: 1px solid white; */
 }
 #SideLogo {
   display: flex;
@@ -94,5 +95,9 @@ export default {
 .SideMenu {
   padding: 5px;
   height: 50px;
+}
+.v-btn {
+  background-color: rgb(55, 55, 55);
+  border-style: none;
 }
 </style>
