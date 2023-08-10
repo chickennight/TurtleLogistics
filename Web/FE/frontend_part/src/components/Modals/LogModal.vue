@@ -1,13 +1,18 @@
 <template>
   <div v-if="show" class="modal-overlay">
     <div class="modal-content">
-      <slot></slot>
+      <video class="modal-video" ref="modalVideo" autoplay muted playsinline></video>
+      <button class="modal-close-button" @click="$emit('close')">닫기</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    show: Boolean,
+    videoStream: Object,
+  },
   watch: {
     videoStream(newStream) {
       this.$nextTick(() => {
