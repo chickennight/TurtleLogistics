@@ -10,11 +10,13 @@ import class2.a204.entity.Product;
 import class2.a204.jwt.JwtTokenProvider;
 import class2.a204.jwt.Role;
 import class2.a204.repository.*;
+import class2.a204.util.DataNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -41,10 +43,6 @@ public class AdminService {
         this.imageRepository = imageRepository;
         this.imageService = imageService;
     }
-
-//    public Admin findAdminById(String id) {
-//        return AR.findById(id).orElse(null);
-//    }
 
     //회원가입
     public void registerAdmin(AdminDTO adminDto) {
@@ -74,12 +72,12 @@ public class AdminService {
         return jwtTokenProvider.refreshAccessToken(refreshToken);
     }
 
-    public String getAdminPhone(String token) {
+    public String getAdminPhone(String token) throws DataNotFountException {
         Optional<Admin> admin = adminRepository.findByAdminId(jwtTokenProvider.getUserID(token));
         if (admin.isPresent())
             return admin.get().getPhoneNumber();
         else
-            return "";
+            throw new DataNotFountException("관리자 조회 실패");
     }
 
     public List<LogisticAnalysisDTO> getLogisticAnalysis() {
@@ -116,9 +114,12 @@ public class AdminService {
         return year * 10000 + month * 100 + day;
     }
 
-    public void uploadImage(MultipartFile image, int logNum) throws IOException {
+    public void uploadImage(MultipartFile image, int logNum) throws DataNotFountException, IOException {
         imageService.uploadImage(image);
-        Image input = new Image(logRepository.findById(logNum).get(), image.getContentType());
+        Image input ;
+        if(logRepository.findById(logNum).isPresent())
+            input = new Image(logRepository.findById(logNum).get(), image.getContentType());
+        else throw new DataNotFountException("로그 조회 실패");
         imageRepository.save(input);
     }
 }
