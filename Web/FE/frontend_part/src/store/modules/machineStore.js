@@ -67,6 +67,18 @@ const machineStore = {
         console.log(error);
       }
     },
+    async machineFixed({ commit }, machine_id) {
+      try {
+        const response = await machineAPI.updateMachine(machine_id, false);
+        if (response.status == 200) {
+          commit;
+        } else {
+          alert("통신이상");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 
