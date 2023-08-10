@@ -6,9 +6,11 @@ import class2.a204.dto.AnalysisRegionDTO;
 import class2.a204.dto.OrderNowDTO;
 import class2.a204.entity.*;
 import class2.a204.repository.*;
+import class2.a204.util.DataNotFountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,11 +33,14 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
-    public OrderNow findByOrderNum(Long orderNum) {
-        return orderNowRepository.findByOrderNum(orderNum);
+    public OrderNow findByOrderNum(Long orderNum) throws DataNotFountException {
+        Optional<OrderNow> orderNow = orderNowRepository.findByOrderNum(orderNum);
+        if (orderNow.isPresent())
+            return orderNow.get();
+        else throw new DataNotFountException("현재 진행 중인 주문 없음");
     }
 
-    public void addNewOrder(NewOrderDTO newOrderDto) {
+    public void addNewOrder(NewOrderDTO newOrderDto) throws DataNotFountException {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -44,8 +49,11 @@ public class OrderService {
 
 
         Long orderNum = ((long) today * 1000000 + todayOrders + 1);
-        Customer customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
-        Order input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer);
+        Optional<Customer> customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
+        Order input;
+        if (customer.isPresent())
+            input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer.get());
+        else throw new DataNotFountException("고객 정보 조회 실패");
 
         orderRepository.save(input);
 
@@ -80,10 +88,13 @@ public class OrderService {
         return orderDetailRepository.findAllByOrderNum(orderNum);
     }
 
-    public void set2OrderNow(Long orderNum) {
-        OrderNow temp = orderNowRepository.findByOrderNum(orderNum);
-        temp.changeStatus(2);
-        orderNowRepository.save(temp);
+    public void set2OrderNow(Long orderNum) throws DataNotFountException {
+        Optional<OrderNow> temp = orderNowRepository.findByOrderNum(orderNum);
+        if (temp.isPresent()) {
+            OrderNow orderNow = temp.get();
+            orderNow.changeStatus(2);
+            orderNowRepository.save(orderNow);
+        } else throw new DataNotFountException("현재 진행 중인 주문 없음");
     }
 
     public Map<String, Long> dataDay(LocalDateTime startDay, LocalDateTime endDay) {

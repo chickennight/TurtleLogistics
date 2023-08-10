@@ -51,7 +51,6 @@ public class ImageService {
         String contentType = "application/octet-stream";
         if (image.isPresent())
             contentType = image.get().getContentType();
-
         String logNumS = String.valueOf(logNum);
         Path file = Paths.get(uploadDir).resolve(logNumS + "." + contentType.split("/")[1]);
         UrlResource resource = new UrlResource(file.toUri());
