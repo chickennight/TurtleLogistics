@@ -5,25 +5,55 @@
     &nbsp;
     <div class="SubCctvContainer">
       <div class="CctvUpperContainer">
-        <video class="VideoContainer" ref="videoElement" autoplay></video>
-        <video class="VideoContainer" ref="notebookVideo" autoplay></video>
+        <video
+          class="VideoContainer"
+          ref="videoElement"
+          autoplay
+          @click="showInModal($refs.videoElement)"
+        ></video>
+        <video
+          class="VideoContainer"
+          ref="notebookVideo"
+          autoplay
+          @click="showInModal($refs.notebookVideo)"
+        ></video>
       </div>
+      <!-- 모달추가 -->
+      <cctv-modal
+        :show="isModalVisible"
+        :videoStream="selectedVideoStream"
+        @close="isModalVisible = false"
+      ></cctv-modal>
       <div class="CctvLowerContainer">
         <button @click="takeScreenshot">Take Screenshot</button>
         <canvas ref="canvasElement" style="display: none"></canvas>
         <img v-if="screenshot" :src="screenshot" alt="Screenshot" />
+      </div>
+      <div class="imageGetContainer">
+        <button @click="getImage">getImage</button>
+        <img v-if="image" :src="image" alt="Image" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import CctvModal from "../Modals/CCTVModal.vue";
+import { mapState } from "vuex";
 export default {
   name: "MainCctv",
+  components: {
+    CctvModal,
+  },
   data() {
     return {
       screenshot: null,
+      isModalVisible: false, // 모달 보이기/숨기기 상태
+      selectedVideoStream: null, // 모달에 표시될 비디오 스트림
     };
+  },
+  computed: {
+    ...mapState("admin", ["image"]),
   },
   mounted() {
     this.initWebcam();
@@ -68,10 +98,37 @@ export default {
       // Get the data URL of the canvas content (base64 encoded image)
       const dataURL = canvasElement.toDataURL("image/png");
 
+      // Convert the dataURL to an image File
+      const fetchImage = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], "screenshot.png", { type: "image/png" });
+      };
+
       // Set the screenshot in the data property to display it on the page
       this.screenshot = dataURL;
 
-      this.$store.dispatch("takeScreenshot", dataURL);
+      fetchImage(dataURL).then((imageFile) => {
+        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: 2 });
+      });
+    },
+    async getImage() {
+      try {
+        await this.$store.dispatch("admin/getImage", 2);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    showInModal(videoElement) {
+      const originalStream = videoElement.srcObject;
+      // srcObject의 값이 null인지 확인 => 화면 안나오는 곳
+      if (!originalStream) {
+        alert("CCTV 고장");
+        return;
+      }
+      const clonedStream = originalStream.clone();
+      this.selectedVideoStream = clonedStream;
+      this.isModalVisible = true;
     },
   },
 };

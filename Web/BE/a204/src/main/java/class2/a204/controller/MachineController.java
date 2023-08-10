@@ -6,8 +6,9 @@ import class2.a204.dto.MachineDTO;
 import class2.a204.dto.PayloadDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
-import class2.a204.jwt.JwtTokenProvider;
-import class2.a204.service.*;
+import class2.a204.service.MachineService;
+import class2.a204.service.MqttService;
+import class2.a204.service.OrderService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,11 +45,11 @@ public class MachineController {
     public ResponseEntity<?> getMachineStatus() {
         try {
             List<Machine> machineList = machineService.findMachineAll();
-            if (machineList.size() == 0)
+            if (machineList.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
                 List<Integer> brokenList = machineService.brokenMachine(machineList);
-                if (brokenList.size() == 0)
+                if (brokenList.isEmpty())
                     return new ResponseEntity<>(machineList, HttpStatus.OK);
                 else {
                     Map<String, List<?>> map = new HashMap<>();
