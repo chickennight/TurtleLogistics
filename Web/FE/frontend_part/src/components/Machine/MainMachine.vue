@@ -24,6 +24,7 @@
             <th class="text-left">날짜</th>
             <th class="text-left">로그명</th>
             <th class="text-left">기계</th>
+            <th class="text-left"></th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
             <td>{{ item.error_date }}</td>
             <td>{{ item.error_message }}</td>
             <td>{{ item.machine_id }}</td>
+            <td><button>상세보기</button></td>
           </tr>
         </tbody>
       </v-table>
