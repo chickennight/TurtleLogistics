@@ -15,7 +15,7 @@
     </div>
     <div class="LogTableContainer">
       <div class="MachineImgContainer">
-        <img class="machineImg" :src="this.$store.state.errorImg" alt="image" />
+        <img class="machineImg" src="/Error_BluePrint/test_machine.png" alt="image" />
       </div>
       <v-table density="compact" theme="dark">
         <thead>
@@ -106,7 +106,7 @@ export default {
   text-align: center;
 }
 .machineImg {
-  width: auto;
+  width: 1000px;
   height: auto;
 }
 </style>
