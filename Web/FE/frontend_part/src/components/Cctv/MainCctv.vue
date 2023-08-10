@@ -143,14 +143,24 @@ export default {
 }
 .CctvHeader {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
+
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .VideoContainer {
   width: 450px;
 }
 .SubCctvContainer {
-  box-shadow: 2px 2px 3px 3px black;
   display: flex;
   flex-direction: column;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
+}
+.CctvUpperContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 </style>
