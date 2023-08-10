@@ -57,7 +57,7 @@ export default {
 }
 .loginForm * {
   color: white;
-  background-color: rgb(53, 53, 53);
+  background-color: rgb(39, 40, 41);
   text-align: center;
 }
 .registDiv {
