@@ -8,7 +8,9 @@ import orderStore from "./modules/orderStore";
 
 const store = createStore({
   state: {
-    mode : false,
+    mode: false,
+    currentTime: "",
+    errorImg: "",
   },
   modules: {
     admin: adminStore,
