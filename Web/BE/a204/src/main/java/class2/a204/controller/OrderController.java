@@ -204,9 +204,9 @@ public class OrderController {
 
     @ApiOperation(value = "지역코드별 주문 분석", notes = "지역별 주문 정보 반환")
     @GetMapping("/analysis/regioncode")
-    public ResponseEntity<?> dataAnalysisRegionCode(Integer regionCode) {
+    public ResponseEntity<?> dataAnalysisRegionCode(Integer regioncode) {
         try {
-            return new ResponseEntity<>(orderService.dataRegionCode(regionCode), HttpStatus.OK);
+            return new ResponseEntity<>(orderService.dataRegionCode(regioncode), HttpStatus.OK);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
