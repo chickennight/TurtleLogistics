@@ -5,6 +5,8 @@
       <header-nav></header-nav>
       <router-view @childContentHeightChanged="updateAppHeight" />
     </div>
+    <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
+    <canvas ref="canvasElement" hidden></canvas>
   </div>
 </template>
 
@@ -19,19 +21,19 @@ export default {
   data: () => ({
     appHeight: 900,
     previousMachineLog: [],
-    errorImg: "/Error_BluePrint/error_nukki.png",
+    errorImg: "/Error_BluePrint/BluePrint_0000.png",
     myTimer: null,
+    screenshot: null,
   }),
   methods: {
     updateAppHeight(childContentHeight) {
       // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
       if (childContentHeight > 800) {
-        this.appHeight = childContentHeight + 300;
+        this.appHeight = childContentHeight + 200;
       } else {
         this.appHeight = 1200;
       }
     },
-
     sendMessage(machineDetail) {
       this.$store.dispatch("admin/SendSMS", machineDetail);
     },
@@ -40,12 +42,57 @@ export default {
       this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
     },
     async getMachineStatus() {
-      if (this.machineStatus[`로그`] != null) {
-        this.previousMachineLog = [...this.machineStatus[`로그`]];
-      } else {
-        this.previousMachineLog = [];
-      }
+      this.previousMachineLog = [...this.machineStatus[`로그`]];
       await this.$store.dispatch("machine/getMachineStatus");
+    },
+    async initWebcam() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const notebookCamera = devices.find(
+          (device) => device.kind === "videoinput" && device.label.includes("Web Camera")
+        );
+        if (notebookCamera) {
+          const notebookStream = await navigator.mediaDevices.getUserMedia({
+            video: { deviceId: notebookCamera.deviceId },
+          });
+          notebookStream; // 노트북 카메라 비디오 요소
+        } else {
+          console.error("Notebook camera not found.");
+        }
+        const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
+      } catch (error) {
+        console.error("Error accessing webcam:", error);
+      }
+    },
+    takeScreenshot(log_num) {
+      const videoElement = this.$refs.videoElement;
+      const canvasElement = this.$refs.canvasElement;
+
+      // Set canvas dimensions to match the video dimensions
+      canvasElement.width = videoElement.videoWidth;
+      canvasElement.height = videoElement.videoHeight;
+
+      // Draw the video frame onto the canvas
+      const ctx = canvasElement.getContext("2d");
+      ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
+
+      // Get the data URL of the canvas content (base64 encoded image)
+      const dataURL = canvasElement.toDataURL("image/png");
+
+      // Convert the dataURL to an image File
+      const fetchImage = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new File([blob], log_num + ".png", { type: "image/png" });
+      };
+
+      // Set the screenshot in the data property to display it on the page
+      this.screenshot = dataURL;
+
+      fetchImage(dataURL).then((imageFile) => {
+        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: log_num });
+      });
     },
   },
   components: {
@@ -53,6 +100,7 @@ export default {
     SidebarNav,
   },
   async mounted() {
+    await this.initWebcam();
     await this.getMachineStatus();
     this.myTimer = setInterval(async () => {
       await this.getMachineStatus(); // 매 초마다 새 데이터를 가져옵니다.
@@ -67,6 +115,8 @@ export default {
         // addedLogs가 비어있지 않으면, 새로운 로그가 추가되었음을 의미합니다.
         if (addedLogs.length > 0) {
           const plainAddedLogs = addedLogs.map((log) => ({ ...log }));
+          // 이미지전송
+          this.takeScreenshot(plainAddedLogs[0].log_num);
           // 새로운 로그에 대해 원하는 동작을 수행합니다.
           this.changeImg(plainAddedLogs[0].machine_id);
           alert(
@@ -140,5 +190,9 @@ export default {
 .adminSubContainer {
   flex-direction: column;
   width: 100%;
+}
+
+.VideoContainer {
+  width: 450px;
 }
 </style>
