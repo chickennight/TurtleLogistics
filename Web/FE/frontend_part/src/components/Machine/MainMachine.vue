@@ -66,7 +66,7 @@
     </div>
 
     <div class="log-image">
-      <img :src="selectedImg" alt="Selected Machine Image" />
+      <img :src="image" alt="Selected Machine Image" />
     </div>
 
     <template #footer>
@@ -134,7 +134,12 @@ export default {
 
       await this.$store.dispatch("machine/getMachineLog");
     },
-    showLogDetails(log) {
+    async showLogDetails(log) {
+      try {
+        await this.$store.dispatch("admin/getImage", log.log_num);
+      } catch (error) {
+        console.error(error);
+      }
       this.selectedLog = log;
       this.isModalOpen = true;
     },
@@ -146,6 +151,7 @@ export default {
     ...mapState("machine", ["machineLog"]),
     ...mapState(["currentTime"]),
     ...mapState(["errorImg"]),
+    ...mapState("admin", ["image"]),
   },
   mounted() {
     this.updateParentHeight();
