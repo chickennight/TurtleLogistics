@@ -33,21 +33,61 @@
             <td>{{ item.error_date }}</td>
             <td>{{ item.error_message }}</td>
             <td>{{ item.machine_id }}</td>
-            <td><button>상세보기</button></td>
+            <td><button @click.stop="showLogDetails(item)">상세보기</button></td>
           </tr>
         </tbody>
       </v-table>
     </div>
   </div>
+  <LogModal :isOpen="isModalOpen" @close="closeModal">
+    <template #header>
+      <h3>상세 정보</h3>
+    </template>
+
+    <div class="log-details">
+      <table>
+        <tr>
+          <th>로그번호</th>
+          <td>{{ selectedLog.log_num }}</td>
+        </tr>
+        <tr>
+          <th>날짜</th>
+          <td>{{ selectedLog.error_date }}</td>
+        </tr>
+        <tr>
+          <th>로그명</th>
+          <td>{{ selectedLog.error_message }}</td>
+        </tr>
+        <tr>
+          <th>기계</th>
+          <td>{{ selectedLog.machine_id }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="log-image">
+      <img :src="selectedImg" alt="Selected Machine Image" />
+    </div>
+
+    <template #footer>
+      <button @click="closeModal">닫기</button>
+    </template>
+  </LogModal>
 </template>
 
 <script>
+import LogModal from "../Modals/LogModal.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "MainMachine",
+  components: {
+    LogModal,
+  },
   data: () => ({
     imgURL: "",
+    isModalOpen: false,
+    selectedLog: null,
   }),
   methods: {
     getMachineOff() {
@@ -93,6 +133,13 @@ export default {
       this.$store.state.errorImg = "/Error_BluePrint/BluePrint_0000.png";
 
       await this.$store.dispatch("machine/getMachineLog");
+    },
+    showLogDetails(log) {
+      this.selectedLog = log;
+      this.isModalOpen = true;
+    },
+    closeModal() {
+      this.isModalOpen = false;
     },
   },
   computed: {
