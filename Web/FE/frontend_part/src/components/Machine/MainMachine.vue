@@ -61,8 +61,8 @@ export default {
       // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
       this.$emit("childContentHeightChanged", container);
     },
-    changeImg() {
-      this.imgURL = this.$store.state.errorImg;
+    changeImg(machine_id) {
+      this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.png`;
       this.updateParentHeight();
     },
     async getMachineLog() {
@@ -90,7 +90,7 @@ export default {
       let currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
 
       this.$store.state.currentTime = currentTime;
-      this.$store.state.errorImg = "/Error_BluePrint/error_nukki.png";
+      this.$store.state.errorImg = "/Error_BluePrint/BluePrint_0000.png";
 
       await this.$store.dispatch("machine/getMachineLog");
     },
@@ -141,9 +141,14 @@ export default {
 }
 .MachineImgContainer {
   text-align: center;
+  margin: 30px;
 }
 .machineImg {
   width: 1000px;
   height: auto;
+}
+.v-table {
+  overflow-y: auto;
+  scrollbar-width: 0px;
 }
 </style>

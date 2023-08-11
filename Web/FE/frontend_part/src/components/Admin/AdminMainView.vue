@@ -3,7 +3,7 @@
     <div id="LowerContainer">
       <sample-CCTV class="BlueprintContainer" @click="moveCCTV" />
       <div class="LogTableContainer" @click="moveMachine">
-        <img class="machineImg" src="/Error_BluePrint/test_machine.png" />
+        <img class="machineImg" src="/Error_BluePrint/BluePrint_0000.png" />
       </div>
     </div>
     <div id="UpperContainer">
