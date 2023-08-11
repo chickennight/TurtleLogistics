@@ -5,7 +5,7 @@
       <header-nav></header-nav>
       <router-view @childContentHeightChanged="updateAppHeight" />
     </div>
-    <video class="VideoContainer" ref="videoElement" hidden></video>
+    <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
     <canvas ref="canvasElement" hidden></canvas>
   </div>
 </template>
@@ -47,6 +47,18 @@ export default {
     },
     async initWebcam() {
       try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const notebookCamera = devices.find(
+          (device) => device.kind === "videoinput" && device.label.includes("Web Camera")
+        );
+        if (notebookCamera) {
+          const notebookStream = await navigator.mediaDevices.getUserMedia({
+            video: { deviceId: notebookCamera.deviceId },
+          });
+          notebookStream; // 노트북 카메라 비디오 요소
+        } else {
+          console.error("Notebook camera not found.");
+        }
         const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
         this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
       } catch (error) {
@@ -79,7 +91,7 @@ export default {
       this.screenshot = dataURL;
 
       fetchImage(dataURL).then((imageFile) => {
-        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: 2 });
+        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: log_num });
       });
     },
   },
@@ -88,7 +100,7 @@ export default {
     SidebarNav,
   },
   async mounted() {
-    this.initWebcam();
+    await this.initWebcam();
     await this.getMachineStatus();
     this.myTimer = setInterval(async () => {
       await this.getMachineStatus(); // 매 초마다 새 데이터를 가져옵니다.
