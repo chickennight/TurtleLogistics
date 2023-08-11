@@ -123,7 +123,7 @@ export default {
   text-align: center;
 }
 .AdminRegistForm * {
-  background-color: rgb(53, 53, 53);
+  background-color: rgb(39, 40, 41);
 }
 .MainTurtle {
   height: 150px;
