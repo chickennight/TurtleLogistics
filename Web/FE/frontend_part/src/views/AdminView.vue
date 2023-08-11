@@ -5,7 +5,7 @@
       <header-nav></header-nav>
       <router-view @childContentHeightChanged="updateAppHeight" />
     </div>
-    <video class="VideoContainer" ref="notebookVideo" hidden autoplay></video>
+    <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
     <canvas ref="canvasElement" hidden></canvas>
   </div>
 </template>
@@ -51,24 +51,22 @@ export default {
         const notebookCamera = devices.find(
           (device) => device.kind === "videoinput" && device.label.includes("Web Camera")
         );
-        console.log(devices);
-        console.log(notebookCamera);
         if (notebookCamera) {
           const notebookStream = await navigator.mediaDevices.getUserMedia({
             video: { deviceId: notebookCamera.deviceId },
           });
-          this.$refs.notebookVideo.srcObject = notebookStream; // 노트북 카메라 비디오 요소
+          notebookStream; // 노트북 카메라 비디오 요소
         } else {
           console.error("Notebook camera not found.");
         }
-        // const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
-        // this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
+        const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
     },
     takeScreenshot(log_num) {
-      const videoElement = this.$refs.notebookVideo;
+      const videoElement = this.$refs.videoElement;
       const canvasElement = this.$refs.canvasElement;
 
       // Set canvas dimensions to match the video dimensions
