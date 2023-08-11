@@ -19,14 +19,14 @@ export default {
   data: () => ({
     appHeight: 900,
     previousMachineLog: [],
-    errorImg: "/Error_BluePrint/error_nukki.png",
+    errorImg: "/Error_BluePrint/BluePrint_0000.png",
     myTimer: null,
   }),
   methods: {
     updateAppHeight(childContentHeight) {
       // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
       if (childContentHeight > 800) {
-        this.appHeight = childContentHeight + 300;
+        this.appHeight = childContentHeight + 200;
       } else {
         this.appHeight = 1200;
       }
