@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `error_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `error_message` VARCHAR(255) NULL DEFAULT NULL,
   `machine_id` INT NOT NULL,
+  `recorded` TINYINT NULL DEFAULT '0',
   PRIMARY KEY (`log_num`),
   INDEX `machine_key_idx` (`machine_id` ASC),
   CONSTRAINT `machine_key`
