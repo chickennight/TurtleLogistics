@@ -29,7 +29,7 @@ public class MachineService {
     }
 
     public List<Log> findLogAll() {
-        return logRepository.findAll();
+        return logRepository.findAllByOrderByErrorDateDesc();
     }
 
     public void addLog(Log log) {
@@ -46,8 +46,19 @@ public class MachineService {
 
     public List<Log> lastBrokenLogs(List<Integer> brokenList) {
         List<Log> lastBrokenLogList = new ArrayList<>();
-        for (Integer n : brokenList)
-            lastBrokenLogList.add(logRepository.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
+        for (Integer machineId : brokenList) {
+            Optional<Log> latestBrokenLogOp = logRepository.findFirstByMachine_MachineIdOrderByErrorDateDesc(machineId);
+
+            if (latestBrokenLogOp.isPresent()) {
+                Log latestBrokenLog = latestBrokenLogOp.get();
+                lastBrokenLogList.add(latestBrokenLog);
+
+                if (!latestBrokenLog.getRecorded()) {
+                    latestBrokenLog.updateRecorded();
+                    logRepository.save(latestBrokenLog);
+                }
+            }
+        }
         return lastBrokenLogList;
     }
 
@@ -63,8 +74,8 @@ public class MachineService {
 
     public Machine findMachine(Integer machineId) throws DataNotFountException {
         Optional<Machine> machine = machineRepository.findByMachineId(machineId);
-        if(machine.isPresent())
-        return machine.get();
+        if (machine.isPresent())
+            return machine.get();
         else throw new DataNotFountException("기계 조회 실패");
     }
 }
