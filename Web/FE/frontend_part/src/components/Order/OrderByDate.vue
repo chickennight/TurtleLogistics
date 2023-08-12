@@ -101,8 +101,6 @@ export default {
     renderCount: 0,
   }),
   async mounted() {
-    this.updateParentHeight();
-
     const offset = new Date().getTimezoneOffset() * 60000;
     const today = new Date(Date.now() - offset);
     const end_day = today.toISOString();
@@ -127,10 +125,6 @@ export default {
     }
 
     this.renderCount += 1;
-  },
-  beforeUnmount() {
-    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
-    window.removeEventListener("resize", this.updateParentHeight);
   },
   computed: {
     ...mapState("order", ["orderData"]),
@@ -298,11 +292,6 @@ export default {
 
         this.renderCount += 1;
       }, 10);
-    },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
     },
   },
 };

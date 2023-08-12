@@ -96,14 +96,8 @@ export default {
     getMachineOn() {
       this.$store.dispatch("machine/machineOn");
     },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
-    },
     changeImg(machine_id) {
       this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.png`;
-      this.updateParentHeight();
     },
     async getMachineLog() {
       let today = new Date();
@@ -154,13 +148,10 @@ export default {
     ...mapState("admin", ["image"]),
   },
   mounted() {
-    this.updateParentHeight();
     this.getMachineLog();
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
-    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
-    window.removeEventListener("resize", this.updateParentHeight);
   },
 };
 </script>
