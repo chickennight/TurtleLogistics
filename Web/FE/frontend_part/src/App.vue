@@ -29,7 +29,7 @@ export default {
   font-family: "GmarketSansTTFMedium";
   text-decoration: none;
 
-  color: white;
+  color: rgb(210, 210, 210);
   /* color: black; */
 }
 

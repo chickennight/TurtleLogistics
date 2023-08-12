@@ -7,15 +7,41 @@
       </div>
     </div>
     <div id="UpperContainer">
-      <sample-graph class="GraphContainer" />
-      <div class="ProductStatusContainer">
-        <v-table density="compact" theme="dark">
+      <sample-graph class="GraphContainer" @click="moveGraph" />
+      <div class="ProductStatusContainer" @click="moveProduct">
+        <v-table density="compact" theme="dark" class="main_table">
           <thead>
             <tr>
-              <th class="text-left" rowspan="2">번호</th>
-              <th class="text-left" rowspan="2">상품명</th>
-              <th class="text-left" rowspan="2">재고</th>
-              <th class="text-left" rowspan="2">이상</th>
+              <th rowspan="2" style="text-align: center" @click="sortTable('product_num', $event)">
+                번호
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
+              <th rowspan="2" style="text-align: center">상품명</th>
+
+              <th rowspan="2" style="text-align: center" @click="sortTable('stock', $event)">
+                재고
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
+              <th
+                rowspan="2"
+                style="text-align: center"
+                @click="sortTable('error_message', $event)"
+              >
+                이상
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -60,6 +86,12 @@ export default {
     // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
     window.removeEventListener("resize", this.updateParentHeight);
   },
+  data() {
+    return {
+      sortBy: null, // 현재 정렬 기준
+      sortOrder: true, // 정렬 순서 (true: 오름차순, false: 내림차순)
+    };
+  },
   methods: {
     getMachineStatus() {
       this.$store.dispatch("machine/getMachineStatus");
@@ -72,28 +104,65 @@ export default {
     getlogisticAnalysis() {
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
-    sortedLogisticAnalysis() {
-      // Sort the array in such a way that items with 'error_message' are on top
-      return this.logisticAnalysis.sort((a, b) => {
-        if (a.error_message !== "" && b.error_message === "") {
-          return -1; // 'a' has an error_message and should come before 'b'
-        } else if (a.error_message === "" && b.error_message !== "") {
-          return 1; // 'b' has an error_message and should come before 'a'
-        } else {
-          return 0; // Maintain the current order if both have an error_message or none
-        }
-      });
-    },
+    // sortedLogisticAnalysis() {
+    //   // Sort the array in such a way that items with 'error_message' are on top
+    //   return this.logisticAnalysis.sort((a, b) => {
+    //     if (a.error_message !== "" && b.error_message === "") {
+    //       return -1; // 'a' has an error_message and should come before 'b'
+    //     } else if (a.error_message === "" && b.error_message !== "") {
+    //       return 1; // 'b' has an error_message and should come before 'a'
+    //     } else {
+    //       return 0; // Maintain the current order if both have an error_message or none
+    //     }
+    //   });
+    // },
     moveCCTV() {
       this.$router.push({ name: "MainCctv" });
     },
     moveMachine() {
       this.$router.push({ name: "MainMachine" });
     },
+    moveGraph() {
+      this.$router.push({ name: "OrderByDate" });
+    },
+    moveProduct() {
+      this.$router.push({ name: "MainLogistics" });
+    },
+    //테이블 정렬 기능
+    sortTable(column) {
+      event.stopPropagation(); // 이벤트 전파 중지
+      // 선택된 칼럼이 현재 정렬 기준과 동일한 경우, 정렬 순서만 변경
+      if (this.sortBy === column) {
+        this.sortOrder = !this.sortOrder;
+      } else {
+        // 다른 칼럼을 선택한 경우, 해당 칼럼으로 정렬 기준을 변경하고 오름차순으로 초기화
+        this.sortBy = column;
+        this.sortOrder = true;
+      }
+    },
+    sortedLogisticAnalysis() {
+      return this.logisticAnalysis.sort((a, b) => {
+        let result = 0;
+
+        if (this.sortBy === "stock") {
+          result = a.stock - b.stock;
+        } else if (this.sortBy === "error_message") {
+          result = a.error_message.localeCompare(b.error_message);
+        } else if (this.sortBy === "product_num") {
+          result = a.product_num - b.product_num;
+        }
+
+        return this.sortOrder ? result : -result;
+      });
+    },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
     ...mapState("admin", ["logisticAnalysis"]),
+    sortIcon() {
+      if (!this.sortBy) return "";
+      return this.sortOrder ? "▲" : "▼"; // ▲: 오름차순, ▼: 내림차순
+    },
   },
 };
 </script>
@@ -135,6 +204,7 @@ export default {
 .BlueprintContainer:hover,
 .GraphContainer:hover {
   background-color: rgb(62, 62, 62);
+  transform: translateY(-5px);
 }
 .ProductStatusContainer::-webkit-scrollbar {
   display: none;
@@ -147,6 +217,7 @@ export default {
   margin-left: 30px;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+  overflow: hidden; /* 스크롤 숨기기 */
 }
 .BlueprintContainer {
   box-shadow: 0px 0px 6px -1px black;
@@ -161,5 +232,17 @@ export default {
   margin-top: 2%;
   width: 100%;
   height: 95%;
+  border-radius: 8px;
+  object-fit: cover; /* 이미지 비율 유지하면서 컨테이너 안에 맞춤 */
+}
+
+.main_table th,
+.main_table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.icon-padding-left {
+  margin-left: 5px;
 }
 </style>
