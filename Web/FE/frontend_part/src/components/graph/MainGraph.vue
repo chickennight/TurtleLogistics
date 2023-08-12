@@ -96,7 +96,6 @@ export default {
   mounted() {
     this.myTimer = setInterval(this.get_order_nows, 5000);
     this.chart_update();
-    this.updateParentHeight();
   },
   watch: {
     // orderNowcalculate 데이터의 변화를 감시
@@ -112,7 +111,6 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
-    window.removeEventListener("resize", this.updateParentHeight);
   },
   computed: {
     ...mapState("order", ["orderNowList"]),
@@ -125,11 +123,6 @@ export default {
     chart_update() {
       this.chartData.datasets[0].data = this.orderNowcalculate;
       this.renderCount += 1;
-    },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
     },
   },
 };
