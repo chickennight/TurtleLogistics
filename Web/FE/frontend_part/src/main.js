@@ -8,9 +8,9 @@ import router from "./router";
 // font-awesome과 관련된 import를 정의
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faUserSecret, faSort } from "@fortawesome/free-solid-svg-icons";
+import { faUserSecret, faSort, fas } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faUserSecret, faSort);
+library.add(faUserSecret, faSort, fas);
 
 loadFonts();
 
