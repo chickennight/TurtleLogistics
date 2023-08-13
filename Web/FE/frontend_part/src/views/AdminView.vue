@@ -8,6 +8,12 @@
     <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
     <canvas ref="canvasElement" hidden></canvas>
   </div>
+  <error-modal
+    :isVisible="isModalVisible"
+    :title="modalTitle"
+    :message="modalMessage"
+    @close="isModalVisible = false"
+  />
 </template>
 
 <script>
@@ -15,6 +21,7 @@ import HeaderNav from "@/components/common/HeaderNav.vue";
 import SidebarNav from "@/components/common/SidebarNav.vue";
 // import AdminMainView from "@/components/Admin/AdminMainView.vue";
 import { mapState } from "vuex";
+import ErrorModal from "@/components/Modals/ErrorModal.vue";
 
 export default {
   name: "AdminView",
@@ -24,6 +31,9 @@ export default {
     errorImg: "/Error_BluePrint/BluePrint_0000.png",
     myTimer: null,
     screenshot: null,
+    isModalVisible: false,
+    modalTitle: "Alert",
+    modalMessage: "",
   }),
   methods: {
     // updateAppHeight(childContentHeight) {
@@ -98,6 +108,7 @@ export default {
   components: {
     HeaderNav,
     SidebarNav,
+    ErrorModal,
   },
   async mounted() {
     await this.initWebcam();
@@ -119,9 +130,12 @@ export default {
           this.takeScreenshot(plainAddedLogs[0].log_num);
           // 새로운 로그에 대해 원하는 동작을 수행합니다.
           this.changeImg(plainAddedLogs[0].machine_id);
-          alert(
-            `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. 확인 후 메뉴얼에 따라 조치해주시기 바랍니다`
-          );
+          this.modalTitle = "Warning";
+          this.modalMessage = `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. <br>확인 후 메뉴얼에 따라 조치해주시기 바랍니다.`;
+          this.isModalVisible = true;
+          // alert(
+          //   `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. 확인 후 메뉴얼에 따라 조치해주시기 바랍니다`
+          // );
 
           switch (plainAddedLogs[0].machine_id) {
             case 1000:

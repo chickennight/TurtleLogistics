@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-overlay" @click="close">
     <div class="modal" @click.stop>
       <slot></slot>
-      <button @click="close">확인</button>
+      <button class="modal-close-button" @click="close">확인</button>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   align-items: center;
 }
 .modal {
-  background: rgb(20, 20, 20);
+  background: rgb(39, 40, 41);
   padding: 20px;
   border-radius: 8px;
   display: flex;
@@ -48,7 +48,7 @@ export default {
 }
 
 .modal-content {
-  background: black;
+  background: rgb(39, 40, 41);
   padding: 20px;
   border-radius: 8px;
   display: flex;
@@ -57,6 +57,19 @@ export default {
 }
 
 .modal-close-button {
-  margin-top: 10px;
+  background-color: rgb(55, 55, 55);
+  border: none;
+  color: #d2d2d2;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background-color: rgba(85, 85, 85, 0.7);
 }
 </style>

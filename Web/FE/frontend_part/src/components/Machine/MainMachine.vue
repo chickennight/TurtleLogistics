@@ -50,10 +50,6 @@
     </div>
   </div>
   <LogModal :isOpen="isModalOpen" @close="closeModal">
-    <template #header>
-      <h3>상세 정보</h3>
-    </template>
-
     <div class="log-details">
       <table>
         <tr>
@@ -70,14 +66,9 @@
         </tr>
       </table>
     </div>
-
     <div class="log-image">
       <img :src="image" alt="Selected Machine Image" />
     </div>
-
-    <template #footer>
-      <button @click="closeModal" class="modalButton">닫기</button>
-    </template>
   </LogModal>
 </template>
 
