@@ -169,7 +169,7 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   align-self: flex-end;
-  top: 30%;
+  top: 10%;
 }
 .SideMenu {
   padding: 5px;

@@ -1,29 +1,78 @@
 <template>
   <div class="LogisticContainer">
     <div class="LogisticsHeader">
-      <h1>물류현황</h1>
+      <h1>물류 현황</h1>
       <h1>{{ this.currentTime }}</h1>
     </div>
     <div class="ProductStatusContainer">
-      <v-table density="compact" theme="dark">
+      <v-table density="compact" theme="dark" class="main_table">
         <thead>
           <tr>
-            <th class="text-left" rowspan="2">상품번호</th>
-            <th class="text-left" rowspan="2">상품명</th>
-            <th class="text-left" rowspan="2">상품재고</th>
-            <th class="text-center" colspan="4">주문량</th>
-            <th class="text-left" rowspan="2">이상 발생</th>
+            <th style="text-align: center" rowspan="2" @click="sortTable('product_num', $event)">
+              상품번호
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
+            <th style="text-align: center" rowspan="2">상품명</th>
+            <th style="text-align: center" rowspan="2" @click="sortTable('stock', $event)">
+              상품재고
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
+            <th style="text-align: center" colspan="4">주문량</th>
+            <th style="text-align: center" rowspan="2" @click="sortTable('error_message', $event)">
+              이상 발생
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
           </tr>
           <tr>
-            <th class="text-left">연평균</th>
-            <th class="text-left">월평균</th>
-            <th class="text-left">주평균</th>
-            <th class="text-left">금일</th>
+            <th style="text-align: center" @click="sortTable('year', $event)">
+              연평균
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
+            <th style="text-align: center" @click="sortTable('month', $event)">
+              월평균
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
+            <th style="text-align: center" @click="sortTable('week', $event)">
+              주평균
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
+            <th style="text-align: center" @click="sortTable('today', $event)">
+              금일
+              <font-awesome-icon
+                :icon="['fas', 'sort']"
+                style="color: #666a70"
+                class="icon-padding-left"
+              />
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="item in logisticAnalysis"
+            v-for="item in sortedLogisticAnalysis()"
             :key="item.product_num"
             :class="{ 'red-text': item.error_message !== `` }"
           >
@@ -51,6 +100,8 @@ export default {
     return {
       myTimer: null,
       currentTime: "",
+      sortBy: null, // 현재 정렬 기준
+      sortOrder: true, // 정렬 순서 (true: 오름차순, false: 내림차순)
     };
   },
   computed: {
@@ -90,6 +141,40 @@ export default {
 
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
+    //테이블 정렬 기능
+    sortTable(column) {
+      // 선택된 칼럼이 현재 정렬 기준과 동일한 경우, 정렬 순서만 변경
+      if (this.sortBy === column) {
+        this.sortOrder = !this.sortOrder;
+      } else {
+        // 다른 칼럼을 선택한 경우, 해당 칼럼으로 정렬 기준을 변경하고 오름차순으로 초기화
+        this.sortBy = column;
+        this.sortOrder = true;
+      }
+    },
+    sortedLogisticAnalysis() {
+      return this.logisticAnalysis.sort((a, b) => {
+        let result = 0;
+
+        if (this.sortBy === "stock") {
+          result = a.stock - b.stock;
+        } else if (this.sortBy === "error_message") {
+          result = a.error_message.localeCompare(b.error_message);
+        } else if (this.sortBy === "product_num") {
+          result = a.product_num - b.product_num;
+        } else if (this.sortBy === "year") {
+          result = a.year - b.year;
+        } else if (this.sortBy === "month") {
+          result = a.month - b.month;
+        } else if (this.sortBy === "week") {
+          result = a.week - b.week;
+        } else if (this.sortBy === "today") {
+          result = a.today - b.today;
+        }
+
+        return this.sortOrder ? result : -result;
+      });
+    },
   },
 };
 </script>
@@ -102,7 +187,7 @@ export default {
   margin: 20px;
 }
 .red-text td {
-  color: red;
+  color: rgb(250, 100, 130);
 }
 .LogisticsHeader {
   margin: 20px;
@@ -113,5 +198,14 @@ export default {
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+}
+.main_table th,
+.main_table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.icon-padding-left {
+  margin-left: 5px;
 }
 </style>
