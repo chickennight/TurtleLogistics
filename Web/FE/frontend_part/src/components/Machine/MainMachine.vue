@@ -3,28 +3,38 @@
     <div class="MachineContainer">
       <h1>기기제어</h1>
       <span class="MachineSpan">
-        <h2>{{ this.currentTime }}</h2>
+        <!-- <h1>{{ this.currentTime }}</h1> -->
         &nbsp;&nbsp;&nbsp;
-        <v-btn @click="getMachineOff" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="getMachineOff"
+          background-color="rgb(53, 53, 53)"
+          variant="outlined"
+          class="offButton"
+        >
           전원 종료
         </v-btn>
-        <v-btn @click="getMachineOn" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="getMachineOn"
+          background-color="rgb(53, 53, 53)"
+          variant="outlined"
+          class="onButton"
+        >
           전원 시작
         </v-btn>
       </span>
     </div>
+    <div class="MachineImgContainer">
+      <img class="machineImg" :src="errorImg" alt="image" />
+    </div>
     <div class="LogTableContainer">
-      <div class="MachineImgContainer">
-        <img class="machineImg" :src="errorImg" alt="image" />
-      </div>
-      <v-table density="compact" theme="dark">
+      <v-table density="compact" theme="dark" class="main_table">
         <thead>
           <tr>
-            <th class="text-left">번호</th>
-            <th class="text-left">날짜</th>
-            <th class="text-left">로그명</th>
-            <th class="text-left">기계</th>
-            <th class="text-left"></th>
+            <th style="text-align: center">번호</th>
+            <th style="text-align: center">날짜</th>
+            <th style="text-align: center">로그명</th>
+            <th style="text-align: center">기계</th>
+            <th style="text-align: center"></th>
           </tr>
         </thead>
         <tbody>
@@ -184,15 +194,22 @@ export default {
   display: flex;
 }
 .MachineImgContainer {
+  background-color: rgb(55, 55, 55);
   text-align: center;
-  margin: 30px;
+  margin: 1%;
 }
 .machineImg {
-  width: 1000px;
+  width: 60%;
   height: auto;
 }
-.v-table {
+.main_table th,
+.main_table td {
   overflow-y: auto;
   scrollbar-width: 0px;
+  text-align: center;
+  vertical-align: middle;
+}
+.offButton {
+  margin-right: 5%;
 }
 </style>
