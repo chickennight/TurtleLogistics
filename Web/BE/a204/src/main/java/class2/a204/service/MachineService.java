@@ -46,8 +46,13 @@ public class MachineService {
 
     public List<Log> lastBrokenLogs(List<Integer> brokenList) {
         List<Log> lastBrokenLogList = new ArrayList<>();
-        for (Integer n : brokenList)
-            lastBrokenLogList.add(logRepository.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
+        for (Integer n : brokenList) {
+            List<Log> logs = logRepository.findAllByMachine_MachineIdOrderByErrorDateDesc(n);
+            if (!logs.isEmpty()) {
+                lastBrokenLogList.add(logs.get(0));
+            }
+        }
+
         return lastBrokenLogList;
     }
 
