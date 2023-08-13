@@ -3,13 +3,13 @@
     <h1>공정현황</h1>
   </div>
   <div class="LogTableContainer">
-    <v-table density="compact" theme="dark">
+    <v-table density="compact" theme="dark" class="main_table">
       <thead>
         <tr>
-          <th class="text-left">로그번호</th>
-          <th class="text-left">로그 발생 날짜</th>
-          <th class="text-left">메세지</th>
-          <th class="text-left">기계번호</th>
+          <th style="text-align: center">로그번호</th>
+          <th style="text-align: center">로그 발생 날짜</th>
+          <th style="text-align: center">메세지</th>
+          <th style="text-align: center">기계번호</th>
           <th></th>
         </tr>
       </thead>
@@ -25,12 +25,12 @@
     </v-table>
   </div>
   <div class="LogTableContainer">
-    <v-table density="compact" theme="dark">
+    <v-table density="compact" theme="dark" class="main_table">
       <thead>
         <tr>
-          <th class="text-left">기계번호</th>
-          <th class="text-left">기계</th>
-          <th class="text-left">고장유무</th>
+          <th style="text-align: center">기계번호</th>
+          <th style="text-align: center">기계</th>
+          <th style="text-align: center">고장유무</th>
         </tr>
       </thead>
       <tbody>
@@ -87,5 +87,11 @@ export default {
 }
 .red-text td {
   color: red;
+}
+
+.main_table th,
+.main_table td {
+  text-align: center;
+  vertical-align: middle;
 }
 </style>
