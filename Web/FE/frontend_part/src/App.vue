@@ -34,7 +34,8 @@ export default {
 }
 
 #app {
-  min-height: 100%;
+  height: 100%;
+  width: 100%;
   background-color: rgb(39, 40, 41);
   /* background-color: rgb(255, 255, 255); */
 }
@@ -43,6 +44,8 @@ body,
 html {
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
   background-color: rgb(39, 40, 41);
 }
 </style>
