@@ -147,10 +147,6 @@ export default {
   computed: {
     ...mapState("machine", ["machineStatus"]),
     ...mapState("admin", ["logisticAnalysis"]),
-    sortIcon() {
-      if (!this.sortBy) return "";
-      return this.sortOrder ? "▲" : "▼"; // ▲: 오름차순, ▼: 내림차순
-    },
   },
 };
 </script>
@@ -159,10 +155,12 @@ export default {
 .SampleContainer {
   display: flex;
   flex-direction: column;
+  height: 100%; /* 컨테이너를 부모 높이에 맞추기 위해 추가 */
 }
 #UpperContainer {
   height: 450px;
   margin: 20px;
+  padding-bottom: 3%;
   display: flex;
 }
 #LowerContainer {
