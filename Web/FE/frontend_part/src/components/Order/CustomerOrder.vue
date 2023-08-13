@@ -137,9 +137,7 @@ export default {
   margin: auto;
   display: block;
 }
-.test * {
-  background-color: red !important;
-}
+
 v-overlay-container * {
   background-color: black;
 }
