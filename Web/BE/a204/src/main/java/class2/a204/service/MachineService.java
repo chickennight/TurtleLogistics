@@ -80,4 +80,8 @@ public class MachineService {
             return machine.get();
         else throw new DataNotFountException("기계 조회 실패");
     }
+
+    public int getLogCnt(int machine_id) {
+        return logRepository.countByMachineId(machine_id);
+    }
 }
