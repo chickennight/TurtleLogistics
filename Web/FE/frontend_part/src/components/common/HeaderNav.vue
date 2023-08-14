@@ -1,5 +1,6 @@
 <template>
   <div id="header">
+    <header-clock />
     <div class="AdminProfile" v-if="isAdmin">
       관리자님 환영합니다 &nbsp; | &nbsp;
       <span @click="adminLogout">로그아웃</span>
@@ -12,8 +13,13 @@
 </template>
 
 <script>
+import HeaderClock from "./HeaderClock.vue";
+
 export default {
   name: "HeaderNav",
+  components: {
+    HeaderClock,
+  },
   data() {
     return {
       isAdmin: this.checkAdmin(),
@@ -47,7 +53,6 @@ export default {
   justify-content: flex-end;
   align-items: center;
 }
-
 .AdminProfile,
 .UserProfile {
   width: 350px;
@@ -55,5 +60,8 @@ export default {
   margin-top: 20px;
   text-align: right;
   font-size: 19px;
+}
+span:hover {
+  cursor: pointer;
 }
 </style>

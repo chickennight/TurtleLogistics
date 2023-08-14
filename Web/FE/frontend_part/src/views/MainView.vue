@@ -1,7 +1,7 @@
 <template>
   <div id="MainContainer">
     <div id="MainLogo">
-      <img class="MainTurtle" :src="mainSrc" @click="EasterEgg" />
+      <img class="MainTurtle" :src="mainSrc" />
       TL <br />
       TURTLE LOGISTICS
     </div>
@@ -22,15 +22,7 @@ export default {
   data: () => ({
     mainSrc: "./MainTurtle.png",
   }),
-  methods: {
-    EasterEgg() {
-      if (this.mainSrc == "./MainTurtle.png") {
-        this.mainSrc = "./Turtle_Easter.png";
-      } else {
-        this.mainSrc = "./MainTurtle.png";
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 
