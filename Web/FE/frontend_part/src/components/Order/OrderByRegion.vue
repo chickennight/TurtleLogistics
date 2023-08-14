@@ -175,33 +175,33 @@
         </g>
       </svg>
     </div>
-  </div>
-  <div class="RegionString">
-    <h3>{{ this.currentRegion }} 지역</h3>
-  </div>
-  <div class="RegionTable">
-    <v-table density="compact" theme="dark">
-      <thead>
-        <tr>
-          <th class="text-left">주문 접수</th>
-          <th class="text-left">포장 과정</th>
-          <th class="text-left">분류 과정</th>
-          <th class="text-left">분류 완료</th>
-          <th class="text-left">배송 과정</th>
-          <th class="text-left">이상 발생</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ this.orderRegion[`주문 접수`] }}</td>
-          <td>{{ this.orderRegion[`포장 과정`] }}</td>
-          <td>{{ this.orderRegion[`분류 과정`] }}</td>
-          <td>{{ this.orderRegion[`분류 완료`] }}</td>
-          <td>{{ this.orderRegion[`배송 과정`] }}</td>
-          <td>{{ this.orderRegion[`이상 발생`] }}</td>
-        </tr>
-      </tbody>
-    </v-table>
+    <div class="RegionString">
+      <h3>{{ this.currentRegion }} 지역</h3>
+    </div>
+    <div class="RegionTable">
+      <v-table density="compact" theme="dark" class="main_table">
+        <thead>
+          <tr>
+            <th style="text-align: center">주문 접수</th>
+            <th style="text-align: center">포장 과정</th>
+            <th style="text-align: center">분류 과정</th>
+            <th style="text-align: center">분류 완료</th>
+            <th style="text-align: center">배송 과정</th>
+            <th style="text-align: center">이상 발생</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ this.orderRegion[`주문 접수`] }}</td>
+            <td>{{ this.orderRegion[`포장 과정`] }}</td>
+            <td>{{ this.orderRegion[`분류 과정`] }}</td>
+            <td>{{ this.orderRegion[`분류 완료`] }}</td>
+            <td>{{ this.orderRegion[`배송 과정`] }}</td>
+            <td>{{ this.orderRegion[`이상 발생`] }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
   </div>
 </template>
 
@@ -259,6 +259,7 @@ path:hover > .TEXT {
   visibility: visible;
 }
 .regionContainer {
+  height: 100%;
   margin: 20px;
 }
 .map-container {
@@ -266,9 +267,10 @@ path:hover > .TEXT {
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+  align-items: center;
 }
 .regionImg {
-  margin-top: 2%;
+  margin-top: 20px;
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
@@ -288,10 +290,17 @@ path:hover > .TEXT {
 
 .RegionString {
   width: 100%;
-  padding: 20px;
+  margin: 20px 0px 20px 0px;
 }
 .RegionTable {
-  padding: 0 20px 20px 20px;
+  box-shadow: 0px 0px 6px -1px black;
   width: 100%;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+.main_table th,
+.main_table td {
+  text-align: center;
+  vertical-align: middle;
 }
 </style>

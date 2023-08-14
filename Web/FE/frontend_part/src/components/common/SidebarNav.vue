@@ -5,103 +5,175 @@
         <img class="SubTurtle" :src="subSrc" @click="EasterEgg" />
       </div>
       <div id="MainTL">
-        <router-link to="/">
+        <router-link to="/admin" @click.stop="selectMenu('AdminMainView')">
           TL <br />
           Turtle Logistics
         </router-link>
       </div>
     </div>
     <div class="SideMenuBar">
-      <router-link :to="{ name: 'AdminMainView' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'AdminMainView' }"
+        class="SideMenu"
+        @click.stop="selectMenu('AdminMainView')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'AdminMainView' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'house-chimney']"
-              style="color: #d2d2d2"
+              :style="
+                selectedMenu === 'AdminMainView' ? { color: '#e64878' } : { color: '#d2d2d2' }
+              "
               class="icon-padding-right"
             />
             메인화면
           </div>
         </v-btn>
       </router-link>
-      <router-link :to="{ name: 'OrderByDate' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'OrderByDate' }"
+        class="SideMenu"
+        @click.stop="selectMenu('OrderByDate')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'OrderByDate' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'calendar-check']"
-              style="color: #d2d2d2"
+              :style="selectedMenu === 'OrderByDate' ? { color: '#e64878' } : { color: '#d2d2d2' }"
               class="icon-padding-right"
             />
             기간주문내역
           </div>
         </v-btn>
       </router-link>
-      <router-link :to="{ name: 'OrderByRegion' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'OrderByRegion' }"
+        class="SideMenu"
+        @click.stop="selectMenu('OrderByRegion')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'OrderByRegion' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'map-location-dot']"
-              style="color: #d2d2d2"
+              :style="
+                selectedMenu === 'OrderByRegion' ? { color: '#e64878' } : { color: '#d2d2d2' }
+              "
               class="icon-padding-right"
             />
             지역주문내역
           </div></v-btn
         >
       </router-link>
-      <router-link :to="{ name: 'MainGraph' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link :to="{ name: 'MainGraph' }" class="SideMenu" @click="selectMenu('MainGraph')">
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'MainGraph' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'clipboard']"
-              style="color: #d2d2d2"
+              :style="selectedMenu === 'MainGraph' ? { color: '#e64878' } : { color: '#d2d2d2' }"
               class="icon-padding-right"
             />
             주문현황
           </div></v-btn
         >
       </router-link>
-      <router-link :to="{ name: 'MainBluePrint' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'MainBluePrint' }"
+        class="SideMenu"
+        @click.stop="selectMenu('MainBluePrint')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'MainBluePrint' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'industry']"
-              style="color: #d2d2d2"
+              :style="
+                selectedMenu === 'MainBluePrint' ? { color: '#e64878' } : { color: '#d2d2d2' }
+              "
               class="icon-padding-right"
             />
             공정현황
           </div></v-btn
         >
       </router-link>
-      <router-link :to="{ name: 'MainLogistics' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'MainLogistics' }"
+        class="SideMenu"
+        @click.stop="selectMenu('MainLogistics')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'MainLogistics' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'list-check']"
-              style="color: #d2d2d2"
+              :style="
+                selectedMenu === 'MainLogistics' ? { color: '#e64878' } : { color: '#d2d2d2' }
+              "
               class="icon-padding-right"
             />
             물류현황
           </div></v-btn
         >
       </router-link>
-      <router-link :to="{ name: 'MainMachine' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link
+        :to="{ name: 'MainMachine' }"
+        class="SideMenu"
+        @click.stop="selectMenu('MainMachine')"
+      >
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'MainMachine' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'hand-pointer']"
-              style="color: #d2d2d2"
+              :style="selectedMenu === 'MainMachine' ? { color: '#e64878' } : { color: '#d2d2d2' }"
               class="icon-padding-right"
             />
             기기제어
           </div></v-btn
         >
       </router-link>
-      <router-link :to="{ name: 'MainCctv' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">
+      <router-link :to="{ name: 'MainCctv' }" class="SideMenu" @click.stop="selectMenu('MainCctv')">
+        <v-btn
+          elevation="8"
+          block
+          variant="outlined"
+          :style="selectedMenu === 'MainCctv' ? selectedtextstyle : {}"
+        >
           <div class="btn-inner-content">
             <font-awesome-icon
               :icon="['fas', 'record-vinyl']"
-              style="color: #d2d2d2"
+              :style="selectedMenu === 'MainCctv' ? { color: '#e64878' } : { color: '#d2d2d2' }"
               class="icon-padding-right"
             />
             CCTV
@@ -117,6 +189,13 @@ export default {
   name: "SidebarNav",
   data: () => ({
     subSrc: "/SubTurtle.png",
+    selectedMenu: "AdminMainView",
+    selectedtextstyle: {
+      background: "linear-gradient(to Left Bottom, #e64878 30%, #f08556 100%)",
+      "-webkit-background-clip": "text",
+      "-webkit-text-fill-color": "transparent",
+      backgroundClip: "text",
+    },
   }),
   methods: {
     EasterEgg() {
@@ -125,6 +204,12 @@ export default {
       } else {
         this.subSrc = "/SubTurtle.png";
       }
+    },
+    selectMenu(name) {
+      this.selectedMenu = name;
+    },
+    iconColor(menuName) {
+      return this.selectedMenu === menuName ? { color: "#e64878" } : { color: "#d2d2d2" };
     },
   },
 };
@@ -169,7 +254,7 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   align-self: flex-end;
-  top: 30%;
+  top: 1%;
 }
 .SideMenu {
   padding: 5px;
