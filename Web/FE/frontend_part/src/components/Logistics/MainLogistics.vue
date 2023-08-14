@@ -2,23 +2,19 @@
   <div class="LogisticContainer">
     <div class="LogisticsHeader">
       <h1>물류 현황</h1>
-      <div>
-        <button class="refresh-button" @click="get_logistic_analysis">
-          <font-awesome-icon
-            :icon="['fas', 'arrows-rotate']"
-            style="color: #666a70"
-            class="refresh-icon"
-            v-if="!isLoading"
-          />
-        </button>
-        <button>
-          <font-awesome-icon
-            :icon="['fas', 'arrows-rotate']"
-            style="color: #fa6482"
-            :class="{ 'refresh-icon': true, 'refresh-icon-spinning': isLoading }"
-            v-if="isLoading"
-          />
-        </button>
+      <div class="refresh-button">
+        <font-awesome-icon
+          @click="get_logistic_analysis"
+          :icon="['fas', 'arrows-rotate']"
+          class="refresh-icon"
+          v-if="!isLoading"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'arrows-rotate']"
+          style="color: rgb(250, 100, 130)"
+          :class="{ 'refresh-icon': true, 'refresh-icon-spinning': isLoading }"
+          v-if="isLoading"
+        />
       </div>
     </div>
     <div class="ProductStatusContainer">
@@ -124,12 +120,8 @@ export default {
   computed: {
     ...mapState("admin", ["logisticAnalysis"]),
   },
-  mounted() {
-    this.get_logistic_analysis();
-  },
   methods: {
     async get_logistic_analysis() {
-      console.log("d");
       this.isLoading = true;
       await this.$store.dispatch("admin/getLogisticAnalysis");
       this.isLoading = false;
@@ -202,8 +194,8 @@ export default {
   margin-left: 5px;
   cursor: pointer;
 }
-.refresh-button {
-  margin-right: 30px;
+.refresh-icon-spinning * {
+  color: #fa6482;
 }
 .refresh-icon {
   font-size: 230%;
@@ -216,7 +208,6 @@ export default {
     transform: rotate(360deg);
   }
 }
-
 .refresh-icon-spinning {
   animation: spin 2s linear infinite;
 }
