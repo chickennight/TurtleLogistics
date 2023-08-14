@@ -61,4 +61,7 @@ export default {
   text-align: right;
   font-size: 19px;
 }
+span:hover {
+  cursor: pointer;
+}
 </style>
