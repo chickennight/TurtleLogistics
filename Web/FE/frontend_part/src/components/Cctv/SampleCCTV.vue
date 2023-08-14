@@ -1,4 +1,3 @@
-<!-- Webcam.vue -->
 <template>
   <div class="CctvContainer">
     <video class="VideoContainer" ref="videoElement" autoplay></video>
