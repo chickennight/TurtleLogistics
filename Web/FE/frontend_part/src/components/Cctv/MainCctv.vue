@@ -1,4 +1,3 @@
-<!-- Webcam.vue -->
 <template>
   <div class="CctvContainer">
     <div class="CctvHeader"><h1>CCTV</h1></div>
@@ -18,7 +17,6 @@
           @click="showInModal($refs.notebookVideo)"
         ></video>
       </div>
-      <!-- 모달추가 -->
       <cctv-modal
         :show="isModalVisible"
         :videoStream="selectedVideoStream"

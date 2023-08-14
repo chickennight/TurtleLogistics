@@ -1,11 +1,9 @@
 <template>
   <div id="header">
-    <!-- 관리자 헤더 -->
     <div class="AdminProfile" v-if="isAdmin">
       관리자님 환영합니다 &nbsp; | &nbsp;
       <span @click="adminLogout">로그아웃</span>
     </div>
-    <!-- 사용자 헤더 -->
     <div class="UserProfile" v-else>
       사용자님 환영합니다 &nbsp; | &nbsp;
       <span @click="customerLogout">로그아웃</span>
