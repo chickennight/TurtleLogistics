@@ -10,7 +10,7 @@
           variant="outlined"
           class="offButton"
         >
-          전원 종료
+          전원 OFF
         </v-btn>
         <v-btn
           @click="getMachineOn"
@@ -18,7 +18,7 @@
           variant="outlined"
           class="onButton"
         >
-          전원 시작
+          전원 ON
         </v-btn>
       </span>
     </div>
@@ -224,5 +224,8 @@ export default {
   width: auto;
   display: block;
   margin: 20px auto;
+}
+td:hover {
+  cursor: pointer;
 }
 </style>
