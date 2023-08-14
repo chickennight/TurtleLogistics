@@ -49,6 +49,8 @@ export default {
       ],
     },
     chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: true,
@@ -111,5 +113,6 @@ export default {
   flex-direction: column;
   align-content: center;
   justify-content: center;
+  width: 100%;
 }
 </style>
