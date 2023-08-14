@@ -31,13 +31,9 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
-
     private final ErrorHandler errorHandler;
-
     private final MachineService machineService;
-
     private final ProductService productService;
-
     private final SmsService smsService;
 
     @Autowired
@@ -189,17 +185,22 @@ public class OrderController {
     }
 
     private Log errorLog(OrderUpdateDTO orderUpdateDto, String errorMessage) throws DataNotFountException {
-        Log l = new Log();
+        Log log = new Log();
         //Log entity에 메서드 추가
-        l.updateErrorMessage(orderUpdateDto.getOrderNum() + " " + errorMessage);
+        log.updateErrorMessage(orderUpdateDto.getOrderNum() + "번 주문 " + errorMessage);
         Machine machine;
-        if (orderUpdateDto.getType() == 0)
+        int cnt;
+        if (orderUpdateDto.getType() == 0) {
             machine = machineService.findMachine(1000 + orderUpdateDto.getProductNum() * 10);
-        else
+            cnt = machineService.getLogCnt(1000 + orderUpdateDto.getProductNum());
+        } else {
             machine = machineService.findMachine(2000 + orderUpdateDto.getProductNum() * 10);
-        l.updateMachine(machine);
+            cnt = machineService.getLogCnt(2000 + orderUpdateDto.getProductNum());
+        }
+        log.updateMachine(machine);
+        log.makeLogNum(cnt);
         machineService.updateMachine(true, machine.getMachineId());
-        return l;
+        return log;
     }
 
     @ApiOperation(value = "지역코드별 주문 분석", notes = "지역별 주문 정보 반환")
