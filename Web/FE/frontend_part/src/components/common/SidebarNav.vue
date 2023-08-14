@@ -13,28 +13,100 @@
     </div>
     <div class="SideMenuBar">
       <router-link :to="{ name: 'AdminMainView' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">메인화면</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'house-chimney']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            메인화면
+          </div>
+        </v-btn>
       </router-link>
       <router-link :to="{ name: 'OrderByDate' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">기간주문내역</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'calendar-check']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            기간주문내역
+          </div>
+        </v-btn>
       </router-link>
       <router-link :to="{ name: 'OrderByRegion' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">지역주문내역</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'map-location-dot']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            지역주문내역
+          </div></v-btn
+        >
       </router-link>
       <router-link :to="{ name: 'MainGraph' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">주문현황</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'clipboard']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            주문현황
+          </div></v-btn
+        >
       </router-link>
       <router-link :to="{ name: 'MainBluePrint' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">공정현황</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'industry']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            공정현황
+          </div></v-btn
+        >
       </router-link>
       <router-link :to="{ name: 'MainLogistics' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">물류현황</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'list-check']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            물류현황
+          </div></v-btn
+        >
       </router-link>
       <router-link :to="{ name: 'MainMachine' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">기기제어</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'hand-pointer']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            기기제어
+          </div></v-btn
+        >
       </router-link>
       <router-link :to="{ name: 'MainCctv' }" class="SideMenu">
-        <v-btn elevation="8" block variant="outlined">CCTV</v-btn>
+        <v-btn elevation="8" block variant="outlined">
+          <div class="btn-inner-content">
+            <font-awesome-icon
+              :icon="['fas', 'record-vinyl']"
+              style="color: #d2d2d2"
+              class="icon-padding-right"
+            />
+            CCTV
+          </div></v-btn
+        >
       </router-link>
     </div>
   </div>
@@ -61,10 +133,12 @@ export default {
 <style scoped>
 #sideBar {
   width: 300px;
+  height: 100%;
   /* box-shadow: 1px 1px 3px 3px white; */
   /* border: 1px solid white; */
 }
 #SideLogo {
+  margin-left: 13px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,15 +163,29 @@ export default {
 }
 .SideMenuBar {
   margin-top: 30px;
+  margin-left: 13px;
   display: flex;
   flex-direction: column;
+  position: -webkit-sticky;
+  position: sticky;
+  align-self: flex-end;
+  top: 30%;
 }
 .SideMenu {
   padding: 5px;
-  height: 50px;
+  height: 65px;
 }
 .v-btn {
   background-color: rgb(55, 55, 55);
   border-style: none;
+  height: 100%; /* 버튼의 높이를 부모 요소의 높이와 동일하게 설정 */
+}
+.icon-padding-right {
+  padding-right: 7px;
+}
+.btn-inner-content {
+  margin-top: 3%;
+  display: flex;
+  width: 100%;
 }
 </style>
