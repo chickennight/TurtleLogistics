@@ -68,9 +68,9 @@ const adminStore = {
         console.log(error);
       }
     },
-    async SendSMS(_, machineDetail) {
+    async SendSMS(_, log_num) {
       try {
-        await adminAPI.sendMessage(machineDetail);
+        await adminAPI.sendMessage(log_num);
       } catch (error) {
         console.log(error);
       }
