@@ -2,7 +2,20 @@
   <div class="LogisticContainer">
     <div class="LogisticsHeader">
       <h1>물류 현황</h1>
-      <v-btn>새로고침</v-btn>
+      <div class="refresh-button">
+        <font-awesome-icon
+          @click="get_logistic_analysis"
+          :icon="['fas', 'arrows-rotate']"
+          class="refresh-icon"
+          v-if="!isLoading"
+        />
+        <font-awesome-icon
+          :icon="['fas', 'arrows-rotate']"
+          style="color: rgb(250, 100, 130)"
+          :class="{ 'refresh-icon': true, 'refresh-icon-spinning': isLoading }"
+          v-if="isLoading"
+        />
+      </div>
     </div>
     <div class="ProductStatusContainer">
       <v-table density="compact" theme="dark" class="main_table">
@@ -101,21 +114,17 @@ export default {
       myTimer: null,
       sortBy: null, // 현재 정렬 기준
       sortOrder: true, // 정렬 순서 (true: 오름차순, false: 내림차순)
+      isLoading: false,
     };
   },
   computed: {
     ...mapState("admin", ["logisticAnalysis"]),
   },
-  mounted() {
-    this.get_logistic_analysis();
-    this.myTimer = setInterval(this.get_logistic_analysis, 60000);
-  },
-  beforeUnmount() {
-    clearInterval(this.myTimer);
-  },
   methods: {
-    get_logistic_analysis() {
-      this.$store.dispatch("admin/getLogisticAnalysis");
+    async get_logistic_analysis() {
+      this.isLoading = true;
+      await this.$store.dispatch("admin/getLogisticAnalysis");
+      this.isLoading = false;
     },
     //테이블 정렬 기능
     sortTable(column) {
@@ -184,5 +193,22 @@ export default {
 .icon-padding-left {
   margin-left: 5px;
   cursor: pointer;
+}
+.refresh-icon-spinning * {
+  color: #fa6482;
+}
+.refresh-icon {
+  font-size: 230%;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.refresh-icon-spinning {
+  animation: spin 2s linear infinite;
 }
 </style>
