@@ -211,4 +211,7 @@ export default {
 .refresh-icon-spinning {
   animation: spin 2s linear infinite;
 }
+.refresh-button {
+  margin-right: 30px;
+}
 </style>

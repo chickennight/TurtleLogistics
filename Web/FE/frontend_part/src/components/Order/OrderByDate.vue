@@ -7,6 +7,7 @@
           @click="setPeriod('week')"
           :class="{ selected: selectedPeriod === 'week' }"
           variant="outlined"
+          :disabled="isLoading"
         >
           일주일
         </v-btn>
@@ -14,6 +15,7 @@
           @click="setPeriod('month')"
           :class="{ selected: selectedPeriod === 'month' }"
           variant="outlined"
+          :disabled="isLoading"
         >
           1개월
         </v-btn>
@@ -21,6 +23,7 @@
           @click="setPeriod('3month')"
           :class="{ selected: selectedPeriod === '3month' }"
           variant="outlined"
+          :disabled="isLoading"
         >
           3개월
         </v-btn>
@@ -28,6 +31,7 @@
           @click="setPeriod('6month')"
           :class="{ selected: selectedPeriod === '6month' }"
           variant="outlined"
+          :disabled="isLoading"
         >
           6개월
         </v-btn>
@@ -35,6 +39,7 @@
           @click="setPeriod('year')"
           :class="{ selected: selectedPeriod === 'year' }"
           variant="outlined"
+          :disabled="isLoading"
         >
           1년
         </v-btn>
@@ -45,7 +50,7 @@
       <div v-if="isLoading" class="loading-overlay">
         <v-progress-circular
           :size="50"
-          color="rgba(250, 100, 130, 0.9)"
+          color="rgba(250, 100, 130, 1)"
           indeterminate
         ></v-progress-circular>
       </div>
@@ -417,7 +422,8 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
   z-index: 1000;
   display: flex;
   justify-content: center;
