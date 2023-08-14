@@ -50,9 +50,7 @@ public class MachineController {
                 List<Integer> brokenList = machineService.brokenMachine(machineList);
                 Map<String, List<?>> map = new HashMap<>();
                 map.put("상태", machineList);
-                List<Log> temp = machineService.lastBrokenLogs(brokenList);
-                List<LogDTO> errorLogs = new ArrayList<>();
-                for (Log l : temp) errorLogs.add(new LogDTO(l));
+                List<LogDTO> errorLogs = machineService.lastBrokenLogs(brokenList);
                 map.put("로그", errorLogs);
                 return new ResponseEntity<>(map, HttpStatus.OK);
             }

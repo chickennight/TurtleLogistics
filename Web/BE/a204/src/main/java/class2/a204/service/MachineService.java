@@ -1,5 +1,6 @@
 package class2.a204.service;
 
+import class2.a204.dto.LogDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.repository.LogRepository;
@@ -44,21 +45,22 @@ public class MachineService {
         return brokenList;
     }
 
-    public List<Log> lastBrokenLogs(List<Integer> brokenList) {
-        List<Log> lastBrokenLogList = new ArrayList<>();
+    public List<LogDTO> lastBrokenLogs(List<Integer> brokenList) {
+        List<LogDTO> lastBrokenLogList = new ArrayList<>();
         for (Integer machineId : brokenList) {
-            Optional<Log> latestBrokenLogOp = logRepository.findFirstByMachine_MachineIdOrderByErrorDateDesc(machineId);
+            Optional<Log> latestBrokenLog = logRepository.findFirstByMachine_MachineIdOrderByErrorDateDesc(machineId);
 
-            if (latestBrokenLogOp.isPresent()) {
-                Log latestBrokenLog = latestBrokenLogOp.get();
-                lastBrokenLogList.add(latestBrokenLog);
+            if (latestBrokenLog.isPresent()) {
+                Log log = latestBrokenLog.get();
+                lastBrokenLogList.add(new LogDTO(log));
 
-                if (!latestBrokenLog.getRecorded()) {
-                    latestBrokenLog.updateRecorded();
-                    logRepository.save(latestBrokenLog);
+                if (!log.getRecorded()) {
+                    log.updateRecorded();
+                    logRepository.save(log);
                 }
             }
         }
+
         return lastBrokenLogList;
     }
 
