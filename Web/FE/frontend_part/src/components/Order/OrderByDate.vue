@@ -403,7 +403,7 @@ export default {
   align-items: center;
 }
 
-.v-btn.selected ::v-deep * {
+.v-btn.selected :deep(*) {
   color: rgb(250, 100, 130, 0.9);
 }
 .v-btn.selected {
@@ -423,7 +423,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.loading-overlay ::v-deep .v-progress-circular .v-progress-circular__overlay {
+.loading-overlay :deep(.v-progress-circular .v-progress-circular__overlay) {
   stroke: rgb(250, 100, 130);
 }
 </style>
