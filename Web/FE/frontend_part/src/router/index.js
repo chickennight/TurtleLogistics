@@ -152,6 +152,7 @@ router.beforeEach((to, from, next) => {
       return;
     }
   }
+  window.scrollTo(0, 0);
   next();
 });
 
