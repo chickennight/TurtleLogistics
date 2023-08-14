@@ -189,7 +189,7 @@ export default {
   name: "SidebarNav",
   data: () => ({
     subSrc: "/SubTurtle.png",
-    selectedMenu: "AdminMainView",
+    selectedMenu: sessionStorage.getItem("selectedMenu") || "AdminMainView",
     selectedtextstyle: {
       background: "linear-gradient(to Left Bottom, #e64878 30%, #f08556 100%)",
       "-webkit-background-clip": "text",
@@ -200,6 +200,7 @@ export default {
   methods: {
     selectMenu(name) {
       this.selectedMenu = name;
+      sessionStorage.setItem("selectedMenu", name);
     },
     iconColor(menuName) {
       return this.selectedMenu === menuName ? { color: "#e64878" } : { color: "#d2d2d2" };
