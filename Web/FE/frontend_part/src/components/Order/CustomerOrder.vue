@@ -10,27 +10,23 @@
         <h2>주문</h2>
         <v-form ref="form">
           <v-text-field
-            v-model="order.customer_num"
-            label="수신자 이름"
+            v-model="this.customer_id"
+            label="아이디"
             color="warning"
-            required
-          ></v-text-field>
-
+            readonly></v-text-field>
           <div class="selectDiv">
             <v-select
               v-model="selectA"
               :items="products"
               label="상품"
               class="productDiv"
-              required
-            ></v-select>
+              required></v-select>
             <v-select
               v-model="order.products[1].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
-              required
-            ></v-select>
+              required></v-select>
           </div>
           <div class="selectDiv">
             <v-select
@@ -38,15 +34,13 @@
               :items="products"
               label="상품"
               class="productDiv"
-              required
-            ></v-select>
+              required></v-select>
             <v-select
               v-model="order.products[2].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
-              required
-            ></v-select>
+              required></v-select>
           </div>
           <div class="selectDiv">
             <v-select
@@ -54,52 +48,59 @@
               :items="products"
               label="상품"
               class="productDiv"
-              required
-            ></v-select>
+              required></v-select>
             <v-select
               v-model="order.products[0].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
-              required
-            ></v-select>
+              required></v-select>
           </div>
 
           <!-- + 버튼 -->
 
           <!-- selectDiv들을 동적으로 렌더링 -->
-          <div v-for="(select, index) in selectDivs" :key="index" class="selectDiv">
+          <div
+            v-for="(select, index) in selectDivs"
+            :key="index"
+            class="selectDiv">
             <v-select
               :v-model="select.product"
               :items="products"
               label="상품"
               class="productDiv"
-              required
-            ></v-select>
+              required></v-select>
             <v-select
               :v-model="order.products[index].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
-              required
-            ></v-select>
+              required></v-select>
             <!-- - 버튼 -->
           </div>
 
-          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv">+</v-btn>
-          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv">-</v-btn>
+          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv"
+            >+</v-btn
+          >
+          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv"
+            >-</v-btn
+          >
 
-          <v-select label="지역" :items="region" v-model="selectedRegionIndex"></v-select>
+          <v-select
+            label="지역"
+            :items="region"
+            v-model="selectedRegionIndex"></v-select>
 
           <v-text-field
             v-model="order.detailAddress"
             label="상세주소"
             color="warning"
-            required
-          ></v-text-field>
+            required></v-text-field>
 
           <div class="d-flex flex-column">
-            <v-btn color="success" class="mt-4" block @click="doOrder"> 주문하기 </v-btn>
+            <v-btn color="success" class="mt-4" block @click="doOrder">
+              주문하기
+            </v-btn>
           </div>
         </v-form>
       </v-sheet>
@@ -109,6 +110,7 @@
 
 <script>
 import HeaderNav from "@/components/common/HeaderNav.vue";
+import { mapState } from "vuex";
 export default {
   name: "CustomerOrder",
   components: {
@@ -116,7 +118,7 @@ export default {
   },
   data: () => ({
     order: {
-      customer_num: "",
+      customer_id: "",
       products: [
         { product_num: 1, stock: 0 },
         { product_num: 2, stock: 0 },
@@ -159,11 +161,22 @@ export default {
     selectDivs: [],
     idxCount: 0,
   }),
-  created() {},
+  computed: {
+    ...mapState("customer", ["customer_id"]),
+  },
   methods: {
-    doOrder() {
-      console.log(this.order);
-      this.$store.dispatch("order/doOrder", this.order);
+    async doOrder() {
+      this.order.customer_id = this.customer_id;
+      if (
+        this.order.address == "" ||
+        this.order.detailAddress == "" ||
+        (this.order.products[0].stock == 0 &&
+          this.order.products[1].stock == 0 &&
+          this.order.products[2].stock == 0)
+      )
+        alert("주문을 확인해주세요");
+      else await this.$store.dispatch("order/doOrder", this.order);
+      this.reset();
     },
     addSelectDiv() {
       // 새로운 selectDiv 객체를 생성하고 selectDivs 배열에 추가
@@ -175,6 +188,19 @@ export default {
       // 해당 index의 selectDiv를 배열에서 제거
       this.selectDivs.splice(this.idxCount - 1, 1);
       this.idxCount -= 1;
+    },
+    reset() {
+      this.order.products = [
+        { product_num: 1, stock: 0 },
+        { product_num: 2, stock: 0 },
+        { product_num: 3, stock: 0 },
+      ];
+      this.order.address = "";
+      this.order.detailAddress = "";
+      this.selectA = "선택 안함";
+      this.selectB = "선택 안함";
+      this.selectC = "선택 안함";
+      this.selectedRegionIndex = null;
     },
   },
   watch: {
