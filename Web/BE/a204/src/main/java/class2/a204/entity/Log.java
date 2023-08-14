@@ -34,6 +34,8 @@ public class Log {
     @NotNull
     private Machine machine;
 
+    private Boolean recorded;
+
 //    public Log(Machine machine2, String logForBrokenMachine) {
 //    }
 
@@ -43,6 +45,10 @@ public class Log {
 
     public void updateErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public void updateRecorded() {
+        this.recorded = true;
     }
 
 }
