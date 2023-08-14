@@ -1,5 +1,4 @@
 import orderAPI from "@/api/order";
-import router from "@/router";
 
 const orderStore = {
   namespaced: true,
@@ -29,7 +28,6 @@ const orderStore = {
     },
     DO_ORDER() {
       alert("주문이 완료되었습니다.");
-      router.push("/");
     }
   },
   actions: {
