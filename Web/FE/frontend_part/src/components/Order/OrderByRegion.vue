@@ -2,8 +2,9 @@
   <div class="regionContainer">
     <div class="map-container">
       <h1>지역별 조회</h1>
-      <br />
-      <svg style="overflow: visible" height="1107" width="500" xmlns="http://www.w3.org/2000/svg">
+    </div>
+    <div class="regionImg">
+      <svg style="overflow: visible" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 750 100">
         <defs>
           <filter id="dropshadow">
             <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
@@ -14,7 +15,7 @@
             </feMerge>
           </filter>
         </defs>
-        <g filter="url(#dropshadow)">
+        <g filter="url(#dropshadow)" transform="scale(0.5)" transform-origin="center center">
           <path
             id="CD11"
             class="OUTLINE"
@@ -153,7 +154,7 @@
             @mouseleave="hideRegion(17)"
           />
         </g>
-        <g filter="url(#dropshadow)">
+        <g filter="url(#dropshadow)" transform="scale(0.5)" transform-origin="center center">
           <text id="1" class="TEXT" x="156" y="164">서울특별시</text>
           <text id="2" class="TEXT" x="503" y="645">부산광역시</text>
           <text id="4" class="TEXT" x="418" y="517">대구광역시</text>
@@ -174,34 +175,33 @@
         </g>
       </svg>
     </div>
-    &nbsp;
-    <div class="RegionString">
-      <h3>{{ this.currentRegion }} 지역</h3>
-    </div>
-    <div class="RegionTable">
-      <v-table density="compact" theme="dark">
-        <thead>
-          <tr>
-            <th class="text-left">주문 접수</th>
-            <th class="text-left">포장 과정</th>
-            <th class="text-left">분류 과정</th>
-            <th class="text-left">분류 완료</th>
-            <th class="text-left">배송 과정</th>
-            <th class="text-left">이상 발생</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ this.orderRegion[`주문 접수`] }}</td>
-            <td>{{ this.orderRegion[`포장 과정`] }}</td>
-            <td>{{ this.orderRegion[`분류 과정`] }}</td>
-            <td>{{ this.orderRegion[`분류 완료`] }}</td>
-            <td>{{ this.orderRegion[`배송 과정`] }}</td>
-            <td>{{ this.orderRegion[`이상 발생`] }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </div>
+  </div>
+  <div class="RegionString">
+    <h3>{{ this.currentRegion }} 지역</h3>
+  </div>
+  <div class="RegionTable">
+    <v-table density="compact" theme="dark">
+      <thead>
+        <tr>
+          <th class="text-left">주문 접수</th>
+          <th class="text-left">포장 과정</th>
+          <th class="text-left">분류 과정</th>
+          <th class="text-left">분류 완료</th>
+          <th class="text-left">배송 과정</th>
+          <th class="text-left">이상 발생</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ this.orderRegion[`주문 접수`] }}</td>
+          <td>{{ this.orderRegion[`포장 과정`] }}</td>
+          <td>{{ this.orderRegion[`분류 과정`] }}</td>
+          <td>{{ this.orderRegion[`분류 완료`] }}</td>
+          <td>{{ this.orderRegion[`배송 과정`] }}</td>
+          <td>{{ this.orderRegion[`이상 발생`] }}</td>
+        </tr>
+      </tbody>
+    </v-table>
   </div>
 </template>
 
@@ -213,15 +213,6 @@ export default {
   data: () => ({
     currentRegion: "",
   }),
-  mounted() {
-    // 컴포넌트가 마운트될 때 실행되는 로직
-    window.addEventListener("resize", this.updateParentHeight);
-    this.updateParentHeight();
-  },
-  beforeUnmount() {
-    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
-    window.removeEventListener("resize", this.updateParentHeight);
-  },
   methods: {
     getRegion(value) {
       let region = document.getElementById(value).textContent;
@@ -236,11 +227,6 @@ export default {
     hideRegion(value) {
       let regionText = document.getElementById(value);
       regionText.style.visibility = "hidden";
-    },
-    updateParentHeight() {
-      const regionContainer = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", regionContainer);
     },
   },
   computed: {
@@ -274,24 +260,38 @@ path:hover > .TEXT {
 }
 .regionContainer {
   margin: 20px;
+}
+.map-container {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
 }
-.map-container {
-  text-align: center;
+.regionImg {
+  margin-top: 2%;
   box-shadow: 0px 0px 6px -1px black;
-  padding: 20px;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  vertical-align: top;
+  overflow: hidden;
 }
+.regionImg svg {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .RegionString {
   width: 100%;
   padding: 20px;
 }
 .RegionTable {
+  padding: 0 20px 20px 20px;
   width: 100%;
 }
 </style>

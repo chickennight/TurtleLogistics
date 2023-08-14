@@ -59,11 +59,9 @@ export default {
   mounted() {
     this.get_logistic_analysis();
     this.myTimer = setInterval(this.get_logistic_analysis, 60000);
-    this.updateParentHeight();
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
-    window.removeEventListener("resize", this.updateParentHeight);
   },
   methods: {
     get_logistic_analysis() {
@@ -91,11 +89,6 @@ export default {
       this.currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
 
       this.$store.dispatch("admin/getLogisticAnalysis");
-    },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
     },
   },
 };

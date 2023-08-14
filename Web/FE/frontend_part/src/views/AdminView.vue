@@ -3,7 +3,7 @@
     <sidebar-nav></sidebar-nav>
     <div class="adminSubContainer">
       <header-nav></header-nav>
-      <router-view @childContentHeightChanged="updateAppHeight" />
+      <router-view />
     </div>
     <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
     <canvas ref="canvasElement" hidden></canvas>
@@ -25,14 +25,14 @@ export default {
     screenshot: null,
   }),
   methods: {
-    updateAppHeight(childContentHeight) {
-      // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
-      if (childContentHeight > 800) {
-        this.appHeight = childContentHeight + 200;
-      } else {
-        this.appHeight = 1200;
-      }
-    },
+    // updateAppHeight(childContentHeight) {
+    //   // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
+    //   if (childContentHeight > 800) {
+    //     this.appHeight = childContentHeight + 200;
+    //   } else {
+    //     this.appHeight = 1200;
+    //   }
+    // },
     sendMessage(machineDetail) {
       this.$store.dispatch("admin/SendSMS", machineDetail);
     },
@@ -199,9 +199,10 @@ export default {
 
 <style scoped>
 #adminMainContainer {
+  min-height: 100vh; /* 뷰포트 높이의 100% */
   display: flex;
   width: 100%;
-  height: 1500px;
+  height: auto;
 }
 
 .adminSubContainer {
