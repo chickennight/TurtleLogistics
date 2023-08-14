@@ -403,7 +403,7 @@ export default {
   align-items: center;
 }
 
-.v-btn.selected ::v-deep * {
+.v-btn.selected :deep(*) {
   color: rgb(250, 100, 130, 0.9);
 }
 .v-btn.selected {
