@@ -178,6 +178,7 @@ export default {
 .LogTableContainer:hover,
 .BlueprintContainer:hover,
 .GraphContainer:hover {
+  transition: all 1s;
   background-color: rgb(62, 62, 62);
   transform: translateY(-5px);
 }
