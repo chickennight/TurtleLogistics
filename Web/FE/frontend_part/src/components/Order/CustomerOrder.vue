@@ -11,41 +11,88 @@
         <v-form ref="form">
           <v-text-field
             v-model="order.customer_num"
-            :rules="nameRules"
             label="수신자 이름"
             color="warning"
             required
           ></v-text-field>
 
-          <v-text-field
-            v-model="order.products[0].stock"
-            :rules="nameRules"
-            label="상품 A"
-            color="warning"
-            required
-          ></v-text-field>
+          <div class="selectDiv">
+            <v-select
+              v-model="selectA"
+              :items="products"
+              label="상품"
+              class="productDiv"
+              required
+            ></v-select>
+            <v-select
+              v-model="order.products[1].stock"
+              :items="number"
+              label="갯수"
+              class="numberDiv"
+              required
+            ></v-select>
+          </div>
+          <div class="selectDiv">
+            <v-select
+              v-model="selectB"
+              :items="products"
+              label="상품"
+              class="productDiv"
+              required
+            ></v-select>
+            <v-select
+              v-model="order.products[2].stock"
+              :items="number"
+              label="갯수"
+              class="numberDiv"
+              required
+            ></v-select>
+          </div>
+          <div class="selectDiv">
+            <v-select
+              v-model="selectC"
+              :items="products"
+              label="상품"
+              class="productDiv"
+              required
+            ></v-select>
+            <v-select
+              v-model="order.products[0].stock"
+              :items="number"
+              label="갯수"
+              class="numberDiv"
+              required
+            ></v-select>
+          </div>
 
-          <v-text-field
-            v-model="order.products[1].stock"
-            :rules="nameRules"
-            label="상품 B"
-            color="warning"
-            required
-          ></v-text-field>
+          <!-- + 버튼 -->
 
-          <v-text-field
-            v-model="order.products[2].stock"
-            :rules="nameRules"
-            label="상품 C"
-            color="warning"
-            required
-          ></v-text-field>
+          <!-- selectDiv들을 동적으로 렌더링 -->
+          <div v-for="(select, index) in selectDivs" :key="index" class="selectDiv">
+            <v-select
+              :v-model="select.product"
+              :items="products"
+              label="상품"
+              class="productDiv"
+              required
+            ></v-select>
+            <v-select
+              :v-model="order.products[index].stock"
+              :items="number"
+              label="갯수"
+              class="numberDiv"
+              required
+            ></v-select>
+            <!-- - 버튼 -->
+          </div>
+
+          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv">+</v-btn>
+          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv">-</v-btn>
 
           <v-select label="지역" :items="region" v-model="selectedRegionIndex"></v-select>
 
           <v-text-field
             v-model="order.detailAddress"
-            :rules="nameRules"
             label="상세주소"
             color="warning"
             required
@@ -71,9 +118,9 @@ export default {
     order: {
       customer_num: "",
       products: [
-        { product_num: 1, stock: "" },
-        { product_num: 2, stock: "" },
-        { product_num: 3, stock: "" },
+        { product_num: 1, stock: 0 },
+        { product_num: 2, stock: 0 },
+        { product_num: 3, stock: 0 },
       ],
       address: "",
       detailAddress: "",
@@ -98,12 +145,36 @@ export default {
       "제주특별자치도",
     ],
     selectedRegionIndex: null,
+    products: [
+      "선택 안함",
+      "횡성 한우 부채살",
+      "두루마리 휴지 30개입",
+      "생수 2L 12개",
+      "진라면 1봉(5개입)",
+    ],
+    number: [0, 1, 2, 3],
+    selectA: "선택 안함",
+    selectB: "선택 안함",
+    selectC: "선택 안함",
+    selectDivs: [],
+    idxCount: 0,
   }),
   created() {},
   methods: {
     doOrder() {
       console.log(this.order);
       this.$store.dispatch("order/doOrder", this.order);
+    },
+    addSelectDiv() {
+      // 새로운 selectDiv 객체를 생성하고 selectDivs 배열에 추가
+      this.selectDivs.push({ product: "선택 안함", stock: 0 });
+      this.idxCount += 1;
+    },
+    // - 버튼을 클릭할 때 실행되는 함수
+    removeSelectDiv() {
+      // 해당 index의 selectDiv를 배열에서 제거
+      this.selectDivs.splice(this.idxCount - 1, 1);
+      this.idxCount -= 1;
     },
   },
   watch: {
@@ -128,7 +199,7 @@ export default {
   text-align: center;
 }
 .OrderForm * {
-  background-color: rgb(53, 53, 53);
+  background-color: rgb(39, 40, 41);
 }
 .MainTurtle {
   height: 150px;
@@ -140,5 +211,15 @@ export default {
 
 v-overlay-container * {
   background-color: black;
+}
+.selectDiv {
+  display: flex;
+  flex-direction: row;
+}
+.productDiv {
+  width: 60%;
+}
+.numberDiv {
+  width: 35%;
 }
 </style>
