@@ -6,19 +6,15 @@
         <v-btn @click="getOrderDataWeek" background-color="rgb(53, 53, 53)" variant="outlined">
           일주일
         </v-btn>
-
         <v-btn @click="getOrderDataMonth" background-color="rgb(53, 53, 53)" variant="outlined">
           1개월
         </v-btn>
-
         <v-btn @click="getOrderData3Month" background-color="rgb(53, 53, 53)" variant="outlined">
           3개월
         </v-btn>
-
         <v-btn @click="getOrderData6Month" background-color="rgb(53, 53, 53)" variant="outlined">
           6개월
         </v-btn>
-
         <v-btn @click="getOrderDataYear" background-color="rgb(53, 53, 53)" variant="outlined">
           1년
         </v-btn>
