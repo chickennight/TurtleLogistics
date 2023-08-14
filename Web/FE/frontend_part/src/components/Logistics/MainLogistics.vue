@@ -183,5 +183,6 @@ export default {
 
 .icon-padding-left {
   margin-left: 5px;
+  cursor: pointer;
 }
 </style>
