@@ -43,8 +43,8 @@ export default {
     //     this.appHeight = 1200;
     //   }
     // },
-    sendMessage(machineDetail) {
-      this.$store.dispatch("admin/SendSMS", machineDetail);
+    sendMessage(log_num) {
+      this.$store.dispatch("admin/SendSMS", log_num);
     },
     changeImg(machine_id) {
       this.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
@@ -133,39 +133,7 @@ export default {
             this.modalTitle = "Warning";
             this.modalMessage = `${log.machine_id} 공정에 이상이 발생했습니다. <br>확인 후 메뉴얼에 따라 조치해주시기 바랍니다.`;
             this.isModalVisible = true;
-            switch (log.machine_id) {
-              case 1000:
-                this.sendMessage(
-                  "[주문 컨베이어 벨트] 오류 발생 / 에러 내용 : " + log.error_message
-                );
-                break;
-              case 1010:
-                this.sendMessage("[1차 피스톤] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 1020:
-                this.sendMessage("[2차 피스톤] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 1030:
-                this.sendMessage("[3차 피스톤] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 2000:
-                this.sendMessage(
-                  "[분류 컨베이어 벨트] 오류 발생 / 에러 내용 : " + log.error_message
-                );
-                break;
-              case 2100:
-                this.sendMessage("[카메라 모듈] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 2010:
-                this.sendMessage("[1차 가름막] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 2020:
-                this.sendMessage("[2차 가름막] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-              case 2030:
-                this.sendMessage("[3차 가름막] 오류 발생 / 에러 내용 : " + log.error_message);
-                break;
-            }
+            this.sendMessage(log.log_num);
           }
         }
       }
