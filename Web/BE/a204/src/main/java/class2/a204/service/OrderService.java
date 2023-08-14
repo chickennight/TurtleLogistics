@@ -48,7 +48,7 @@ public class OrderService {
 
 
         Long orderNum = ((long) today * 1000000 + todayOrders + 1);
-        Optional<Customer> customer = customerRepository.findByCustomerNum(newOrderDto.getCustomerNum());
+        Optional<Customer> customer = customerRepository.findByCustomerId(newOrderDto.getCustomerId());
         Order input;
         if (customer.isPresent())
             input = new Order(orderNum, newOrderDto.getDetailAddress(), newOrderDto.getAddress(), customer.get());
