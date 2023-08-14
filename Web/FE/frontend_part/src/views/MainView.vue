@@ -6,26 +6,11 @@
       TURTLE LOGISTICS
     </div>
     <div id="CardDiv">
-      <v-card class="customCard" variant="outlined" style="margin-right: 5%">
-        <v-card-item>
-          <div>
-            <div class="mb-1">사용자 페이지</div>
-          </div>
-        </v-card-item>
-        <v-card-actions>
-          <v-btn variant="outlined" href="/customerLogin"> 접속 </v-btn>
-        </v-card-actions>
+      <v-card class="customCard" variant="outlined" style="margin-right: 5%" href="/customerLogin">
+        <v-card-actions> 사용자 페이지 </v-card-actions>
       </v-card>
-      <v-card class="customCard" variant="outlined">
-        <v-card-item>
-          <div>
-            <div class="mb-1">관리자 페이지</div>
-          </div>
-        </v-card-item>
-
-        <v-card-actions>
-          <v-btn variant="outlined" href="/adminLogin"> 접속 </v-btn>
-        </v-card-actions>
+      <v-card class="customCard" variant="outlined" href="/adminLogin">
+        <v-card-actions> 관리자 페이지 </v-card-actions>
       </v-card>
     </div>
   </div>
@@ -99,14 +84,26 @@ export default {
 }
 .customCard {
   width: 200px;
-  height: auto;
+  height: 130px;
+  background-color: rgb(55, 55, 55);
+  border-style: none;
+  color: rgb(250, 100, 130);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  padding-top: 13px;
 }
-
 .v-card-item {
   display: flex;
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
   padding-bottom: -40px;
   padding: 10px 8px 0px 8px;
+}
+.customCard:hover {
+  border: 2px solid rgb(250, 100, 130);
+  transform: translateY(-5px);
 }
 </style>
