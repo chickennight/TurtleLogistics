@@ -41,8 +41,8 @@ export default {
       datasets: [
         {
           label: "주문건수",
-          backgroundColor: "salmon",
-          borderColor: "salmon",
+          backgroundColor: "rgb(250, 100, 130)",
+          borderColor: "rgb(250, 100, 130)",
           color: "red",
           data: [],
         },

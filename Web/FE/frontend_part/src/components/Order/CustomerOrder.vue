@@ -124,7 +124,7 @@ export default {
 .CustomerContainer {
   display: flex;
   flex-direction: column;
-  height: 200vh;
+  height: 120vh;
   text-align: center;
 }
 .OrderForm * {
@@ -137,9 +137,7 @@ export default {
   margin: auto;
   display: block;
 }
-.test * {
-  background-color: red !important;
-}
+
 v-overlay-container * {
   background-color: black;
 }

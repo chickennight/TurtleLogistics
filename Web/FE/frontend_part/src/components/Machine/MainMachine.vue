@@ -1,7 +1,7 @@
 <template>
   <div class="MachineMainContainer">
     <div class="MachineContainer">
-      <h1>기기제어</h1>
+      <h1>기기 제어</h1>
       <span class="MachineSpan">
         <!-- <h1>{{ this.currentTime }}</h1> -->
         &nbsp;&nbsp;&nbsp;
@@ -50,38 +50,25 @@
     </div>
   </div>
   <LogModal :isOpen="isModalOpen" @close="closeModal">
-    <template #header>
-      <h3>상세 정보</h3>
-    </template>
-
     <div class="log-details">
       <table>
         <tr>
           <th>로그번호</th>
-          <td>{{ selectedLog.log_num }}</td>
-        </tr>
-        <tr>
           <th>날짜</th>
-          <td>{{ selectedLog.error_date }}</td>
-        </tr>
-        <tr>
           <th>로그명</th>
-          <td>{{ selectedLog.error_message }}</td>
+          <th>기계</th>
         </tr>
         <tr>
-          <th>기계</th>
+          <td>{{ selectedLog.log_num }}</td>
+          <td>{{ selectedLog.error_date }}</td>
+          <td>{{ selectedLog.error_message }}</td>
           <td>{{ selectedLog.machine_id }}</td>
         </tr>
       </table>
     </div>
-
     <div class="log-image">
       <img :src="image" alt="Selected Machine Image" />
     </div>
-
-    <template #footer>
-      <button @click="closeModal">닫기</button>
-    </template>
   </LogModal>
 </template>
 
@@ -173,12 +160,13 @@ export default {
   justify-content: space-between;
   margin: 20px;
   padding: 20px;
+  align-items: center;
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
 }
 .LogTableContainer {
-  margin: 20px;
+  margin: 0px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -192,11 +180,14 @@ export default {
 }
 .MachineSpan {
   display: flex;
+  align-items: center;
 }
 .MachineImgContainer {
   background-color: rgb(55, 55, 55);
   text-align: center;
-  margin: 1%;
+  margin: 0px 20px 20px 20px;
+  box-shadow: 0px 0px 6px -1px black;
+  border-radius: 10px;
 }
 .machineImg {
   width: 60%;
@@ -211,5 +202,28 @@ export default {
 }
 .offButton {
   margin-right: 5%;
+}
+
+/* 모달 css */
+
+.log-details table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+}
+
+.log-details th,
+.log-details td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.log-image img {
+  max-width: 100%;
+  width: auto;
+  display: block;
+  margin: 20px auto;
 }
 </style>

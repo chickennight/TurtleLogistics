@@ -1,6 +1,6 @@
 <template>
   <div class="SampleContainer">
-    <h1>공정현황</h1>
+    <h1>공정 현황</h1>
   </div>
   <div class="LogTableContainer">
     <v-table density="compact" theme="dark" class="main_table">
@@ -41,7 +41,10 @@
         >
           <td>{{ item.machine_id }}</td>
           <td>{{ item.machine_detail }}</td>
-          <td>{{ item.broken }}</td>
+          <td>
+            <span v-if="item.broken" :style="{ color: 'rgb(250, 100, 130)' }">기기 고장</span>
+            <span v-else>정상 작동</span>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -86,7 +89,7 @@ export default {
   border-radius: 10px;
 }
 .red-text td {
-  color: red;
+  color: rgb(250, 100, 130);
 }
 
 .main_table th,
