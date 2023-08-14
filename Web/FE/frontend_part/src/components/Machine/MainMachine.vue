@@ -120,7 +120,6 @@ export default {
       let currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
 
       this.$store.state.currentTime = currentTime;
-      this.$store.state.errorImg = "/Error_BluePrint/BluePrint_0000.png";
 
       await this.$store.dispatch("machine/getMachineLog");
     },
