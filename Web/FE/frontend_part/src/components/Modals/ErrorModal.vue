@@ -1,8 +1,9 @@
 <template>
-  <div v-if="show" class="modal-overlay">
-    <div class="modal-content">
-      <video class="modal-video" ref="modalVideo" autoplay muted playsinline></video>
-      <button class="modal-close-button" @click="$emit('close')">닫기</button>
+  <div v-if="isVisible" class="modal-overlay">
+    <div class="modal">
+      <h2>{{ title }}</h2>
+      <p v-html="message"></p>
+      <button class="modal-close-button" @click="close">확인</button>
     </div>
   </div>
 </template>
@@ -10,17 +11,22 @@
 <script>
 export default {
   props: {
-    show: Boolean,
-    videoStream: Object,
+    isVisible: {
+      type: Boolean,
+      default: false,
+    },
+    title: {
+      type: String,
+      default: "Alert",
+    },
+    message: {
+      type: String,
+      default: "",
+    },
   },
-  watch: {
-    videoStream(newStream) {
-      this.$nextTick(() => {
-        if (this.$refs.modalVideo) {
-          this.$refs.modalVideo.srcObject = newStream;
-          this.$refs.modalVideo.play();
-        }
-      });
+  methods: {
+    close() {
+      this.$emit("close");
     },
   },
 };
@@ -38,6 +44,20 @@ export default {
   justify-content: center;
   align-items: center;
 }
+.modal {
+  background: rgb(39, 40, 41);
+  border: 2px solid rgb(250, 100, 130);
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 500px;
+  height: 200px;
+  max-width: 70vh;
+  z-index: 1001;
+}
 
 .modal-content {
   background: rgb(39, 40, 41);
@@ -47,14 +67,8 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.modal-video {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  background-color: black;
-}
+
 .modal-close-button {
-  margin-top: 20px;
   background-color: rgb(55, 55, 55);
   border: none;
   color: #d2d2d2;
@@ -64,6 +78,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
   transition: 0.3s ease;
 }
 

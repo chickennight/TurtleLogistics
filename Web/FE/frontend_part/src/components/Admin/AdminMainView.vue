@@ -159,13 +159,13 @@ export default {
 }
 #UpperContainer {
   height: 450px;
-  margin: 20px;
+  margin: 0px -25px 20px 20px;
   padding-bottom: 3%;
   display: flex;
 }
 #LowerContainer {
   height: 450px;
-  margin: 20px;
+  margin: 20px -25px 20px 20px;
   display: flex;
 }
 .GraphContainer {
@@ -178,7 +178,7 @@ export default {
 .ProductStatusContainer {
   padding: 20px;
   width: 40%;
-  margin-left: 30px;
+  margin-left: 20px;
   overflow-y: auto;
   scrollbar-width: 0px;
   box-shadow: 0px 0px 6px -1px black;
@@ -196,11 +196,11 @@ export default {
   display: none;
 }
 .LogTableContainer {
-  padding: 10px;
+  padding: 20px;
   box-shadow: 0px 0px 6px -1px black;
   width: 55%;
   overflow-y: auto;
-  margin-left: 30px;
+  margin-left: 20px;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
   overflow: hidden; /* 스크롤 숨기기 */
@@ -212,7 +212,7 @@ export default {
   border-radius: 10px;
 }
 .red-text td {
-  color: red;
+  color: rgb(250, 100, 130);
 }
 .machineImg {
   margin-top: 2%;

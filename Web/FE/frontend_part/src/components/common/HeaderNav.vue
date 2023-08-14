@@ -47,11 +47,15 @@ export default {
   height: 100px;
   display: flex;
   justify-content: flex-end;
-  /* box-shadow: 6px 1px 3px 3px black; */
+  align-items: center;
 }
+
 .AdminProfile,
 .UserProfile {
   width: 350px;
-  margin: auto 0;
+  margin-right: 25px;
+  margin-top: 20px;
+  text-align: right;
+  font-size: 19px;
 }
 </style>

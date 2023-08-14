@@ -88,19 +88,19 @@ export default {
 <style scoped>
 .CctvContainer {
   margin: 20px;
-  padding: 20px;
   display: flex;
+  height: (100vh - 40px);
   flex-direction: column;
 }
 .CctvHeader {
   padding: 20px;
-
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
 }
 .VideoContainer {
   width: 450px;
+  height: 450px;
 }
 .SubCctvContainer {
   display: flex;
@@ -108,6 +108,7 @@ export default {
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+  flex-grow: 1;
 }
 .CctvUpperContainer {
   display: flex;

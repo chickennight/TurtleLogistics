@@ -1,13 +1,12 @@
 <template>
   <div class="OrderNowContainer">
     <div class="OrderNowHeader"><h1>주문 현황</h1></div>
-    &nbsp;
     <div class="OrderNowGraph">
       <Line :data="updatedChartData" :options="chartOptions" style="color: white" />
     </div>
     &nbsp;
     <div class="search-container">
-      <label for="statusSearch">현황별 검색 : </label>
+      <label for="statusSearch" style="margin-right: 0.5%">현황별 검색 : </label>
       <select v-model="searchStatus" @change="filterOrders">
         <option value="">모든 현황</option>
         <option value="주문 접수">주문 접수</option>
@@ -18,7 +17,7 @@
         <option value="이상 발생">이상 발생</option>
       </select>
     </div>
-    <div class="OrderNowTableContainer" style="margin-top: 2%">
+    <div class="OrderNowTableContainer">
       <v-table density="compact" theme="dark" class="main_table">
         <thead>
           <tr>
@@ -88,8 +87,8 @@ export default {
         datasets: [
           {
             label: "주문건수",
-            borderColor: "salmon",
-            backgroundColor: "salmon",
+            borderColor: "rgb(250, 100, 130)",
+            backgroundColor: "rgb(250, 100, 130)",
             color: "red",
             data: [],
           },
@@ -210,6 +209,7 @@ export default {
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+  margin-top: 20px;
 }
 .OrderNowHeader {
   padding: 20px;
@@ -236,7 +236,10 @@ export default {
 .search-container {
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 10px;
-  padding-top: 1%;
+  padding-bottom: 17px;
+  margin-right: 2%;
+}
+.OrderNowTableContainer {
+  border-radius: 10px;
 }
 </style>
