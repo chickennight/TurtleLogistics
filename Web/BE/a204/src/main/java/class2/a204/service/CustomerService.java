@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -45,8 +46,11 @@ public class CustomerService {
             String refreshToken = jwtTokenProvider.createRefreshToken(customer.get().getCustomerId(), Role.ROLE_CUSTOMER.name());
 
             Map<String, String> tokens = new HashMap<>();
+
             tokens.put("accessToken", accessToken);
             tokens.put("refreshToken", refreshToken);
+            tokens.put("customer_id", customer.get().getCustomerId());
+
             return tokens;
         }
         return null;

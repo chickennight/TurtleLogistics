@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class NewOrderDTO {
 
-    @JsonProperty("customer_num")
-    private Integer customerNum;
+    @JsonProperty("customer_id")
+    private String customerId;
 
     private List<Product> products;
 
