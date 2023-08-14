@@ -43,7 +43,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: auto;
-  max-width: 70vh;
+  max-width: 90vh;
   z-index: 1001;
 }
 
