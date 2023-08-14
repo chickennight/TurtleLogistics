@@ -1,9 +1,11 @@
 <template>
   <div id="sideBar">
     <div id="SideLogo">
-      <div id="LogoImage">
-        <img class="SubTurtle" :src="subSrc" />
-      </div>
+      <router-link to="/admin" @click.stop="selectMenu('AdminMainView')">
+        <div id="LogoImage">
+          <img class="SubTurtle" :src="subSrc" />
+        </div>
+      </router-link>
       <div id="MainTL">
         <router-link to="/admin" @click.stop="selectMenu('AdminMainView')">
           TL <br />

@@ -17,6 +17,7 @@
           background-color="rgb(53, 53, 53)"
           variant="outlined"
           class="onButton"
+          style="margin-right: 10px"
         >
           전원 ON
         </v-btn>
