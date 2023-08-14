@@ -3,7 +3,6 @@
     <div class="MachineContainer">
       <h1>기기 제어</h1>
       <span class="MachineSpan">
-        <!-- <h1>{{ this.currentTime }}</h1> -->
         &nbsp;&nbsp;&nbsp;
         <v-btn
           @click="getMachineOff"
