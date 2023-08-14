@@ -2,7 +2,7 @@
   <div class="LogisticContainer">
     <div class="LogisticsHeader">
       <h1>물류 현황</h1>
-      <h1>{{ this.currentTime }}</h1>
+      <v-btn>새로고침</v-btn>
     </div>
     <div class="ProductStatusContainer">
       <v-table density="compact" theme="dark" class="main_table">
@@ -99,7 +99,6 @@ export default {
   data() {
     return {
       myTimer: null,
-      currentTime: "",
       sortBy: null, // 현재 정렬 기준
       sortOrder: true, // 정렬 순서 (true: 오름차순, false: 내림차순)
     };
@@ -116,29 +115,6 @@ export default {
   },
   methods: {
     get_logistic_analysis() {
-      let today = new Date();
-
-      let month = today.getMonth() + 1; // 월
-      let date = today.getDate(); // 날짜
-
-      let hours = today.getHours(); // 시
-      let minutes = today.getMinutes(); // 분
-      let seconds = today.getSeconds(); // 초
-
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-
-      this.currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
-
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
     //테이블 정렬 기능
@@ -207,5 +183,6 @@ export default {
 
 .icon-padding-left {
   margin-left: 5px;
+  cursor: pointer;
 }
 </style>

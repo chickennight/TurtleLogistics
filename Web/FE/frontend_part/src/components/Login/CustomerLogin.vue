@@ -9,6 +9,7 @@
           v-model="customer.customer_id"
           label="아이디"
           :rules="nameRules"
+          @keyup.enter="doCustomerLogin"
         ></v-text-field>
 
         <v-text-field
@@ -16,6 +17,7 @@
           label="비밀번호"
           type="password"
           :rules="nameRules"
+          @keyup.enter="doCustomerLogin"
         ></v-text-field>
 
         <v-btn @click="doCustomerLogin" block class="mt-2">로그인</v-btn>

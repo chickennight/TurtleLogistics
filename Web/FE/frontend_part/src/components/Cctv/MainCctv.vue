@@ -3,13 +3,17 @@
     <div class="CctvHeader"><h1>CCTV</h1></div>
     &nbsp;
     <div class="SubCctvContainer">
-      <div class="CctvUpperContainer">
+      <div class="CctvDiv">
+        <h2>주문 파트</h2>
         <video
           class="VideoContainer"
           ref="videoElement"
           autoplay
           @click="showInModal($refs.videoElement)"
         ></video>
+      </div>
+      <div class="CctvDiv">
+        <h2>분류 파트</h2>
         <video
           class="VideoContainer"
           ref="notebookVideo"
@@ -98,19 +102,21 @@ export default {
 }
 .VideoContainer {
   width: 450px;
-  height: 450px;
+  height: 390px;
 }
 .SubCctvContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
   flex-grow: 1;
 }
-.CctvUpperContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.CctvDiv {
+  margin: 20px;
+}
+h2 {
+  margin-top: 10px;
 }
 </style>

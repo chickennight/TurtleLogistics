@@ -2,7 +2,7 @@
   <div id="sideBar">
     <div id="SideLogo">
       <div id="LogoImage">
-        <img class="SubTurtle" :src="subSrc" @click="EasterEgg" />
+        <img class="SubTurtle" :src="subSrc" />
       </div>
       <div id="MainTL">
         <router-link to="/admin" @click.stop="selectMenu('AdminMainView')">
@@ -189,7 +189,7 @@ export default {
   name: "SidebarNav",
   data: () => ({
     subSrc: "/SubTurtle.png",
-    selectedMenu: "AdminMainView",
+    selectedMenu: sessionStorage.getItem("selectedMenu") || "AdminMainView",
     selectedtextstyle: {
       background: "linear-gradient(to Left Bottom, #e64878 30%, #f08556 100%)",
       "-webkit-background-clip": "text",
@@ -198,15 +198,9 @@ export default {
     },
   }),
   methods: {
-    EasterEgg() {
-      if (this.subSrc == "/SubTurtle.png") {
-        this.subSrc = "/SubTurtle_Easter.png";
-      } else {
-        this.subSrc = "/SubTurtle.png";
-      }
-    },
     selectMenu(name) {
       this.selectedMenu = name;
+      sessionStorage.setItem("selectedMenu", name);
     },
     iconColor(menuName) {
       return this.selectedMenu === menuName ? { color: "#e64878" } : { color: "#d2d2d2" };

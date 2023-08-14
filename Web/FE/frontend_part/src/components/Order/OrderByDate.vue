@@ -3,26 +3,52 @@
     <div class="ButtonContainer">
       <h1>기간별 조회</h1>
       <span>
-        <v-btn @click="getOrderDataWeek" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="setPeriod('week')"
+          :class="{ selected: selectedPeriod === 'week' }"
+          variant="outlined"
+        >
           일주일
         </v-btn>
-        <v-btn @click="getOrderDataMonth" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="setPeriod('month')"
+          :class="{ selected: selectedPeriod === 'month' }"
+          variant="outlined"
+        >
           1개월
         </v-btn>
-        <v-btn @click="getOrderData3Month" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="setPeriod('3month')"
+          :class="{ selected: selectedPeriod === '3month' }"
+          variant="outlined"
+        >
           3개월
         </v-btn>
-        <v-btn @click="getOrderData6Month" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="setPeriod('6month')"
+          :class="{ selected: selectedPeriod === '6month' }"
+          variant="outlined"
+        >
           6개월
         </v-btn>
-        <v-btn @click="getOrderDataYear" background-color="rgb(53, 53, 53)" variant="outlined">
+        <v-btn
+          @click="setPeriod('year')"
+          :class="{ selected: selectedPeriod === 'year' }"
+          variant="outlined"
+        >
           1년
         </v-btn>
       </span>
     </div>
-
     <div class="OrderGraphContainer">
       <Line :data="chartData" :key="renderCount" :options="chartOptions" />
+      <div v-if="isLoading" class="loading-overlay">
+        <v-progress-circular
+          :size="50"
+          color="rgba(250, 100, 130, 0.9)"
+          indeterminate
+        ></v-progress-circular>
+      </div>
     </div>
   </div>
 </template>
@@ -94,39 +120,82 @@ export default {
         },
       },
     },
+    selectedPeriod: sessionStorage.getItem("selectedPeriod") || "week",
+    isLoading: false,
     renderCount: 0,
   }),
   async mounted() {
-    const offset = new Date().getTimezoneOffset() * 60000;
-    const today = new Date(Date.now() - offset);
-    const end_day = today.toISOString();
-    const week = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000 - offset);
-    const start_day = week.toISOString();
-
-    const date = {
-      end: end_day,
-      start: start_day,
-    };
-
-    await this.$store.dispatch("order/getOrderData", date);
-
-    var idx = 0;
-    this.chartData.labels = [];
-    this.chartData.datasets.data = [];
-
-    for (let key in this.orderData) {
-      this.chartData.labels[idx] = key.substr(4);
-      this.chartData.datasets[0].data[idx] = this.orderData[key];
-      idx++;
+    if (this.selectedPeriod) {
+      switch (this.selectedPeriod) {
+        case "week":
+          await this.getOrderDataWeek();
+          break;
+        case "month":
+          await this.getOrderDataMonth();
+          break;
+        case "3month":
+          await this.getOrderData3Month();
+          break;
+        case "6month":
+          await this.getOrderData6Month();
+          break;
+        case "year":
+          await this.getOrderDataYear();
+          break;
+      }
+    } else {
+      const offset = new Date().getTimezoneOffset() * 60000;
+      const today = new Date(Date.now() - offset);
+      const end_day = today.toISOString();
+      const week = new Date(Date.now() - 6 * 24 * 60 * 60 * 1000 - offset);
+      const start_day = week.toISOString();
+      const date = {
+        end: end_day,
+        start: start_day,
+      };
+      await this.$store.dispatch("order/getOrderData", date);
+      var idx = 0;
+      this.chartData.labels = [];
+      this.chartData.datasets.data = [];
+      for (let key in this.orderData) {
+        this.chartData.labels[idx] = key.substr(4);
+        this.chartData.datasets[0].data[idx] = this.orderData[key];
+        idx++;
+      }
+      this.renderCount += 1;
     }
-
-    this.renderCount += 1;
   },
   computed: {
     ...mapState("order", ["orderData"]),
   },
   methods: {
+    setPeriod(period) {
+      if (this.selectedPeriod === period) {
+        return;
+      }
+      this.selectedPeriod = period;
+      sessionStorage.setItem("selectedPeriod", period);
+
+      switch (period) {
+        case "week":
+          this.getOrderDataWeek();
+          break;
+        case "month":
+          this.getOrderDataMonth();
+          break;
+        case "3month":
+          this.getOrderData3Month();
+          break;
+        case "6month":
+          this.getOrderData6Month();
+          break;
+        case "year":
+          this.getOrderDataYear();
+          break;
+      }
+    },
     async getOrderDataWeek() {
+      this.isLoading = true;
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -139,6 +208,7 @@ export default {
       };
 
       await this.$store.dispatch("order/getOrderData", date);
+      this.isLoading = false;
 
       var idx = 0;
       this.chartData.labels = [];
@@ -154,6 +224,7 @@ export default {
       }, 10);
     },
     async getOrderDataMonth() {
+      this.isLoading = true;
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -166,6 +237,7 @@ export default {
       };
 
       await this.$store.dispatch("order/getOrderData", date);
+      this.isLoading = false;
       this.chartData.labels = [];
       this.chartData.datasets.data = [];
       var idx = 0;
@@ -180,6 +252,7 @@ export default {
       }, 10);
     },
     async getOrderData3Month() {
+      this.isLoading = true;
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -194,6 +267,7 @@ export default {
 
       await this.$store.dispatch("order/getOrderData", date);
 
+      this.isLoading = false;
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
 
@@ -216,6 +290,7 @@ export default {
       }, 10);
     },
     async getOrderData6Month() {
+      this.isLoading = true;
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -228,6 +303,7 @@ export default {
       };
 
       await this.$store.dispatch("order/getOrderData", date);
+      this.isLoading = false;
       var idx = 0;
       this.chartData.labels = [];
       this.chartData.datasets[0].data = [];
@@ -251,6 +327,7 @@ export default {
       }, 10);
     },
     async getOrderDataYear() {
+      this.isLoading = true;
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -263,6 +340,7 @@ export default {
       };
 
       await this.$store.dispatch("order/getOrderData", date);
+      this.isLoading = false;
 
       var idx = 0;
       this.chartData.labels = [];
@@ -300,6 +378,7 @@ export default {
   box-shadow: 0px 0px 6px -1px black;
   background-color: rgb(55, 55, 55);
   border-radius: 10px;
+  position: relative;
 }
 .b .graph {
   background-color: white;
@@ -322,5 +401,29 @@ export default {
   display: flex;
   gap: 10px;
   align-items: center;
+}
+
+.v-btn.selected ::v-deep * {
+  color: rgb(250, 100, 130, 0.9);
+}
+.v-btn.selected {
+  color: rgb(250, 100, 130, 0.9);
+  /* background-color: rgb(250, 100, 130); */
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loading-overlay ::v-deep .v-progress-circular .v-progress-circular__overlay {
+  stroke: rgb(250, 100, 130);
 }
 </style>
