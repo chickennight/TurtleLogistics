@@ -26,7 +26,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- 페이지네이션 처리된 데이터로 변경 -->
           <tr v-for="item in paginatedOrderNowList" :key="item.order_num">
             <td>{{ item.order_num }}</td>
             <td>{{ item.status }}</td>
