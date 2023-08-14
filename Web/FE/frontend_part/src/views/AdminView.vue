@@ -27,7 +27,6 @@ export default {
   name: "AdminView",
   data: () => ({
     appHeight: 900,
-    previousMachineLog: [],
     errorImg: "/Error_BluePrint/BluePrint_0000.png",
     myTimer: null,
     screenshot: null,
@@ -52,14 +51,14 @@ export default {
       this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
     },
     async getMachineStatus() {
-      this.previousMachineLog = [...this.machineStatus[`로그`]];
       await this.$store.dispatch("machine/getMachineStatus");
     },
     async initWebcam() {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const notebookCamera = devices.find(
-          (device) => device.kind === "videoinput" && device.label.includes("Web Camera")
+          (device) =>
+            device.kind === "videoinput" && device.label.includes("Web Camera")
         );
         if (notebookCamera) {
           const notebookStream = await navigator.mediaDevices.getUserMedia({
@@ -69,7 +68,9 @@ export default {
         } else {
           console.error("Notebook camera not found.");
         }
-        const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const webcamStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
       } catch (error) {
         console.error("Error accessing webcam:", error);
@@ -85,7 +86,13 @@ export default {
 
       // Draw the video frame onto the canvas
       const ctx = canvasElement.getContext("2d");
-      ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
+      ctx.drawImage(
+        videoElement,
+        0,
+        0,
+        videoElement.videoWidth,
+        videoElement.videoHeight
+      );
 
       // Get the data URL of the canvas content (base64 encoded image)
       const dataURL = canvasElement.toDataURL("image/png");
@@ -101,7 +108,10 @@ export default {
       this.screenshot = dataURL;
 
       fetchImage(dataURL).then((imageFile) => {
-        this.$store.dispatch("admin/takeScreenshot", { image: imageFile, log_num: log_num });
+        this.$store.dispatch("admin/takeScreenshot", {
+          image: imageFile,
+          log_num: log_num,
+        });
       });
     },
   },
@@ -118,71 +128,75 @@ export default {
       let addedLogs;
       // previousMachineLog와 machineLog를 비교하여 새로운 로그를 찾습니다.
       if (this.machineStatus[`로그`] != null) {
-        addedLogs = this.machineStatus[`로그`].filter(
-          (log) => !this.previousMachineLog.some((prevLog) => prevLog.log_num === log.log_num)
-        );
-        this.previousMachineLog = [...this.machineStatus[`로그`]];
+        addedLogs = this.machineStatus["로그"].filter((log) => !log.recorded);
 
         // addedLogs가 비어있지 않으면, 새로운 로그가 추가되었음을 의미합니다.
         if (addedLogs.length > 0) {
-          const plainAddedLogs = addedLogs.map((log) => ({ ...log }));
-          // 이미지전송
-          this.takeScreenshot(plainAddedLogs[0].log_num);
-          // 새로운 로그에 대해 원하는 동작을 수행합니다.
-          this.changeImg(plainAddedLogs[0].machine_id);
-          this.modalTitle = "Warning";
-          this.modalMessage = `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. <br>확인 후 메뉴얼에 따라 조치해주시기 바랍니다.`;
-          this.isModalVisible = true;
-          // alert(
-          //   `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. 확인 후 메뉴얼에 따라 조치해주시기 바랍니다`
-          // );
 
-          switch (plainAddedLogs[0].machine_id) {
-            case 1000:
-              this.sendMessage(
-                "[주문 컨베이어 벨트] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 1010:
-              this.sendMessage(
-                "[1차 피스톤] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 1020:
-              this.sendMessage(
-                "[2차 피스톤] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 1030:
-              this.sendMessage(
-                "[3차 피스톤] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 2000:
-              this.sendMessage(
-                "[분류 컨베이어 벨트] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 2100:
-              this.sendMessage(
-                "[카메라 모듈] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 2010:
-              this.sendMessage(
-                "[1차 가름막] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 2020:
-              this.sendMessage(
-                "[2차 가름막] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
-            case 2030:
-              this.sendMessage(
-                "[3차 가름막] 오류 발생 / 에러 내용 : " + plainAddedLogs[0].error_message
-              );
-              break;
+          for(let log of addedLogs){
+            // 이미지전송
+            this.takeScreenshot(log.log_num);
+            // 새로운 로그에 대해 원하는 동작을 수행합니다.
+            this.changeImg(log.machine_id);
+            this.modalTitle = "Warning";
+            this.modalMessage = `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. <br>확인 후 메뉴얼에 따라 조치해주시기 바랍니다.`;
+            this.isModalVisible = true;
+            switch (log.machine_id) {
+              case 1000:
+                this.sendMessage(
+                  "[주문 컨베이어 벨트] 오류 발생 / 에러 내용 : " +
+                  log.error_message
+                );
+                break;
+              case 1010:
+                this.sendMessage(
+                  "[1차 피스톤] 오류 발생 / 에러 내용 : " +
+                  log.error_message
+                );
+                break;
+              case 1020:
+                this.sendMessage(
+                  "[2차 피스톤] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 1030:
+                this.sendMessage(
+                  "[3차 피스톤] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 2000:
+                this.sendMessage(
+                  "[분류 컨베이어 벨트] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 2100:
+                this.sendMessage(
+                  "[카메라 모듈] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 2010:
+                this.sendMessage(
+                  "[1차 가름막] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 2020:
+                this.sendMessage(
+                  "[2차 가름막] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+              case 2030:
+                this.sendMessage(
+                  "[3차 가름막] 오류 발생 / 에러 내용 : " +
+                    log.error_message
+                );
+                break;
+            }
           }
         }
       }

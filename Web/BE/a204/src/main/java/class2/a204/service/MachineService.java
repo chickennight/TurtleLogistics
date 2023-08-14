@@ -1,5 +1,6 @@
 package class2.a204.service;
 
+import class2.a204.dto.LogDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
 import class2.a204.repository.LogRepository;
@@ -29,7 +30,7 @@ public class MachineService {
     }
 
     public List<Log> findLogAll() {
-        return logRepository.findAll();
+        return logRepository.findAllByOrderByErrorDateDesc();
     }
 
     public void addLog(Log log) {
@@ -44,10 +45,22 @@ public class MachineService {
         return brokenList;
     }
 
-    public List<Log> lastBrokenLogs(List<Integer> brokenList) {
-        List<Log> lastBrokenLogList = new ArrayList<>();
-        for (Integer n : brokenList)
-            lastBrokenLogList.add(logRepository.findAllByMachine_MachineIdOrderByErrorDateDesc(n).get(0));
+    public List<LogDTO> lastBrokenLogs(List<Integer> brokenList) {
+        List<LogDTO> lastBrokenLogList = new ArrayList<>();
+        for (Integer machineId : brokenList) {
+            Optional<Log> latestBrokenLog = logRepository.findFirstByMachine_MachineIdOrderByErrorDateDesc(machineId);
+
+            if (latestBrokenLog.isPresent()) {
+                Log log = latestBrokenLog.get();
+                lastBrokenLogList.add(new LogDTO(log));
+
+                if (!log.getRecorded()) {
+                    log.updateRecorded();
+                    logRepository.save(log);
+                }
+            }
+        }
+
         return lastBrokenLogList;
     }
 
@@ -63,8 +76,8 @@ public class MachineService {
 
     public Machine findMachine(Integer machineId) throws DataNotFountException {
         Optional<Machine> machine = machineRepository.findByMachineId(machineId);
-        if(machine.isPresent())
-        return machine.get();
+        if (machine.isPresent())
+            return machine.get();
         else throw new DataNotFountException("기계 조회 실패");
     }
 }
