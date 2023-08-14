@@ -92,18 +92,6 @@ export default {
     getlogisticAnalysis() {
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
-    // sortedLogisticAnalysis() {
-    //   // Sort the array in such a way that items with 'error_message' are on top
-    //   return this.logisticAnalysis.sort((a, b) => {
-    //     if (a.error_message !== "" && b.error_message === "") {
-    //       return -1; // 'a' has an error_message and should come before 'b'
-    //     } else if (a.error_message === "" && b.error_message !== "") {
-    //       return 1; // 'b' has an error_message and should come before 'a'
-    //     } else {
-    //       return 0; // Maintain the current order if both have an error_message or none
-    //     }
-    //   });
-    // },
     moveCCTV() {
       this.$router.push({ name: "MainCctv" });
     },
