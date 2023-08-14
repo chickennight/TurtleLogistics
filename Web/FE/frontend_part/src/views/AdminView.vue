@@ -115,7 +115,6 @@ export default {
     this.myTimer = setInterval(async () => {
       await this.getMachineStatus(); // 매 초마다 새 데이터를 가져옵니다.
       let addedLogs;
-      console.log(this.machineStatus)
       // previousMachineLog와 machineLog를 비교하여 새로운 로그를 찾습니다.
       if (this.machineStatus[`로그`] != null) {
         addedLogs = this.machineStatus["로그"].filter((log) => !log.recorded);
