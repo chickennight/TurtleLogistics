@@ -96,10 +96,12 @@ public class AdminController {
 
     @ApiOperation(value = "기기 이상 알림", notes = "기기 이상 발생시 메세지 전송")
     @PostMapping("/msg")
-    public ResponseEntity<?> sendMessage(@RequestBody String content, ServletRequest request) {
+    public ResponseEntity<?> sendMessage(@RequestBody int logNum, ServletRequest request) {
         try {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), content);
+
+            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token));
+            sms.setContent(smsService.createMessage(logNum));
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
