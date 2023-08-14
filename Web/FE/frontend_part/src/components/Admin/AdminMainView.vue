@@ -3,7 +3,7 @@
     <div id="LowerContainer">
       <sample-CCTV class="BlueprintContainer" @click="moveCCTV" />
       <div class="LogTableContainer" @click="moveMachine">
-        <img class="machineImg" src="/Error_BluePrint/BluePrint_0000.png" />
+        <img class="machineImg" :src="errorImg" />
       </div>
     </div>
     <div id="UpperContainer">
@@ -147,6 +147,7 @@ export default {
   computed: {
     ...mapState("machine", ["machineStatus"]),
     ...mapState("admin", ["logisticAnalysis"]),
+    ...mapState(["errorImg"]),
   },
 };
 </script>
