@@ -20,6 +20,7 @@ public class LogDTO {
     private String errorMessage;
     @JsonProperty("machine_id")
     private Integer machineId;
+    private Boolean recorded;
 
     public LogDTO(Log l) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -27,5 +28,6 @@ public class LogDTO {
         this.errorDate = l.getErrorDate().format(formatter);
         this.errorMessage = l.getErrorMessage();
         this.machineId = l.getMachine().getMachineId();
+        this.recorded = l.getRecorded();
     }
 }
