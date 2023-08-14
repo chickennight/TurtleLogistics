@@ -7,7 +7,7 @@
     &nbsp;
     <div class="search-container">
       <label for="statusSearch" style="margin-right: 0.5%">현황별 검색 : </label>
-      <select v-model="searchStatus" @change="filterOrders">
+      <select v-model="searchStatus" @change="filterOrders" style="margin-right: 5px">
         <option value="">모든 현황</option>
         <option value="주문 접수">주문 접수</option>
         <option value="포장 과정">포장 과정</option>
@@ -16,6 +16,7 @@
         <option value="배송 과정">배송 과정</option>
         <option value="이상 발생">이상 발생</option>
       </select>
+      ▼
     </div>
     <div class="OrderNowTableContainer">
       <v-table density="compact" theme="dark" class="main_table">
@@ -237,8 +238,15 @@ export default {
   justify-content: flex-end;
   padding-bottom: 17px;
   margin-right: 2%;
+  font-size: 20px;
 }
 .OrderNowTableContainer {
   border-radius: 10px;
+}
+select:hover {
+  background-color: rgb(55, 55, 55);
+}
+option {
+  background-color: rgb(55, 55, 55);
 }
 </style>
