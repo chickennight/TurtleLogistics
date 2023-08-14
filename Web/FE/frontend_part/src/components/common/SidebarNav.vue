@@ -2,7 +2,7 @@
   <div id="sideBar">
     <div id="SideLogo">
       <div id="LogoImage">
-        <img class="SubTurtle" :src="subSrc" @click="EasterEgg" />
+        <img class="SubTurtle" :src="subSrc" />
       </div>
       <div id="MainTL">
         <router-link to="/admin" @click.stop="selectMenu('AdminMainView')">
@@ -198,13 +198,6 @@ export default {
     },
   }),
   methods: {
-    EasterEgg() {
-      if (this.subSrc == "/SubTurtle.png") {
-        this.subSrc = "/SubTurtle_Easter.png";
-      } else {
-        this.subSrc = "/SubTurtle.png";
-      }
-    },
     selectMenu(name) {
       this.selectedMenu = name;
     },
