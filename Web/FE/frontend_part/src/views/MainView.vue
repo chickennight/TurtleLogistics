@@ -36,11 +36,11 @@ export default {
   height: 100vh;
   border: 1px solid black;
   color: white;
-  /* 
-  background-image: url("@/assets/conveyor.svg"), url("@/assets/belt.svg");
-  background-position: top right, bottom right;
-  background-size: 80%, 80%;
-  background-repeat: no-repeat; */
+
+  background-image: url("@/assets/openConveyorBelt.svg");
+  background-position: left 53% bottom -200%;
+  background-size: 140%;
+  background-repeat: no-repeat;
 }
 #MainLogo {
   width: 400px;
@@ -86,6 +86,7 @@ export default {
   font-size: 22px;
   font-weight: bold;
   padding-top: 13px;
+  border: 3px solid rgb(21, 21, 21);
 }
 .v-card-item {
   display: flex;
@@ -95,6 +96,7 @@ export default {
   padding: 10px 8px 0px 8px;
 }
 .customCard:hover {
+  transition: all 1s;
   border: 2px solid rgb(250, 100, 130);
   transform: translateY(-5px);
 }

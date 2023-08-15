@@ -13,50 +13,42 @@
             v-model="this.customer_id"
             label="아이디"
             color="warning"
-            readonly></v-text-field>
+            readonly
+          ></v-text-field>
 
           <!-- selectDiv들을 동적으로 렌더링 -->
-          <div
-            v-for="(select, index) in selectDivs"
-            :key="index"
-            class="selectDiv">
+          <div v-for="(select, index) in selectDivs" :key="index" class="selectDiv">
             <v-select
               :v-model="select.product"
               :items="products"
               label="상품"
               class="productDiv"
-              required></v-select>
+              required
+            ></v-select>
             <v-select
               v-model="order.products[index].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
-              required></v-select>
+              required
+            ></v-select>
             <!-- - 버튼 -->
           </div>
 
-          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv"
-            >+</v-btn
-          >
-          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv"
-            >-</v-btn
-          >
+          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv">+</v-btn>
+          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv">-</v-btn>
 
-          <v-select
-            label="지역"
-            :items="region"
-            v-model="selectedRegionIndex"></v-select>
+          <v-select label="지역" :items="region" v-model="selectedRegionIndex"></v-select>
 
           <v-text-field
             v-model="order.detailAddress"
             label="상세주소"
             color="warning"
-            required></v-text-field>
+            required
+          ></v-text-field>
 
           <div class="d-flex flex-column">
-            <v-btn color="success" class="mt-4" block @click="doOrder">
-              주문하기
-            </v-btn>
+            <v-btn color="success" class="mt-4" block @click="doOrder"> 주문하기 </v-btn>
           </div>
         </v-form>
       </v-sheet>
@@ -103,12 +95,7 @@ export default {
       "제주특별자치도",
     ],
     selectedRegionIndex: null,
-    products: [
-      "횡성 한우 부채살",
-      "두루마리 휴지 30개입",
-      "생수 2L 12개",
-      "진라면 1봉(5개입)",
-    ],
+    products: ["횡성 한우 부채살", "두루마리 휴지 30개입", "생수 2L 12개", "진라면 1봉(5개입)"],
     number: [1, 2, 3],
     selectA: "선택 안함",
     selectB: "선택 안함",
@@ -176,7 +163,7 @@ export default {
 .CustomerContainer {
   display: flex;
   flex-direction: column;
-  height: 120vh;
+  height: 100vh;
   text-align: center;
 }
 .OrderForm * {
