@@ -49,7 +49,7 @@ export default {
       this.$store.dispatch("admin/SendSMS", log_num);
     },
     changeImg(machine_id) {
-      this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
+      this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.png`;
     },
     async getMachineStatus() {
       await this.$store.dispatch("machine/getMachineStatus");
