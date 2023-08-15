@@ -15,8 +15,12 @@ const customerStore = {
       state.customer_id = data.customer_id;
       localStorage.setItem("customerToken", data.accessToken); // 로컬스토리지에 accessToken 저장
       localStorage.setItem("customerRefreshToken", data.refreshToken); //로컬스토리지에 refreshToken 저장
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminRefreshToken");
     },
     LOGOUT() {
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminRefreshToken");
       localStorage.removeItem("customerToken");
       localStorage.removeItem("customerRefreshToken");
     },
