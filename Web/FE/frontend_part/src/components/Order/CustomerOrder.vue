@@ -121,8 +121,6 @@ export default {
   },
   methods: {
     async doOrder() {
-      console.log(this.order);
-      console.log(this.order.products);
       this.order.customer_id = this.customer_id;
       if (
         this.order.address == "" ||
