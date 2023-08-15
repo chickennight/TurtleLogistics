@@ -4,19 +4,19 @@
     <div class="OrderNowGraph">
       <Line :data="updatedChartData" :options="chartOptions" style="color: white" />
     </div>
-    &nbsp;
     <div class="search-container">
       <label for="statusSearch" style="margin-right: 0.5%">현황별 검색 : </label>
-      <select v-model="searchStatus" @change="filterOrders" style="margin-right: 5px">
-        <option value="">모든 현황</option>
-        <option value="주문 접수">주문 접수</option>
-        <option value="포장 과정">포장 과정</option>
-        <option value="분류 과정">분류 과정</option>
-        <option value="분류 완료">분류 완료</option>
-        <option value="배송 과정">배송 과정</option>
-        <option value="이상 발생">이상 발생</option>
-      </select>
-      ▼
+      <div class="custom-select">
+        <select v-model="searchStatus" @change="filterOrders">
+          <option value="">모든 현황</option>
+          <option value="주문 접수">주문 접수</option>
+          <option value="포장 과정">포장 과정</option>
+          <option value="분류 과정">분류 과정</option>
+          <option value="분류 완료">분류 완료</option>
+          <option value="배송 과정">배송 과정</option>
+          <option value="이상 발생">이상 발생</option>
+        </select>
+      </div>
     </div>
     <div class="OrderNowTableContainer">
       <v-table density="compact" theme="dark" class="main_table">
@@ -233,13 +233,6 @@ export default {
   padding: 10px 0;
 }
 
-.search-container {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 17px;
-  margin-right: 2%;
-  font-size: 20px;
-}
 .OrderNowTableContainer {
   border-radius: 10px;
 }
@@ -248,5 +241,41 @@ select:hover {
 }
 option {
   background-color: rgb(55, 55, 55);
+}
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 17px;
+  margin-right: 1%;
+  margin-top: 1.5%;
+  font-size: 20px;
+}
+
+.custom-select select {
+  padding: 5px 15px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 6px -1px black;
+  border: 1px solid gray;
+  cursor: pointer;
+  background-color: rgb(55, 55, 55);
+  color: white;
+  appearance: none;
+  transition: background-color 0.3s ease;
+}
+
+.custom-select select:hover {
+  background-color: rgb(45, 45, 45);
+}
+
+option {
+  background-color: rgb(55, 55, 55);
+  color: white;
 }
 </style>

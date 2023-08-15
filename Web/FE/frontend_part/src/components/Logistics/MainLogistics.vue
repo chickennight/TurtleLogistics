@@ -125,6 +125,8 @@ export default {
       this.isLoading = true;
       await this.$store.dispatch("admin/getLogisticAnalysis");
       this.isLoading = false;
+
+      this.sortTable("product_num");
     },
     //테이블 정렬 기능
     sortTable(column) {
