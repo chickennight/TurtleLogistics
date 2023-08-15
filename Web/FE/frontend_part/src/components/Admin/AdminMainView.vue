@@ -209,7 +209,7 @@ export default {
   width: 100%;
   height: 95%;
   border-radius: 8px;
-  object-fit: cover; /* 이미지 비율 유지하면서 컨테이너 안에 맞춤 */
+  object-fit: contain; /*이미지 비율 유지하면서 컨테이너 안에 맞춤*/
 }
 
 .main_table th,
