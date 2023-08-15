@@ -22,11 +22,12 @@
 
         <v-btn @click="doCustomerLogin" block class="mt-2">로그인</v-btn>
       </v-form>
-      &nbsp;
-      <div class="registDiv">
-        <router-link :to="{ name: 'CustomerRegist' }">회원가입</router-link>
-      </div>
     </v-sheet>
+    <div class="registDiv">
+      <v-btn block class="mt-2">
+        <router-link :to="{ name: 'CustomerRegist' }">회원가입</router-link>
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -51,26 +52,41 @@ export default {
 <style scoped>
 .loginForm {
   width: 100%;
-  height: 120vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-image: url("@/assets/closeConveyorBelt.svg");
+  background-position: left 44% bottom 120%;
+  background-size: 150%;
+  background-repeat: no-repeat;
 }
 .loginForm * {
-  color: white;
   background-color: rgb(39, 40, 41);
   text-align: center;
 }
 .registDiv {
+  color: rgb(210, 210, 210) !important;
   text-align: center;
-  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+  width: 300px;
 }
+
 .MainTurtle {
   height: 150px;
   width: 150px;
   object-fit: contain;
   margin: auto;
   display: block;
+}
+
+.mt-2 {
+  border: 3px solid rgb(21, 21, 21);
+  font-size: 22px;
+  font-weight: bold;
+  padding: 7%;
 }
 </style>
