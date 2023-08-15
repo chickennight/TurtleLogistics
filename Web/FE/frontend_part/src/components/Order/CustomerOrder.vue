@@ -14,50 +14,6 @@
             label="아이디"
             color="warning"
             readonly></v-text-field>
-          <div class="selectDiv">
-            <v-select
-              v-model="selectA"
-              :items="products"
-              label="상품"
-              class="productDiv"
-              required></v-select>
-            <v-select
-              v-model="order.products[1].stock"
-              :items="number"
-              label="갯수"
-              class="numberDiv"
-              required></v-select>
-          </div>
-          <div class="selectDiv">
-            <v-select
-              v-model="selectB"
-              :items="products"
-              label="상품"
-              class="productDiv"
-              required></v-select>
-            <v-select
-              v-model="order.products[2].stock"
-              :items="number"
-              label="갯수"
-              class="numberDiv"
-              required></v-select>
-          </div>
-          <div class="selectDiv">
-            <v-select
-              v-model="selectC"
-              :items="products"
-              label="상품"
-              class="productDiv"
-              required></v-select>
-            <v-select
-              v-model="order.products[0].stock"
-              :items="number"
-              label="갯수"
-              class="numberDiv"
-              required></v-select>
-          </div>
-
-          <!-- + 버튼 -->
 
           <!-- selectDiv들을 동적으로 렌더링 -->
           <div
@@ -71,7 +27,7 @@
               class="productDiv"
               required></v-select>
             <v-select
-              :v-model="order.products[index].stock"
+              v-model="order.products[index].stock"
               :items="number"
               label="갯수"
               class="numberDiv"
@@ -148,13 +104,12 @@ export default {
     ],
     selectedRegionIndex: null,
     products: [
-      "선택 안함",
       "횡성 한우 부채살",
       "두루마리 휴지 30개입",
       "생수 2L 12개",
       "진라면 1봉(5개입)",
     ],
-    number: [0, 1, 2, 3],
+    number: [1, 2, 3],
     selectA: "선택 안함",
     selectB: "선택 안함",
     selectC: "선택 안함",
