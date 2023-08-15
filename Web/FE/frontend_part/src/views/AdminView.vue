@@ -27,13 +27,15 @@ export default {
   name: "AdminView",
   data: () => ({
     appHeight: 900,
-    errorImg: "",
     myTimer: null,
     screenshot: null,
     isModalVisible: false,
     modalTitle: "Alert",
     modalMessage: "",
   }),
+  created(){
+    this.changeImg('0000');
+  },
   methods: {
     // updateAppHeight(childContentHeight) {
     //   // 자식 컴포넌트의 내용 높이에 따라 App.vue의 높이를 동적으로 변경
@@ -47,7 +49,6 @@ export default {
       this.$store.dispatch("admin/SendSMS", log_num);
     },
     changeImg(machine_id) {
-      this.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
       this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.PNG`;
     },
     async getMachineStatus() {
@@ -121,6 +122,8 @@ export default {
       let addedLogs;
       // previousMachineLog와 machineLog를 비교하여 새로운 로그를 찾습니다.
       if (this.machineStatus[`로그`] != null) {
+        const brokenList = this.machineStatus[`로그`];
+        this.changeImg(brokenList[0].machine_id);
         addedLogs = this.machineStatus["로그"].filter((log) => !log.recorded);
 
         // addedLogs가 비어있지 않으면, 새로운 로그가 추가되었음을 의미합니다.
@@ -129,7 +132,6 @@ export default {
             // 이미지전송
             this.takeScreenshot(log.log_num);
             // 새로운 로그에 대해 원하는 동작을 수행합니다.
-            this.changeImg(log.machine_id);
             this.modalTitle = "Warning";
             this.modalMessage = `${log.machine_id} 공정에 이상이 발생했습니다. <br>확인 후 메뉴얼에 따라 조치해주시기 바랍니다.`;
             this.isModalVisible = true;
@@ -141,6 +143,7 @@ export default {
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
+    ...mapState(["errorImg"]),
   },
 };
 </script>
