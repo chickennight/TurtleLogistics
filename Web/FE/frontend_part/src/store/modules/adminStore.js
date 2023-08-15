@@ -17,10 +17,15 @@ const adminStore = {
       state;
       localStorage.setItem("adminToken", data.accessToken);
       localStorage.setItem("adminRefreshToken", data.refreshToken);
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customerRefreshToken");
+      sessionStorage.setItem("selectedMenu", "AdminMainView");
     },
     LOGOUT() {
       localStorage.removeItem("adminToken");
       localStorage.removeItem("adminRefreshToken");
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customerRefreshToken");
     },
     GET_LOGISTIC_ANALYSIS(state, data) {
       state.logisticAnalysis = data;
