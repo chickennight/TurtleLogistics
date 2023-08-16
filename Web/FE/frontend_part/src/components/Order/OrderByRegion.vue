@@ -31,7 +31,7 @@
           </tbody>
         </v-table>
       </div>
-      <svg style="overflow: visible" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -100 750 100">
+      <svg style="overflow: visible" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -80 750 50">
         <defs>
           <filter id="dropshadow">
             <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
@@ -341,7 +341,7 @@ path:hover > .TEXT {
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  height: 150%;
   vertical-align: top;
   overflow: hidden;
 }
@@ -350,22 +350,24 @@ path:hover > .TEXT {
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
 }
 
 .RegionString {
   width: 100%;
-  margin: 20px 0px 20px 0px;
+  margin: 20px 0px 20px 40px;
   margin-left: 20px;
 }
 .RegionTable {
-  box-shadow: 0px 0px 6px -1px black;
   width: 100%;
   border-radius: 10px;
-  margin-bottom: 40px;
 }
 .main_table th,
 .main_table td {
   text-align: center;
   vertical-align: middle;
+}
+.main_table {
+  margin: 0px 15px 0px 15px;
 }
 </style>
