@@ -231,6 +231,10 @@ export default {
     currentRegion: "",
     selectedRegion: null,
   }),
+  mounted() {
+    this.resetRegions();
+    this.$store.dispatch("order/resetOrderRegion");
+  },
   methods: {
     getRegion(value) {
       let region = document.getElementById(value).textContent;
@@ -268,6 +272,22 @@ export default {
         regionText.style.visibility = "hidden";
       }
     },
+    resetRegions() {
+      // 모든 지역 이름 숨기기
+      const texts = document.querySelectorAll(".TEXT");
+      texts.forEach((text) => {
+        text.style.visibility = "hidden";
+      });
+
+      // 선택된 지역 스타일 제거하기
+      const paths = document.querySelectorAll("path");
+      paths.forEach((path) => {
+        path.classList.remove("selected");
+      });
+
+      this.currentRegion = "";
+      this.selectedRegion = null;
+    },
   },
   computed: {
     ...mapState("order", ["orderRegion"]),
@@ -297,6 +317,7 @@ path:hover {
   font-weight: bold;
   text-anchor: middle;
   visibility: hidden;
+  pointer-events: none;
 }
 path:hover > .TEXT {
   visibility: visible;
