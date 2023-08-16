@@ -8,7 +8,7 @@
       <label for="statusSearch" style="margin-right: 0.5%">현황별 검색 : </label>
       <div class="custom-select">
         <select v-model="searchStatus" @change="filterOrders">
-          <option value="">모든 현황</option>
+          <option value="모든 현황">모든 현황</option>
           <option value="주문 접수">주문 접수</option>
           <option value="포장 과정">포장 과정</option>
           <option value="분류 과정">분류 과정</option>
@@ -36,11 +36,39 @@
     </div>
     <div class="pagination">
       <button @click="currentPage = Math.max(1, currentPage - 1)" style="margin-right: 1%">
-        이전
+        &lt;
       </button>
-      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <span>
+        <input
+          type="number"
+          v-model="inputPage"
+          @keyup.enter="goToInputPage"
+          min="1"
+          :max="totalPages"
+          style="
+            width: 40px;
+            text-align: center;
+            padding: 1px;
+            border-radius: 4px;
+            display: inline-block;
+            vertical-align: middle;
+          "
+        />
+        /
+        <span
+          style="
+            width: 40px;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
+            padding: 1px;
+          "
+          >{{ totalPages }}</span
+        >
+      </span>
+
       <button @click="currentPage = Math.min(totalPages, currentPage + 1)" style="margin-left: 1%">
-        다음
+        &gt;
       </button>
     </div>
   </div>
@@ -80,6 +108,7 @@ export default {
   },
   data() {
     return {
+      inputPage: 1,
       renderCount: 0,
       myTimer: null,
       chartData: {
@@ -121,30 +150,29 @@ export default {
       //페이지네이션과 검색기능
       currentPage: 1,
       itemsPerPage: 10,
-      searchStatus: "",
+      searchStatus: "모든 현황",
       lastApiResponse: null,
       filteredOrderNowList: [],
     };
   },
   created() {
-    this.get_order_nows();
+    // this.get_order_nows();
     this.get_order_nows().then(() => {
       this.filterOrders(); // 초기 필터링
     });
   },
-  mounted() {
-    this.myTimer = setInterval(this.get_order_nows, 5000);
-  },
+  // mounted() {
+  //   this.myTimer = setInterval(this.get_order_nows, 5000);
+  // },
   watch: {
-    // orderNowcalculate 데이터의 변화를 감시
-    orderNowcalculate: {
-      handler(newVal) {
-        // 데이터가 변경될 때 실행되는 로직
-        this.chartData.datasets[0].data = newVal;
-        this.renderCount += 1;
+    orderNowList: {
+      handler() {
+        this.filterOrders();
       },
-      // deep 옵션을 true로 설정하여 중첩 객체의 변경도 감시 (선택적)
-      deep: true,
+      immediate: true,
+    },
+    currentPage(newVal) {
+      this.inputPage = newVal;
     },
   },
   beforeUnmount() {
@@ -175,10 +203,18 @@ export default {
     },
   },
   methods: {
+    goToInputPage() {
+      if (this.inputPage >= 1 && this.inputPage <= this.totalPages) {
+        this.currentPage = this.inputPage;
+        this.inputPage = this.currentPage;
+      } else {
+        alert("유효한 페이지 번호를 입력해주세요.");
+        this.inputPage = this.currentPage;
+      }
+    },
     async get_order_nows() {
       try {
         const response = await this.$store.dispatch("order/getOrderNows");
-
         if (JSON.stringify(response) !== JSON.stringify(this.lastApiResponse)) {
           this.lastApiResponse = response;
         }
@@ -187,7 +223,7 @@ export default {
       }
     },
     filterOrders() {
-      if (!this.searchStatus) {
+      if (this.searchStatus === "모든 현황") {
         this.filteredOrderNowList = this.orderNowList;
       } else {
         this.filteredOrderNowList = this.orderNowList.filter((order) =>
@@ -277,5 +313,11 @@ option {
 option {
   background-color: rgb(55, 55, 55);
   color: white;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>
