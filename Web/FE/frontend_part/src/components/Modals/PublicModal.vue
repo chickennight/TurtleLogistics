@@ -24,7 +24,18 @@ export default {
       default: "",
     },
   },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
+  },
   methods: {
+    handleKeyDown(event) {
+      if (event.key === "Escape" || event.key === "Enter") {
+        this.$emit("close");
+      }
+    },
     close() {
       this.$emit("close");
     },

@@ -104,8 +104,8 @@
   </div>
   <public-modal
     :isVisible="showModal"
-    title="데이터 갱신"
-    message="데이터가 성공적으로 새로고침되었습니다."
+    title="물류 현황 갱신"
+    message="물류 현황이 성공적으로 새로고침되었습니다."
     @close="closeModal"
   />
 </template>
