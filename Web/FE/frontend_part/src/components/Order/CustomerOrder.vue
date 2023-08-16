@@ -6,11 +6,11 @@
     </div>
     &nbsp;
     <div class="OrderForm">
-      <v-sheet width="300" class="mx-auto">
+      <v-sheet width="500" class="mx-auto">
         <h2>주문</h2>
         <v-form ref="form">
           <v-text-field
-            v-model="this.customer_id"
+            v-model="customer_id"
             label="아이디"
             color="warning"
             readonly
@@ -19,24 +19,34 @@
           <!-- selectDiv들을 동적으로 렌더링 -->
           <div v-for="(select, index) in selectDivs" :key="index" class="selectDiv">
             <v-select
-              :v-model="select.product"
+              v-model="select.product"
               :items="products"
               label="상품"
               class="productDiv"
               required
             ></v-select>
-            <v-select
+            <v-text-field
+              type="number"
               v-model="order.products[index].stock"
-              :items="number"
               label="갯수"
               class="numberDiv"
               required
-            ></v-select>
+              :min="0"
+              :max="99"
+              @focus="onInputFocus(index)"
+              @input="checkValidQuantity(index, $event.target.value)"
+            ></v-text-field>
             <!-- - 버튼 -->
+            <v-btn class="removeButton" @click="removeSelectDiv">-</v-btn>
           </div>
 
-          <v-btn v-if="this.idxCount < 3" color="primary" @click="addSelectDiv">+</v-btn>
-          <v-btn v-if="this.idxCount > 0" color="error" @click="removeSelectDiv">-</v-btn>
+          <v-btn
+            v-if="this.idxCount < 3"
+            color="rgb(250,100,130)"
+            @click="addSelectDiv"
+            style="margin-bottom: 3%; margin-top: -2%"
+            >+</v-btn
+          >
 
           <v-select label="지역" :items="region" v-model="selectedRegionIndex"></v-select>
 
@@ -54,17 +64,27 @@
       </v-sheet>
     </div>
   </div>
+  <PublicModal
+    :isVisible="isModalVisible"
+    @close="isModalVisible = false"
+    title="주문 성공"
+    message="주문이 성공적으로 완료되었습니다."
+  ></PublicModal>
 </template>
 
 <script>
+import PublicModal from "@/components/Modals/PublicModal.vue";
 import HeaderNav from "@/components/common/HeaderNav.vue";
 import { mapState } from "vuex";
 export default {
   name: "CustomerOrder",
   components: {
+    PublicModal,
     HeaderNav,
   },
   data: () => ({
+    isModalVisible: false,
+
     order: {
       customer_id: "",
       products: [
@@ -100,24 +120,51 @@ export default {
     selectA: "선택 안함",
     selectB: "선택 안함",
     selectC: "선택 안함",
-    selectDivs: [],
+    selectDivs: [{ product: "선택 안함", stock: 0 }],
     idxCount: 0,
   }),
   computed: {
     ...mapState("customer", ["customer_id"]),
   },
   methods: {
+    onInputFocus(index) {
+      // 커서 클릭 시 입력된 값이 0이면 비우기, 그 외의 경우는 그대로 두기
+      if (this.order.products[index].stock === 0) {
+        this.order.products[index].stock = "";
+      }
+    },
+    checkValidQuantity(index, newValue) {
+      if (newValue > 99) {
+        this.order.products[index].stock = 99;
+      } else if (newValue < 0) {
+        this.order.products[index].stock = 0;
+      } else if (newValue === "") {
+        this.order.products[index].stock = this.previousValues[index];
+      } else {
+        this.order.products[index].stock = newValue;
+      }
+    },
     async doOrder() {
+      // 주문 갯수 3을 초과하는 경우 3으로 설정
+      this.order.products.forEach((product, index) => {
+        if (product.stock > 3) {
+          this.order.products[index] = {
+            ...product,
+            stock: 3,
+          };
+        }
+      });
       this.order.customer_id = this.customer_id;
       if (
         this.order.address == "" ||
         this.order.detailAddress == "" ||
-        (this.order.products[0].stock == 0 &&
-          this.order.products[1].stock == 0 &&
-          this.order.products[2].stock == 0)
+        (this.order.products[0].stock < 0 &&
+          this.order.products[1].stock < 0 &&
+          this.order.products[2].stock < 0)
       )
         alert("주문을 확인해주세요");
       else await this.$store.dispatch("order/doOrder", this.order);
+      this.isModalVisible = true;
       this.reset();
     },
     addSelectDiv() {
@@ -169,6 +216,9 @@ export default {
 .OrderForm * {
   background-color: rgb(39, 40, 41);
 }
+.selectDiv {
+  width: 100%;
+}
 .MainTurtle {
   height: 150px;
   width: 150px;
@@ -185,9 +235,14 @@ v-overlay-container * {
   flex-direction: row;
 }
 .productDiv {
-  width: 60%;
+  width: 75%;
 }
 .numberDiv {
-  width: 35%;
+  margin-left: 2%;
+  width: 25%;
+}
+.removeButton {
+  margin: 2% 0 0 2%;
+  color: rgb(21, 21, 21);
 }
 </style>

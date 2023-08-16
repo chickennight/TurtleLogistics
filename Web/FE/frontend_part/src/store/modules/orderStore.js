@@ -11,6 +11,10 @@ const orderStore = {
   },
   getters: {},
   mutations: {
+    SET_ORDER_DATA(state, { period, data }) {
+      state.cachedOrderData[period].data = data;
+      state.cachedOrderData[period].timestamp = Date.now();
+    },
     GET_ORDER_DATE(state, data) {
       state.orderData = data;
     },
@@ -26,9 +30,7 @@ const orderStore = {
     GET_DATA_ANALYSIS_REGION(state, data) {
       state.orderRegion = data;
     },
-    DO_ORDER() {
-      alert("주문이 완료되었습니다.");
-    },
+    DO_ORDER() {},
     RESET_ORDER_REGION(state) {
       state.orderRegion = [];
     },
