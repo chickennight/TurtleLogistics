@@ -23,6 +23,19 @@ export default {
       });
     },
   },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeyDown);
+  },
+  beforeUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
+  },
+  methods: {
+    handleKeyDown(event) {
+      if (event.key === "Escape" || event.key === "Enter") {
+        this.$emit("close");
+      }
+    },
+  },
 };
 </script>
 
@@ -31,8 +44,8 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 200vh;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -40,21 +53,22 @@ export default {
 }
 
 .modal-content {
+  width: 125vh;
   background: rgb(39, 40, 41);
   padding: 20px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 1%;
 }
 .modal-video {
   width: 100%;
-  height: auto;
   border-radius: 8px;
   background-color: black;
 }
 .modal-close-button {
-  margin-top: 20px;
+  margin-top: 5px;
   background-color: rgb(55, 55, 55);
   border: none;
   color: #d2d2d2;
