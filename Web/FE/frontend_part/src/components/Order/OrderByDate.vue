@@ -161,7 +161,7 @@ export default {
       await this.$store.dispatch("order/getOrderData", date);
       var idx = 0;
       this.chartData.labels = [];
-      this.chartData.datasets.data = [];
+      this.chartData.datasets[0].data = [];
       for (let key in this.orderData) {
         this.chartData.labels[idx] = key.substr(4);
         this.chartData.datasets[0].data[idx] = this.orderData[key];
@@ -217,7 +217,7 @@ export default {
 
       var idx = 0;
       this.chartData.labels = [];
-      this.chartData.datasets.data = [];
+      this.chartData.datasets[0].data = [];
 
       setTimeout(() => {
         for (let key in this.orderData) {
@@ -244,7 +244,7 @@ export default {
       await this.$store.dispatch("order/getOrderData", date);
       this.isLoading = false;
       this.chartData.labels = [];
-      this.chartData.datasets.data = [];
+      this.chartData.datasets[0].data = [];
       var idx = 0;
 
       setTimeout(() => {
@@ -349,7 +349,7 @@ export default {
 
       var idx = 0;
       this.chartData.labels = [];
-      this.chartData.datasets.data = [];
+      this.chartData.datasets[0].data = [];
 
       setTimeout(() => {
         for (let key in this.orderData) {
