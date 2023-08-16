@@ -8,7 +8,7 @@
     <video class="VideoContainer" ref="videoElement" hidden autoplay></video>
     <canvas ref="canvasElement" hidden></canvas>
   </div>
-  <error-modal
+  <public-modal
     :isVisible="isModalVisible"
     :title="modalTitle"
     :message="modalMessage"
@@ -21,7 +21,7 @@ import HeaderNav from "@/components/common/HeaderNav.vue";
 import SidebarNav from "@/components/common/SidebarNav.vue";
 // import AdminMainView from "@/components/Admin/AdminMainView.vue";
 import { mapState } from "vuex";
-import ErrorModal from "@/components/Modals/ErrorModal.vue";
+import PublicModal from "@/components/Modals/PublicModal.vue";
 
 export default {
   name: "AdminView",
@@ -112,7 +112,7 @@ export default {
   components: {
     HeaderNav,
     SidebarNav,
-    ErrorModal,
+    PublicModal,
   },
   async mounted() {
     await this.initWebcam();
