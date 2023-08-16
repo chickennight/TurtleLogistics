@@ -8,9 +8,50 @@ const orderStore = {
     orderNowList: [],
     orderNowcalculate: [],
     orderRegion: [],
+    cachedOrderData: {
+      "3month": {
+        data: null,
+        timestamp: null,
+      },
+      "6month": {
+        data: null,
+        timestamp: null,
+      },
+      "1year": {
+        data: null,
+        timestamp: null,
+      },
+    },
   },
-  getters: {},
+  getters: {
+    getCachedOrderData: (state) => (period) => {
+      let cacheDuration;
+
+      switch (period) {
+        case "3month":
+        case "6month":
+          cacheDuration = 7 * 24 * 60 * 60 * 1000; // 1주일
+          break;
+        case "1year":
+          cacheDuration = 30 * 24 * 60 * 60 * 1000; // 1달
+          break;
+        default:
+          return null;
+      }
+
+      const now = Date.now();
+      const cachedData = state.cachedOrderData[period];
+      if (cachedData.data && now - cachedData.timestamp <= cacheDuration) {
+        return cachedData.data;
+      }
+      return null;
+    },
+  },
   mutations: {
+    SET_ORDER_DATA(state, { period, data }) {
+      state.cachedOrderData[period].data = data;
+      state.cachedOrderData[period].timestamp = Date.now();
+    },
     GET_ORDER_DATE(state, data) {
       state.orderData = data;
     },
@@ -34,6 +75,28 @@ const orderStore = {
     },
   },
   actions: {
+    //캐싱
+    async fetchAndCacheOrderData({ commit, getters }, date) {
+      try {
+        let startDay = date.start;
+        let endDay = date.end;
+        const response = await orderAPI.dataAnalysisDay(startDay, endDay);
+
+        let period;
+        if (date.period === "3month") period = "3month";
+        else if (date.period === "6month") period = "6month";
+        else if (date.period === "year") period = "1year";
+        else return;
+
+        // 캐싱 된 데이터를 가져와서 현재 데이터와 비교
+        const cachedData = getters.getCachedOrderData(period);
+        if (!cachedData) {
+          commit("SET_ORDER_DATA", { period, data: response.data });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     //일자별 주문 분석
     async getOrderData({ commit }, date) {
       try {

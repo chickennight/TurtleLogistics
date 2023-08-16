@@ -174,6 +174,26 @@ export default {
     ...mapState("order", ["orderData"]),
   },
   methods: {
+    setChartData(data) {
+      var idx = 0;
+      this.chartData.labels = [];
+      this.chartData.datasets[0].data = [];
+
+      for (let key in data) {
+        if (this.chartData.labels[idx] == undefined) {
+          this.chartData.labels[idx] = key.substr(0, 6);
+          this.chartData.datasets[0].data[idx] = data[key];
+        } else if (key.substr(0, 6) != this.chartData.labels[idx]) {
+          idx++;
+          this.chartData.datasets[0].data[idx] = 0;
+          this.chartData.labels[idx] = key.substr(0, 6);
+          this.chartData.datasets[0].data[idx] += data[key];
+        } else if (key.substr(0, 6) == this.chartData.labels[idx]) {
+          this.chartData.datasets[0].data[idx] += data[key];
+        }
+      }
+      this.renderCount += 1;
+    },
     setPeriod(period) {
       if (this.selectedPeriod === period) {
         return;
@@ -258,6 +278,7 @@ export default {
     },
     async getOrderData3Month() {
       this.isLoading = true;
+
       const offset = new Date().getTimezoneOffset() * 60000;
       const today = new Date(Date.now() - offset);
       const end_day = today.toISOString();
@@ -265,34 +286,23 @@ export default {
       const start_day = month.toISOString();
 
       const date = {
+        period: "3month",
         end: end_day,
         start: start_day,
       };
-      var idx = 0;
 
-      await this.$store.dispatch("order/getOrderData", date);
+      // 캐싱된 데이터 확인
+      const cachedData = this.$store.getters["order/getCachedOrderData"]("3month");
+      if (cachedData) {
+        // 캐싱된 데이터를 차트 데이터로 설정
+        this.setChartData(cachedData);
+      } else {
+        // 캐싱된 데이터가 없으면 새로운 데이터 요청
+        await this.$store.dispatch("order/fetchAndCacheOrderData", date);
+        this.setChartData(this.orderData);
+      }
 
       this.isLoading = false;
-      this.chartData.labels = [];
-      this.chartData.datasets[0].data = [];
-
-      setTimeout(() => {
-        for (let key in this.orderData) {
-          if (this.chartData.labels[idx] == undefined) {
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] = this.orderData[key];
-          } else if (key.substr(0, 6) != this.chartData.labels[idx]) {
-            idx++;
-            this.chartData.datasets[0].data[idx] = 0;
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          } else if (key.substr(0, 6) == this.chartData.labels[idx]) {
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          }
-        }
-
-        this.renderCount += 1;
-      }, 10);
     },
     async getOrderData6Month() {
       this.isLoading = true;
@@ -303,33 +313,23 @@ export default {
       const start_day = month.toISOString();
 
       const date = {
+        period: "6month",
         end: end_day,
         start: start_day,
       };
 
-      await this.$store.dispatch("order/getOrderData", date);
+      // 캐싱된 데이터 확인
+      const cachedData = this.$store.getters["order/getCachedOrderData"]("6month");
+      if (cachedData) {
+        // 캐싱된 데이터를 차트 데이터로 설정
+        this.setChartData(cachedData);
+      } else {
+        // 캐싱된 데이터가 없으면 새로운 데이터 요청
+        await this.$store.dispatch("order/fetchAndCacheOrderData", date);
+        this.setChartData(this.orderData);
+      }
+
       this.isLoading = false;
-      var idx = 0;
-      this.chartData.labels = [];
-      this.chartData.datasets[0].data = [];
-
-      setTimeout(() => {
-        for (let key in this.orderData) {
-          if (this.chartData.labels[idx] == undefined) {
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] = this.orderData[key];
-          } else if (key.substr(0, 6) != this.chartData.labels[idx]) {
-            idx++;
-            this.chartData.datasets[0].data[idx] = 0;
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          } else if (key.substr(0, 6) == this.chartData.labels[idx]) {
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          }
-        }
-
-        this.renderCount += 1;
-      }, 10);
     },
     async getOrderDataYear() {
       this.isLoading = true;
@@ -340,34 +340,23 @@ export default {
       const start_day = month.toISOString();
 
       const date = {
+        period: "1year",
         end: end_day,
         start: start_day,
       };
 
-      await this.$store.dispatch("order/getOrderData", date);
+      // 캐싱된 데이터 확인
+      const cachedData = this.$store.getters["order/getCachedOrderData"]("1year");
+      if (cachedData) {
+        // 캐싱된 데이터를 차트 데이터로 설정
+        this.setChartData(cachedData);
+      } else {
+        // 캐싱된 데이터가 없으면 새로운 데이터 요청
+        await this.$store.dispatch("order/fetchAndCacheOrderData", date);
+        this.setChartData(this.orderData);
+      }
+
       this.isLoading = false;
-
-      var idx = 0;
-      this.chartData.labels = [];
-      this.chartData.datasets[0].data = [];
-
-      setTimeout(() => {
-        for (let key in this.orderData) {
-          if (this.chartData.labels[idx] == undefined) {
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] = this.orderData[key];
-          } else if (key.substr(0, 6) != this.chartData.labels[idx]) {
-            idx++;
-            this.chartData.datasets[0].data[idx] = 0;
-            this.chartData.labels[idx] = key.substr(0, 6);
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          } else if (key.substr(0, 6) == this.chartData.labels[idx]) {
-            this.chartData.datasets[0].data[idx] += this.orderData[key];
-          }
-        }
-
-        this.renderCount += 1;
-      }, 10);
     },
   },
 };
