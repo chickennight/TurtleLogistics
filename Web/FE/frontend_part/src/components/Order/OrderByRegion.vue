@@ -3,35 +3,35 @@
     <div class="map-container">
       <h1>지역별 조회</h1>
     </div>
-    <div class="RegionString">
-      <h3>{{ this.currentRegion }} 지역</h3>
-    </div>
-    <div class="RegionTable">
-      <v-table density="compact" theme="dark" class="main_table">
-        <thead>
-          <tr>
-            <th style="text-align: center">주문 접수</th>
-            <th style="text-align: center">포장 과정</th>
-            <th style="text-align: center">분류 과정</th>
-            <th style="text-align: center">분류 완료</th>
-            <th style="text-align: center">배송 과정</th>
-            <th style="text-align: center">이상 발생</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ this.orderRegion[`주문 접수`] }}</td>
-            <td>{{ this.orderRegion[`포장 과정`] }}</td>
-            <td>{{ this.orderRegion[`분류 과정`] }}</td>
-            <td>{{ this.orderRegion[`분류 완료`] }}</td>
-            <td>{{ this.orderRegion[`배송 과정`] }}</td>
-            <td>{{ this.orderRegion[`이상 발생`] }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </div>
     <div class="regionImg">
-      <svg style="overflow: visible" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 750 100">
+      <div class="RegionString">
+        <h3>{{ this.currentRegion }} 지역</h3>
+      </div>
+      <div class="RegionTable">
+        <v-table density="compact" theme="dark" class="main_table">
+          <thead>
+            <tr>
+              <th style="text-align: center">주문 접수</th>
+              <th style="text-align: center">포장 과정</th>
+              <th style="text-align: center">분류 과정</th>
+              <th style="text-align: center">분류 완료</th>
+              <th style="text-align: center">배송 과정</th>
+              <th style="text-align: center">이상 발생</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ this.orderRegion[`주문 접수`] }}</td>
+              <td>{{ this.orderRegion[`포장 과정`] }}</td>
+              <td>{{ this.orderRegion[`분류 과정`] }}</td>
+              <td>{{ this.orderRegion[`분류 완료`] }}</td>
+              <td>{{ this.orderRegion[`배송 과정`] }}</td>
+              <td>{{ this.orderRegion[`이상 발생`] }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
+      <svg style="overflow: visible" xmlns="http://www.w3.org/2000/svg" viewBox="-50 -100 750 100">
         <defs>
           <filter id="dropshadow">
             <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
