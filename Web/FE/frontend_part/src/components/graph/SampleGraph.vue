@@ -91,7 +91,7 @@ export default {
 
     var idx = 0;
     this.chartData.labels = [];
-    this.chartData.datasets.data = [];
+    this.chartData.datasets[0].data = [];
 
     for (let key in this.orderWeekData) {
       this.chartData.labels[idx] = key.substr(4);
