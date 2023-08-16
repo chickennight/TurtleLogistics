@@ -28,7 +28,10 @@ const orderStore = {
     },
     DO_ORDER() {
       alert("주문이 완료되었습니다.");
-    }
+    },
+    RESET_ORDER_REGION(state) {
+      state.orderRegion = [];
+    },
   },
   actions: {
     //일자별 주문 분석
@@ -103,6 +106,10 @@ const orderStore = {
         alert("오류가 발생했습니다. 다시 시도해주세요.");
         console.log(error);
       }
+    },
+    //데이터 초기화
+    resetOrderRegion({ commit }) {
+      commit("RESET_ORDER_REGION");
     },
   },
 };
