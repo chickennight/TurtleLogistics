@@ -127,6 +127,11 @@ export default {
     ...mapState("customer", ["customer_id"]),
   },
   methods: {
+    preventOrderSubmit(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    },
     onInputFocus(index) {
       // 커서 클릭 시 입력된 값이 0이면 비우기, 그 외의 경우는 그대로 두기
       if (this.order.products[index].stock === 0) {
@@ -202,6 +207,13 @@ export default {
         this.order.address = this.region.indexOf(newIndex) + 1; // 선택한 지역의 값을 order.address에 할당
       } else {
         this.order.address = null; // 선택이 해제된 경우 order.address를 null로 설정
+      }
+    },
+    isModalVisible(isVisible) {
+      if (isVisible) {
+        document.addEventListener("keydown", this.preventOrderSubmit);
+      } else {
+        document.removeEventListener("keydown", this.preventOrderSubmit);
       }
     },
   },
