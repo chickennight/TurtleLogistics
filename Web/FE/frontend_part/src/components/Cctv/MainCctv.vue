@@ -11,6 +11,7 @@
           autoplay
           @click="showInModal($refs.videoElement)"
         ></video>
+        <p v-if="!isVideoConnected" class="error-message">CCTV 연결 안됨</p>
       </div>
       <div class="CctvDiv">
         <h2>분류 파트</h2>
@@ -20,6 +21,7 @@
           autoplay
           @click="showInModal($refs.notebookVideo)"
         ></video>
+        <p v-if="!isNotebookConnected" class="error-message">CCTV 연결 안됨</p>
       </div>
       <cctv-modal
         :show="isModalVisible"
@@ -42,15 +44,31 @@ export default {
     return {
       isModalVisible: false, // 모달 보이기/숨기기 상태
       selectedVideoStream: null, // 모달에 표시될 비디오 스트림
+      isVideoConnected: true,
+      isNotebookConnected: true,
     };
   },
   computed: {
     ...mapState("admin", ["image"]),
+    isVideoElementConnected() {
+      return this.$refs.videoElement && this.$refs.videoElement.srcObject;
+    },
+    isNotebookVideoConnected() {
+      return this.$refs.notebookVideo && this.$refs.notebookVideo.srcObject;
+    },
   },
   mounted() {
     this.initWebcam();
+    this.checkConnectionStatus();
+  },
+  updated() {
+    this.checkConnectionStatus();
   },
   methods: {
+    checkConnectionStatus() {
+      this.isVideoConnected = this.$refs.videoElement && this.$refs.videoElement.srcObject;
+      this.isNotebookConnected = this.$refs.notebookVideo && this.$refs.notebookVideo.srcObject;
+    },
     async initWebcam() {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -62,12 +80,14 @@ export default {
             video: { deviceId: notebookCamera.deviceId },
           });
           this.$refs.notebookVideo.srcObject = notebookStream; // 노트북 카메라 비디오 요소
+          this.isNotebookConnected = !!notebookStream;
         } else {
           console.error("Notebook camera not found.");
         }
 
         const webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
         this.$refs.videoElement.srcObject = webcamStream; // 웹캠 비디오 요소
+        this.isVideoConnected = !!webcamStream;
       } catch (error) {
         console.error("Error accessing webcam:", error);
       }
@@ -103,6 +123,8 @@ export default {
 .VideoContainer {
   width: 450px;
   height: 390px;
+  border: 3px solid rgb(250, 100, 130); /* 빨간색 테두리 추가 */
+  border-radius: 5px; /* 테두리 모서리 둥글게 */
 }
 .SubCctvContainer {
   display: flex;
@@ -118,5 +140,9 @@ export default {
 }
 h2 {
   margin-top: 10px;
+  text-align: center;
+}
+.error-message {
+  text-align: center;
 }
 </style>
