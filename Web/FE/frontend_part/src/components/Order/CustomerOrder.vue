@@ -41,8 +41,8 @@
           </div>
 
           <v-btn
-            v-if="this.idxCount &lt; 3"
-            color="rgb(250,100,130)"
+            v-if="selectDivs.length < 3"
+            class="addButton"
             @click="addSelectDiv"
             style="margin-bottom: 3%; margin-top: -2%"
             >+</v-btn
@@ -58,7 +58,7 @@
           ></v-text-field>
 
           <div class="d-flex flex-column">
-            <v-btn color="success" class="mt-4" block @click="doOrder"> 주문하기 </v-btn>
+            <v-btn class="mt-4" block @click="doOrder"> 주문하기 </v-btn>
           </div>
         </v-form>
       </v-sheet>
@@ -161,10 +161,12 @@ export default {
         (this.order.products[0].stock < 0 &&
           this.order.products[1].stock < 0 &&
           this.order.products[2].stock < 0)
-      )
+      ) {
         alert("주문을 확인해주세요");
-      else await this.$store.dispatch("order/doOrder", this.order);
-      this.isModalVisible = true;
+      } else {
+        await this.$store.dispatch("order/doOrder", this.order);
+        this.isModalVisible = true;
+      }
       this.reset();
     },
     addSelectDiv() {
@@ -244,5 +246,14 @@ v-overlay-container * {
 .removeButton {
   margin: 2% 0 0 2%;
   color: rgb(21, 21, 21);
+}
+
+.mt-4 {
+  background-color: rgb(250, 100, 130) !important;
+}
+.addButton {
+  border: 2px solid rgb(250, 100, 130) !important;
+  background-color: transparent !important;
+  color: #fff;
 }
 </style>
