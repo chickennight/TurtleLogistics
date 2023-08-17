@@ -1,6 +1,8 @@
 <template>
   <div class="loginForm">
-    <div><img class="MainTurtle" src="./MainTurtle.png" /></div>
+    <div>
+      <img class="MainTurtle" src="./MainTurtle.png" />
+    </div>
     &nbsp;
     <v-sheet width="300" class="mx-auto">
       <h2>로그인</h2>
@@ -24,9 +26,7 @@
       </v-form>
     </v-sheet>
     <div class="registDiv">
-      <v-btn block class="mt-2">
-        <router-link :to="{ name: 'CustomerRegist' }">회원가입</router-link>
-      </v-btn>
+      <v-btn block class="mt-2" router-link :to="{ name: 'AdminRegist' }"> 회원가입 </v-btn>
     </div>
   </div>
 </template>
