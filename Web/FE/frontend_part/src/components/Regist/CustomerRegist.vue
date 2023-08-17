@@ -10,7 +10,7 @@
         <v-form ref="form">
           <v-text-field
             v-model="customer.customer_id"
-            :rules="nameRules"
+            :rules="id_rules"
             label="아이디"
             color="warning"
             required
@@ -18,7 +18,7 @@
 
           <v-text-field
             v-model="customer.password"
-            :rules="nameRules"
+            :rules="pw_rules"
             label="비밀번호"
             type="password"
             color="warning"
@@ -27,7 +27,7 @@
 
           <v-text-field
             v-model="customer.passwordCheck"
-            :rules="nameRules"
+            :rules="pwcheck_rules"
             label="비밀번호 확인"
             type="password"
             color="warning"
@@ -36,7 +36,7 @@
 
           <v-text-field
             v-model="customer.phone_number"
-            :rules="nameRules"
+            :rules="phone_rules"
             label="전화번호"
             required
           ></v-text-field>
@@ -63,7 +63,25 @@ export default {
       phone_number: "",
       address: "",
     },
-    nameRules: [(v) => !!v || "해당 칸을 입력해주세요"],
+    id_rules: [
+      (v) => !!v || "해당 칸을 입력해주세요",
+      (v) => !(v && v.length <= 7) || "아이디를 8자 이상으로 설정해주세요.",
+      (v) => (v && v.trim().length > 0) || "공백만으로는 입력할 수 없습니다.",
+    ],
+    pw_rules: [
+      (v) => !!v || "해당 칸을 입력해주세요",
+      (v) => !(v && v.length <= 7) || "비밀번호를 8자 이상으로 설정해주세요.",
+      (v) => (v && v.trim().length > 0) || "공백만으로는 입력할 수 없습니다.",
+      (v) =>
+        /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/.test(v) ||
+        "비밀번호를 영어, 숫자, 특수문자의 조합으로 설정해주세요.",
+    ],
+    pwcheck_rules: [(v) => !!v || "해당 칸을 입력해주세요"],
+    phone_rules: [
+      (v) => !!v || "해당 칸을 입력해주세요",
+      (v) => !(v && v.length != 11) || "전화번호가 적합하지 않습니다.",
+      (v) => (v && v.trim().length > 0) || "공백만으로는 입력할 수 없습니다.",
+    ],
     select: null,
     region: [
       "서울특별시",
