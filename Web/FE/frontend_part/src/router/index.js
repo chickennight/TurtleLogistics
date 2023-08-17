@@ -71,7 +71,7 @@ const routes = [
         path: "mainCctv",
         name: "MainCctv",
         component: MainCctv,
-      }
+      },
     ],
   },
   {
@@ -127,6 +127,7 @@ const router = createRouter({
 
 //주소 직접 접근시 토큰검사
 router.beforeEach((to, from, next) => {
+  document.title = "Turtle Logistics";
   window.scrollTo(0, 0);
   const adminToken = localStorage.getItem("adminToken");
   const customerToken = localStorage.getItem("customerToken");
@@ -153,7 +154,7 @@ router.beforeEach((to, from, next) => {
       return;
     }
   }
-  
+
   next();
 });
 
