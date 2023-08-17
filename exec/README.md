@@ -48,6 +48,19 @@
 
 ### 1.2 IoT
 
+### 1.2.1 HW
+- esp12E(NodeMCU V3)
+- esp12F(NodeMCU V2)
+- esp8266(NodeMCU devkit V0.9)
+- esp32
+- 아두이노 D1 R1
+- 서보모터 mg996r
+- Rasberry Pi4
+- Rasberry Pi Camera Rev 1.3
+
+
+### 1.2.2 SW
+
 ## 2. Build & Distribute
 
 ### 2.1 Nginx
