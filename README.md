@@ -47,7 +47,7 @@
 - 이종민 (팀원) : Backend 메인, Frontend 보조
 - 권도현 (팀원) : Backend 메인, Frontend 보조
 - 이승혁 (팀원) : IoT 개발
-- 채문희 (팀원) : IoT 개발
+- 채문희 (팀원) : 기구 개발
 - 서강운 (팀원) : IoT 개발
 
 | 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@john0513](https://github.com/john0513) | 권도현 [@yup8229](https://github.com/yup8229)          |
