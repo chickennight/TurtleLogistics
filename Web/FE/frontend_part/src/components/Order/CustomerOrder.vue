@@ -41,7 +41,7 @@
           </div>
 
           <v-btn
-            v-if="this.idxCount < 3"
+            v-if="this.idxCount &lt; 3"
             color="rgb(250,100,130)"
             @click="addSelectDiv"
             style="margin-bottom: 3%; margin-top: -2%"
