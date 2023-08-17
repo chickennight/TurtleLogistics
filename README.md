@@ -64,7 +64,7 @@
 
 - IoT : PyQT, AWS IoT Core, MQTT, OpenCV, C++, Python
 - Frontend : Vue.js, JS
-- Backend : Java, Spring, MySQL, JPA
+- Backend : Java, Spring Boot, Spring Security, MySQL, JPA
 - Infra : Jenkins, AWS EC2, NginX, Docker, Certbot
 
 <br>
