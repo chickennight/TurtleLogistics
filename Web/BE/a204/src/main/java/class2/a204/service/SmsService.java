@@ -3,11 +3,14 @@ package class2.a204.service;
 import class2.a204.dto.MessageDTO;
 import class2.a204.dto.SmsRequestDTO;
 import class2.a204.dto.SmsResponseDTO;
+import class2.a204.entity.Log;
+import class2.a204.repository.LogRepository;
+import class2.a204.util.DataNotFountException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,18 +22,19 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class SmsService {
+    private final LogRepository logRepository;
 
     @Value("${naver-cloud-sms.accessKey}")
     private String accessKey;
@@ -44,7 +48,12 @@ public class SmsService {
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    public String makeSignature(Long time) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+    @Autowired
+    public SmsService(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
+
+    public String makeSignature(Long time) throws NoSuchAlgorithmException, InvalidKeyException {
         String space = " ";
         String newLine = "\n";
         String method = "POST";
@@ -53,26 +62,24 @@ public class SmsService {
         String accessKey = this.accessKey;
         String secretKey = this.secretKey;
 
-        String message = new StringBuilder()
-                .append(method)
-                .append(space)
-                .append(url)
-                .append(newLine)
-                .append(timestamp)
-                .append(newLine)
-                .append(accessKey)
-                .toString();
+        String message = method +
+                space +
+                url +
+                newLine +
+                timestamp +
+                newLine +
+                accessKey;
 
-        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(signingKey);
 
-        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-        String encodeBase64String = Base64.encodeBase64String(rawHmac);
+        byte[] rawHmac = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
 
-        return encodeBase64String;
+        return Base64.encodeBase64String(rawHmac);
     }
-    public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+
+    public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException {
         Long time = System.currentTimeMillis();
 
         HttpHeaders headers = new HttpHeaders();
@@ -99,8 +106,18 @@ public class SmsService {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        SmsResponseDTO response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ serviceId +"/messages"), httpBody, SmsResponseDTO.class);
 
-        return response;
+        return restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId + "/messages"), httpBody, SmsResponseDTO.class);
+    }
+
+    public String createMessage(int logNum) throws DataNotFountException {
+        StringBuilder sb = new StringBuilder();
+        Optional<Log> l = logRepository.findById(logNum);
+        Log log;
+        if (l.isPresent())
+            log = l.get();
+        else throw new DataNotFountException("존재하지 않는 로그입니다.");
+        sb.append(log.getMachine().getMachineDetail()).append(" 오류 발생").append('\n').append("에러 내용: ").append(log.getErrorMessage());
+        return sb.toString();
     }
 }

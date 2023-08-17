@@ -2,15 +2,14 @@ package class2.a204.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "orders")
 public class Order {
@@ -38,7 +37,12 @@ public class Order {
     @NotNull
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
+    public Order(Long orderNum, String detailAddress, Integer address, Customer customer) {
+        this.orderNum = orderNum;
+        this.detailAddress = detailAddress;
+        this.address = address;
+        this.customer = customer;
+    }
+
 
 }
