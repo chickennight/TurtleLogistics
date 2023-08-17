@@ -138,6 +138,8 @@ export default {
             this.sendMessage(log.log_num);
           }
         }
+      } else {
+        this.changeImg("0000");
       }
     }, 1000);
   },
