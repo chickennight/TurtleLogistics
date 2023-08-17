@@ -26,7 +26,7 @@
       </v-form>
     </v-sheet>
     <div class="registDiv">
-      <v-btn block class="mt-2" router-link :to="{ name: 'AdminRegist' }"> 회원가입 </v-btn>
+      <v-btn block class="mt-2" router-link :to="{ name: 'CustomerRegist' }"> 회원가입 </v-btn>
     </div>
   </div>
 </template>
