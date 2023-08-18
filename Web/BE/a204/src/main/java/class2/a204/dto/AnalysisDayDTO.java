@@ -6,7 +6,10 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AnalysisDayDTO {
     private String day;
     private Long count;
+
+
 }

@@ -1,6 +1,5 @@
 package class2.a204.dto;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

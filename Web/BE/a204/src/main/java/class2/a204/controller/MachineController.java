@@ -2,12 +2,12 @@ package class2.a204.controller;
 
 import class2.a204.dto.LogAddDTO;
 import class2.a204.dto.LogDTO;
-import class2.a204.dto.MachineDTO;
 import class2.a204.dto.PayloadDTO;
 import class2.a204.entity.Log;
 import class2.a204.entity.Machine;
-import class2.a204.jwt.JwtTokenProvider;
-import class2.a204.service.*;
+import class2.a204.service.MachineService;
+import class2.a204.service.MqttService;
+import class2.a204.service.OrderService;
 import class2.a204.util.ErrorHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,25 +44,15 @@ public class MachineController {
     public ResponseEntity<?> getMachineStatus() {
         try {
             List<Machine> machineList = machineService.findMachineAll();
-            if (machineList.size() == 0)
+            if (machineList.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             else {
                 List<Integer> brokenList = machineService.brokenMachine(machineList);
-                if (brokenList.size() == 0)
-                    return new ResponseEntity<>(machineList, HttpStatus.OK);
-                else {
-                    Map<String, List<?>> map = new HashMap<>();
-                    map.put("상태", machineList);
-                    List<Log> temp = machineService.lastBrokenLogs(brokenList);
-                    List<LogDTO> errorLogs = new ArrayList<>();
-                    for (Log l : temp) errorLogs.add(new LogDTO(l));
-                    map.put("로그", errorLogs);
-                    List<Log> orderError = orderService.findOrderError();
-                    List<LogDTO> processErrorLogs = new ArrayList<>();
-                    for (Log l : orderError) processErrorLogs.add(new LogDTO(l));
-                    map.put("인식 오류 로그", processErrorLogs);
-                    return new ResponseEntity<>(map, HttpStatus.OK);
-                }
+                Map<String, List<?>> map = new HashMap<>();
+                map.put("상태", machineList);
+                List<LogDTO> errorLogs = machineService.lastBrokenLogs(brokenList);
+                map.put("로그", errorLogs);
+                return new ResponseEntity<>(map, HttpStatus.OK);
             }
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
@@ -106,10 +96,10 @@ public class MachineController {
 
     @ApiOperation(value = "기기 정보 업데이트", notes = "기기의 정보를 업데이트")
     @PutMapping("/{machineId}")
-    public ResponseEntity<?> updateMachine(@PathVariable Integer machineId, @RequestBody MachineDTO machineDto) {
+    public ResponseEntity<?> updateMachine(@PathVariable Integer machineId, @RequestBody boolean status) {
         try {
-            machineService.updateMachine(machineDto, machineId);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            machineService.updateMachine(status, machineId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return errorHandler.errorMessage(e);
         }
@@ -117,7 +107,7 @@ public class MachineController {
 
     @ApiOperation(value = "기기 제어", notes = "특정 기기를 제어하기 위한 MQTT 메시지를 발행")
     @PostMapping("/control")
-    public ResponseEntity<?> MachineControl(@RequestBody PayloadDTO payloadDto) {
+    public ResponseEntity<?> controlMachine(@RequestBody PayloadDTO payloadDto) {
         try {
             mqttService.publish(payloadDto.getTopic(), payloadDto.getMessage());
             return new ResponseEntity<>(HttpStatus.OK);

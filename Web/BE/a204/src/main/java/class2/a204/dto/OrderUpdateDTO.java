@@ -12,6 +12,9 @@ public class OrderUpdateDTO {
     @JsonProperty("order_num")
     private Long orderNum;
 
+    @JsonProperty("product_num")
+    private Integer ProductNum = 0;
+
     private Integer type;
 
     private Integer result;

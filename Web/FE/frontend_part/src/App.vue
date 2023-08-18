@@ -25,16 +25,27 @@ export default {
   font-family: "GmarketSansTTFLight";
   src: url("../public/fonts/GmarketSansTTFLight.ttf");
 }
-* {
+*:not(.v-overlay-container *) *:not(.refresh-icon-spinning *) {
   font-family: "GmarketSansTTFMedium";
   text-decoration: none;
 
-  color: white;
+  color: rgb(210, 210, 210);
   /* color: black; */
 }
 
 #app {
-  background-color: rgb(53, 53, 53);
+  height: 100%;
+  width: 100%;
+  background-color: rgb(39, 40, 41);
   /* background-color: rgb(255, 255, 255); */
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(39, 40, 41);
 }
 </style>

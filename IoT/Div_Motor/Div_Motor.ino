@@ -2,7 +2,6 @@
 
 #define THINGNAME "Div_Motor"
 #define TOPIC_POW_CTR "/mod/web/power" 
-#define TOPIC_MOT_POW "/mod/div/motor/power"
 #define TOPIC_MOT_SPD "/mod/div/motor/speed"
 #define TOPIC_WEB_LOG "/log"
 
@@ -64,13 +63,6 @@ void Subscribe_callback(char *topic, byte *payload, unsigned int length)
     else if (power == -1) MSG("power set by web_power = -1");
   }
 
-  else if(strcmp(topic,TOPIC_MOT_POW)==0)
-  {
-    power = doc["power"].as<int>();
-    if(power == 1) MSG("power set by device_power = 1");
-    else if (power == -1) MSG("power set by device_power = -1");
-  }
-  
   else if(strcmp(topic,TOPIC_MOT_SPD)==0)
   {
     speed = doc["speed"].as<int>();

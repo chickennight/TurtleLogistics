@@ -7,6 +7,11 @@ import machineStore from "./modules/machineStore";
 import orderStore from "./modules/orderStore";
 
 const store = createStore({
+  state: {
+    mode: false,
+    currentTime: "",
+    errorImg: "",
+  },
   modules: {
     admin: adminStore,
     customer: customerStore,
@@ -16,7 +21,7 @@ const store = createStore({
   devtools: true,
   plugins: [
     createPersistedState({
-      whiteList: ["orderWeekData"],
+      storage: window.sessionStorage,
     }),
   ],
 });
