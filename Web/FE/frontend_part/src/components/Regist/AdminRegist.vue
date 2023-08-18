@@ -1,8 +1,10 @@
 <template>
   <div class="AdminContainer">
-    <div>
-      <img class="MainTurtle" src="./MainTurtle.png" />
-    </div>
+    <router-link to="/">
+      <div>
+        <img class="MainTurtle" src="./MainTurtle.png" />
+      </div>
+    </router-link>
     &nbsp;
     <div class="AdminRegistForm">
       <v-sheet width="300" class="mx-auto">
