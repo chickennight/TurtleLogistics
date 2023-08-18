@@ -1,9 +1,11 @@
 <template>
   <div class="CustomerContainer">
     <header-nav></header-nav>
-    <div>
-      <img class="MainTurtle" src="./MainTurtle.png" />
-    </div>
+    <router-link to="/">
+      <div>
+        <img class="MainTurtle" src="./MainTurtle.png" />
+      </div>
+    </router-link>
     &nbsp;
     <div class="OrderForm">
       <v-sheet width="500" class="mx-auto">
