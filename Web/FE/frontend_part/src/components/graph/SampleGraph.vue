@@ -41,14 +41,16 @@ export default {
       datasets: [
         {
           label: "주문건수",
-          backgroundColor: "salmon",
-          borderColor: "salmon",
+          backgroundColor: "rgb(250, 100, 130)",
+          borderColor: "rgb(250, 100, 130)",
           color: "red",
           data: [],
         },
       ],
     },
     chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: true,
@@ -89,7 +91,7 @@ export default {
 
     var idx = 0;
     this.chartData.labels = [];
-    this.chartData.datasets.data = [];
+    this.chartData.datasets[0].data = [];
 
     for (let key in this.orderWeekData) {
       this.chartData.labels[idx] = key.substr(4);
@@ -105,4 +107,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.SampleGraphContainer {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+}
+</style>

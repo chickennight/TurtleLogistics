@@ -81,7 +81,7 @@
 
 - ##### Topic description
 |Pub/Sub|Direction|Topic|Detail|
-	|----------|----------|----------|----------|
+|----------|----------|----------|----------|
 |Pub|to Web|/log|{"dev":"Ord_Verifier", "content":"message"}|
 |Pub|to Order_Motor|/mod/ord/motor/power|{"power":"-1"}|
 |Pub|to Supervisor|/ord/res|{"order_num":"1001", "type":"0", "result":"1"}|

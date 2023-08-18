@@ -1,24 +1,28 @@
 <template>
   <div id="header">
-    <!-- 관리자 헤더 -->
-    <div class="AdminProfile" v-if = "isAdmin">
-      관리자님 환영합니다 &nbsp;&nbsp;&nbsp; 마이페이지 &nbsp; | &nbsp;
+    <header-clock />
+    <div class="AdminProfile" v-if="isAdmin">
+      관리자님 환영합니다 &nbsp; | &nbsp;
       <span @click="adminLogout">로그아웃</span>
     </div>
-    <!-- 사용자 헤더 -->
     <div class="UserProfile" v-else>
-      사용자님 환영합니다 &nbsp;&nbsp;&nbsp;
+      사용자님 환영합니다 &nbsp; | &nbsp;
       <span @click="customerLogout">로그아웃</span>
     </div>
   </div>
 </template>
 
 <script>
+import HeaderClock from "./HeaderClock.vue";
+
 export default {
   name: "HeaderNav",
+  components: {
+    HeaderClock,
+  },
   data() {
     return {
-      isAdmin : this.checkAdmin(),
+      isAdmin: this.checkAdmin(),
     };
   },
   methods: {
@@ -30,12 +34,12 @@ export default {
       alert("로그아웃되었습니다.");
       this.$store.dispatch("customer/Logout");
     },
-    checkAdmin(){
+    checkAdmin() {
       const adminToken = localStorage.getItem("adminToken");
       return adminToken ? true : false;
     },
   },
-  created(){
+  created() {
     this.isAdmin = this.checkAdmin(); //컴포넌트가 생성될 때 토큰을 확인
   },
 };
@@ -47,11 +51,17 @@ export default {
   height: 100px;
   display: flex;
   justify-content: flex-end;
-  box-shadow: 6px 1px 3px 3px black;
+  align-items: center;
 }
-.AdminProfile
+.AdminProfile,
 .UserProfile {
   width: 350px;
-  margin: auto 0;
+  margin-right: 25px;
+  margin-top: 20px;
+  text-align: right;
+  font-size: 19px;
+}
+span:hover {
+  cursor: pointer;
 }
 </style>

@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -94,11 +95,13 @@ public class AdminController {
     }
 
     @ApiOperation(value = "기기 이상 알림", notes = "기기 이상 발생시 메세지 전송")
-    @GetMapping("/msg")
-    public ResponseEntity<?> sendMessage(@RequestParam("machine_detail") String machineDetail, ServletRequest request) {
+    @PostMapping("/msg")
+    public ResponseEntity<?> sendMessage(@RequestBody int logNum, ServletRequest request) {
         try {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token), machineDetail);
+
+            MessageDTO sms = new MessageDTO(adminService.getAdminPhone(token));
+            sms.setContent(smsService.createMessage(logNum));
             smsService.sendSms(sms);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
@@ -118,7 +121,7 @@ public class AdminController {
 
     @ApiOperation(value = "사진 저장", notes = "문제 발생시 해당 상황 사진 저장")
     @PostMapping("/image")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile image, @RequestParam("log_num") int logNum) {
+    public ResponseEntity<?> uploadImage(@RequestPart("image") MultipartFile image, @RequestParam("log_num") int logNum) {
         try {
             adminService.uploadImage(image, logNum);
             return new ResponseEntity<>(adminService.getLogisticAnalysis(), HttpStatus.OK);
@@ -129,7 +132,7 @@ public class AdminController {
 
     @ApiOperation(value = "사진 조회", notes = "로그 번호와 매칭 되는 사진 조회")
     @GetMapping("/image/{name}")
-    public ResponseEntity<?> downloadImage(@PathVariable("name") String name) {
+    public ResponseEntity<?> downloadImage(@PathVariable("name") int name) {
         try {
             return imageService.downloadImage(name);
         } catch (Exception e) {

@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "log")
 public class Log {
     @JsonProperty("log_num")
@@ -35,8 +33,11 @@ public class Log {
     @NotNull
     private Machine machine;
 
-//    public Log(Machine machine2, String logForBrokenMachine) {
-//    }
+    private Boolean recorded;
+
+    public Log() {
+        this.recorded = false;
+    }
 
     public void updateMachine(Machine machine) {
         this.machine = machine;
@@ -46,4 +47,11 @@ public class Log {
         this.errorMessage = errorMessage;
     }
 
+    public void updateRecorded() {
+        this.recorded = true;
+    }
+
+    public void makeLogNum(int cnt) {
+        this.logNum = this.machine.getMachineId() * 10000 + cnt;
+    }
 }
