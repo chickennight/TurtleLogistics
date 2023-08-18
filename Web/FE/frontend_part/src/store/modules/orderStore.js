@@ -11,6 +11,10 @@ const orderStore = {
   },
   getters: {},
   mutations: {
+    SET_ORDER_DATA(state, { period, data }) {
+      state.cachedOrderData[period].data = data;
+      state.cachedOrderData[period].timestamp = Date.now();
+    },
     GET_ORDER_DATE(state, data) {
       state.orderData = data;
     },
@@ -25,6 +29,10 @@ const orderStore = {
     },
     GET_DATA_ANALYSIS_REGION(state, data) {
       state.orderRegion = data;
+    },
+    DO_ORDER() {},
+    RESET_ORDER_REGION(state) {
+      state.orderRegion = [];
     },
   },
   actions: {
@@ -94,11 +102,16 @@ const orderStore = {
     },
     async doOrder({ commit }, order) {
       try {
-        orderAPI.newOrder(order);
-        commit;
+        await orderAPI.newOrder(order);
+        commit("DO_ORDER");
       } catch (error) {
+        alert("오류가 발생했습니다. 다시 시도해주세요.");
         console.log(error);
       }
+    },
+    //데이터 초기화
+    resetOrderRegion({ commit }) {
+      commit("RESET_ORDER_REGION");
     },
   },
 };

@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `error_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `error_message` VARCHAR(255) NULL DEFAULT NULL,
   `machine_id` INT NOT NULL,
+  `recorded` TINYINT NULL DEFAULT '0',
   PRIMARY KEY (`log_num`),
   INDEX `machine_key_idx` (`machine_id` ASC),
   CONSTRAINT `machine_key`
@@ -129,6 +130,23 @@ CREATE TABLE IF NOT EXISTS `ordernow` (
     REFERENCES `orders` (`order_num`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`image`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `image` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `log_num` INT NOT NULL,
+  `content_type` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `log_num_foreignkey_idx` (`log_num` ASC),
+  CONSTRAINT `log_num_foreignkey`
+    FOREIGN KEY (`log_num`)
+    REFERENCES `log` (`log_num`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 CREATE INDEX idx_orderdetail_product_date_amount ON orderdetail(product_num, order_date, amount);

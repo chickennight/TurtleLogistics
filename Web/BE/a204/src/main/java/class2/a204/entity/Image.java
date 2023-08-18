@@ -26,6 +26,7 @@ public class Image {
     @JoinColumn(name = "log_num")
     private Log log;
 
+    @Column(name = "content_type")
     private String contentType;
 
     public Image(Log log, String contentType) {

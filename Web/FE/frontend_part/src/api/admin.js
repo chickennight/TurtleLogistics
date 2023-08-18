@@ -41,11 +41,9 @@ const refreshToken = async (refreshTokenDTO) => {
 };
 
 // 기기 이상 알림 메세지 전송
-const sendMessage = async (machineDetail) => {
+const sendMessage = async (logNum) => {
   try {
-    const response = await authorizedApi.get("/admin/msg", {
-      params: { machine_detail: machineDetail },
-    });
+    const response = await authorizedApi.post("/admin/msg", logNum);
     return response;
   } catch (error) {
     throw new Error(`기기 이상 알림 메세지 전송 에러: ${error.message}`);
@@ -85,7 +83,9 @@ const uploadImage = async (imageFile, logNum) => {
 //사진 조회
 const downloadImage = async (imageName) => {
   try {
-    const response = await authorizedApi.get(`/admin/image/${imageName}`);
+    const response = await authorizedApi.get(`/admin/image/${imageName}`, {
+      responseType: "arraybuffer",
+    });
     return response;
   } catch (error) {
     throw new Error(`사진 조회 에러 : ${error.message}`);

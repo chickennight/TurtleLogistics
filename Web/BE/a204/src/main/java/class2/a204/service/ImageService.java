@@ -35,20 +35,30 @@ public class ImageService {
         String fileName = file.getOriginalFilename();
         String filePath = uploadDir + File.separator + fileName;
         File dest = new File(filePath);
+
+        // 디렉토리 생성
+        if (!dest.getParentFile().exists())
+            dest.getParentFile().mkdirs();
+
         file.transferTo(dest);
     }
 
-    public ResponseEntity<UrlResource> downloadImage(String logNum) throws MalformedURLException {
+
+    public ResponseEntity<UrlResource> downloadImage(Integer logNum) throws MalformedURLException {
         Optional<Image> image = imageRepository.findByLogNum(logNum);
+
+        System.out.println(image);
         String contentType = "application/octet-stream";
         if (image.isPresent())
             contentType = image.get().getContentType();
-        Path file = Paths.get(uploadDir).resolve(logNum);
+        String logNumS = String.valueOf(logNum);
+        Path file = Paths.get(uploadDir).resolve(logNumS + "." + contentType.split("/")[1]);
         UrlResource resource = new UrlResource(file.toUri());
+
         if (resource.exists() && resource.isReadable())
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,27 +1,40 @@
 <template>
   <div class="MachineMainContainer">
     <div class="MachineContainer">
-      <h1>기기제어</h1>
+      <h1>기기 제어</h1>
       <span class="MachineSpan">
-        <h2>{{ this.currentTime }}</h2>
         &nbsp;&nbsp;&nbsp;
-        <v-btn @click="getMachineOff" background-color="rgb(53, 53, 53)" variant="outlined">
-          전원 종료
+        <v-btn
+          @click="getMachineOff"
+          background-color="rgb(53, 53, 53)"
+          variant="outlined"
+          class="offButton"
+        >
+          전원 OFF
         </v-btn>
-        <v-btn @click="getMachineOn" background-color="rgb(53, 53, 53)" variant="outlined">
-          전원 시작
+        <v-btn
+          @click="getMachineOn"
+          background-color="rgb(53, 53, 53)"
+          variant="outlined"
+          class="onButton"
+          style="margin-right: 10px"
+        >
+          전원 ON
         </v-btn>
       </span>
     </div>
+    <div class="MachineImgContainer">
+      <img class="machineImg" :src="errorImg" alt="image" />
+    </div>
     <div class="LogTableContainer">
-      <div><img class="machineImg" :src="errorImg" width="300" height="300" /></div>
-      <v-table density="compact" theme="dark">
+      <v-table density="compact" theme="dark" class="main_table">
         <thead>
           <tr>
-            <th class="text-left">번호</th>
-            <th class="text-left">날짜</th>
-            <th class="text-left">로그명</th>
-            <th class="text-left">기계</th>
+            <th style="text-align: center">번호</th>
+            <th style="text-align: center">날짜</th>
+            <th style="text-align: center">로그명</th>
+            <th style="text-align: center">기계</th>
+            <th style="text-align: center"></th>
           </tr>
         </thead>
         <tbody>
@@ -30,25 +43,59 @@
             <td>{{ item.error_date }}</td>
             <td>{{ item.error_message }}</td>
             <td>{{ item.machine_id }}</td>
+            <td><button @click.stop="showLogDetails(item)">상세보기</button></td>
           </tr>
         </tbody>
       </v-table>
     </div>
   </div>
+  <LogModal :isOpen="isModalOpen" @close="closeModal">
+    <div class="log-details">
+      <table>
+        <tr>
+          <th>로그번호</th>
+          <th>날짜</th>
+          <th>로그명</th>
+          <th>기계</th>
+        </tr>
+        <tr>
+          <td>{{ selectedLog.log_num }}</td>
+          <td>{{ selectedLog.error_date }}</td>
+          <td>{{ selectedLog.error_message }}</td>
+          <td>{{ selectedLog.machine_id }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="log-image">
+      <img :src="image" alt="Selected Machine Image" />
+    </div>
+  </LogModal>
 </template>
 
 <script>
+import LogModal from "../Modals/LogModal.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "MainMachine",
+  components: {
+    LogModal,
+  },
   data: () => ({
-    errorImg: "/errorImg/2000_error.PNG",
-    myTimer: null,
-    currentTime: "",
-    previousMachineLog: [],
+    imgURL: "",
+    isModalOpen: false,
+    selectedLog: null,
   }),
   methods: {
+    getMachineOff() {
+      this.$store.dispatch("machine/machineOff");
+    },
+    getMachineOn() {
+      this.$store.dispatch("machine/machineOn");
+    },
+    changeImg(machine_id) {
+      this.$store.state.errorImg = `/Error_BluePrint/BluePrint_${machine_id}.png`;
+    },
     async getMachineLog() {
       let today = new Date();
 
@@ -71,125 +118,36 @@ export default {
         seconds = "0" + seconds;
       }
 
-      this.currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
+      let currentTime = `${month}/${date} ${hours}:${minutes}:${seconds}`;
 
-      this.previousMachineLog = [...this.machineLog];
+      this.$store.state.currentTime = currentTime;
 
       await this.$store.dispatch("machine/getMachineLog");
     },
-    getMachineOff() {
-      this.$store.dispatch("machine/machineOff");
+    async showLogDetails(log) {
+      try {
+        await this.$store.dispatch("admin/getImage", log.log_num);
+      } catch (error) {
+        console.error(error);
+      }
+      this.selectedLog = log;
+      this.isModalOpen = true;
     },
-    getMachineOn() {
-      this.$store.dispatch("machine/machineOn");
-    },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
-    },
-    changeImg(machine_id) {
-      this.errorImg = `/errorImg/${machine_id}_error.PNG`;
-    },
-    sendMessage(machineDetail) {
-      this.$store.dispatch("admin/SendSMS", machineDetail);
+    closeModal() {
+      this.isModalOpen = false;
     },
   },
   computed: {
     ...mapState("machine", ["machineLog"]),
+    ...mapState(["currentTime"]),
+    ...mapState(["errorImg"]),
+    ...mapState("admin", ["image"]),
   },
   mounted() {
     this.getMachineLog();
-    this.myTimer = setInterval(async () => {
-      await this.getMachineLog(); // 매 분마다 새 데이터를 가져옵니다.
-
-      // previousMachineLog와 machineLog를 비교하여 새로운 로그를 찾습니다.
-      const addedLogs = this.machineLog.filter(
-        (log) => !this.previousMachineLog.some((prevLog) => prevLog.log_num === log.log_num)
-      );
-
-      // addedLogs가 비어있지 않으면, 새로운 로그가 추가되었음을 의미합니다.
-      if (addedLogs.length > 0) {
-        const plainAddedLogs = addedLogs.map((log) => ({ ...log }));
-        console.log("새로운 로그가 추가되었습니다:", plainAddedLogs[0].log_num);
-        console.log("새로운 로그가 추가되었습니다:", plainAddedLogs[0].machine_id);
-        // 새로운 로그에 대해 원하는 동작을 수행합니다.
-        this.changeImg(plainAddedLogs[0].machine_id);
-        alert(
-          `${plainAddedLogs[0].machine_id} 공정에 이상이 발생했습니다. 확인 후 메뉴얼에 따라 조치해주시기 바랍니다`
-        );
-
-        switch (plainAddedLogs[0].machine_id) {
-          case 1000:
-            this.sendMessage(
-              "[주문 컨베이어 벨트] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 1010:
-            this.sendMessage(
-              "[1차 피스톤] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 1020:
-            this.sendMessage(
-              "[2차 피스톤] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 1030:
-            this.sendMessage(
-              "[3차 피스톤] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2000:
-            this.sendMessage(
-              "[분류 컨베이어 벨트] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2100:
-            this.sendMessage(
-              "[카메라 모듈] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2010:
-            this.sendMessage(
-              "[1차 가름막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2020:
-            this.sendMessage(
-              "[2차 가름막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2030:
-            this.sendMessage(
-              "[3차 가름막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2001:
-            this.sendMessage(
-              "[1차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2002:
-            this.sendMessage(
-              "[2차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-          case 2003:
-            this.sendMessage(
-              "[3차 분류 내리막] 오류 발생 \n 에러 내용 : " + plainAddedLogs[0].error_message
-            );
-            break;
-        }
-      }
-    }, 60000);
-
-    this.updateParentHeight();
   },
   beforeUnmount() {
     clearInterval(this.myTimer);
-    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
-    window.removeEventListener("resize", this.updateParentHeight);
   },
 };
 </script>
@@ -201,13 +159,19 @@ export default {
   justify-content: space-between;
   margin: 20px;
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
+  align-items: center;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .LogTableContainer {
-  margin: 20px;
+  margin: 0px 20px 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .MachineMainContainer {
   display: flex;
@@ -215,5 +179,53 @@ export default {
 }
 .MachineSpan {
   display: flex;
+  align-items: center;
+}
+.MachineImgContainer {
+  background-color: rgb(55, 55, 55);
+  text-align: center;
+  margin: 0px 20px 20px 20px;
+  box-shadow: 0px 0px 6px -1px black;
+  border-radius: 10px;
+}
+.machineImg {
+  width: 60%;
+  height: auto;
+}
+.main_table th,
+.main_table td {
+  overflow-y: auto;
+  scrollbar-width: 0px;
+  text-align: center;
+  vertical-align: middle;
+}
+.offButton {
+  margin-right: 5%;
+}
+
+/* 모달 css */
+
+.log-details table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+}
+
+.log-details th,
+.log-details td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.log-image img {
+  max-width: 100%;
+  width: auto;
+  display: block;
+  margin: 20px auto;
+}
+td:hover {
+  cursor: pointer;
 }
 </style>
