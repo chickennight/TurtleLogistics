@@ -130,8 +130,8 @@
 
   IoT
 
-  - 예시1
-  - 예시2
+  - snake_case
+  - 
 
 ### 1. Planning & Design
 
@@ -140,6 +140,7 @@
 - 와이어 프레임
 ![image.png](./image/wire.png)
 - ERDCloud
+
 ![ERD_DIAGRAM.png](./image/ERD_DIAGRAM.png)
 - API 명세서
 ![API_Image](./image/teamP_API.png)
@@ -168,7 +169,7 @@
     ### iv.3
     <img src="./image/HW/belt/ih3.jpg" width="500">
   - 전체 공정 <br>
-  추후 업데이트 예정~
+    <img src="./image/HW/hw_main.jpg" width="500">
 
 - Jira를 통한 일정관리
   - 매 주 월요일에 주 단위 이슈를 생성하고 금요일까지 40의 Story Point를 완료함으로써 일정을 관리했습니다
@@ -182,7 +183,7 @@
   ![5week_jira](./image/5week_jira.png)
   5주차 번다운 차트
 
-  ![6week_jira](./image/6week_jira.png)
+  ![6week_jira](./image/6week_jira.PNG)
   5주차 번다운 차트
 
 - Confluence를 통한 문서 작업 및 기록
@@ -193,14 +194,21 @@
 
 | 웹 페이지 | 주요 화면 |
 | ---- | ---- |
-| <img width="400" src="image/web/web_main.PNG"> | <img width="400" src="image/web/admin_main.png"> |
 | 웹 페이지 메인화면| 관리자 페이지 메인화면 |
-| <img width="400" src="image/web/admin_date.png"> | <img width="400" src="image/web/admin_region.png"> |
+| <img width="400" src="image/web/web_main.PNG"> | <img width="400" src="image/web/admin_main.png"> |
 | 기간별 주문 데이터 조회 | 지역별 주문 데이터 조회 |
-| <img width="400" src="image/web/admin_logistics.png"> | <img width="400" src="image/web/admin_machine.png"> |
+| <img width="400" src="image/web/admin_date.png"> | <img width="400" src="image/web/admin_region.png"> |
 | 물류 분석 데이터 조회 | 공정 현황 조회 |
-| <img width="400" src="image/web/admin_control.png"> | <img width="400" src="image/web/admin_cctv.png"> |
+| <img width="400" src="image/web/admin_logistics.png"> | <img width="400" src="image/web/admin_machine.png"> |
 | 기기 제어 | cctv |
+| <img width="400" src="image/web/admin_control.png"> | <img width="400" src="image/web/admin_cctv.png"> |
+
+- HW
+
+| HW | 주요 작동 영상 |
+| ---- | ---- |
+| 주문 피스톤 작동 영상 | 상품 분류막 작동 영상 |
+| 영상 추후 업로드 예정 | 영상 추후 업로드 예정 |
 
 
 ### 4. ETC
