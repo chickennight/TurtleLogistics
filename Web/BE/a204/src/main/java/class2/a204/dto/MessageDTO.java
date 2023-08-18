@@ -10,4 +10,8 @@ import lombok.*;
 public class MessageDTO {
     private String to;
     private String content;
+
+    public MessageDTO(String phone) {
+        this.to = phone;
+    }
 }

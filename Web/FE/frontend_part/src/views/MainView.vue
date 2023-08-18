@@ -1,35 +1,16 @@
 <template>
   <div id="MainContainer">
     <div id="MainLogo">
-      <img class="MainTurtle" src="./MainTurtle.png" />
+      <img class="MainTurtle" :src="mainSrc" />
       TL <br />
       TURTLE LOGISTICS
     </div>
-    &nbsp;
     <div id="CardDiv">
-      <v-card class="mx-auto" max-width="344" variant="outlined">
-        <v-card-item>
-          <div>
-            <div class="mb-1">주문 페이지</div>
-            <div>터틀 로지스틱스 구매자 페이지</div>
-          </div>
-        </v-card-item>
-        <v-card-actions>
-          <v-btn variant="outlined" href="/customerLogin"> Button </v-btn>
-        </v-card-actions>
+      <v-card class="customCard" variant="outlined" style="margin-right: 5%" href="/customerLogin">
+        <v-card-actions> 사용자 페이지 </v-card-actions>
       </v-card>
-      &nbsp;
-      <v-card class="mx-auto" max-width="344" variant="outlined">
-        <v-card-item>
-          <div>
-            <div class="mb-1">관리자 페이지</div>
-            <div>터틀 로지스틱스 관리자 페이지</div>
-          </div>
-        </v-card-item>
-
-        <v-card-actions>
-          <v-btn variant="outlined" href="/adminLogin"> Button </v-btn>
-        </v-card-actions>
+      <v-card class="customCard" variant="outlined" href="/adminLogin">
+        <v-card-actions> 관리자 페이지 </v-card-actions>
       </v-card>
     </div>
   </div>
@@ -38,6 +19,10 @@
 <script>
 export default {
   name: "MainView",
+  data: () => ({
+    mainSrc: "./MainTurtle.png",
+  }),
+  methods: {},
 };
 </script>
 
@@ -47,9 +32,15 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 1000px;
+  /* height: 1000px; */
+  height: 100vh;
   border: 1px solid black;
   color: white;
+
+  background-image: url("@/assets/openConveyorBelt.svg");
+  background-position: left 53% bottom -200%;
+  background-size: 140%;
+  background-repeat: no-repeat;
 }
 #MainLogo {
   width: 400px;
@@ -61,6 +52,7 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin-bottom: 30px; /* 로고와 카드 사이의 간격 조절 */
 }
 .MainTurtle {
   height: 300px;
@@ -68,9 +60,44 @@ export default {
   object-fit: contain;
   margin: auto;
   display: block;
+  filter: drop-shadow(5px 5px 10px #555); /* 로고에 그림자 효과 추가 */
 }
 #CardDiv {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.v-card-actions {
+  display: flex;
+  justify-content: center;
+  padding: 0px 8px 10px 8px;
+}
+.customCard {
+  width: 200px;
+  height: 130px;
+  background-color: rgb(55, 55, 55);
+  border-style: none;
+  color: rgb(250, 100, 130);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  padding-top: 13px;
+  border: 3px solid rgb(21, 21, 21);
+}
+.v-card-item {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding-bottom: -40px;
+  padding: 10px 8px 0px 8px;
+}
+.customCard:hover {
+  transition: all 1s;
+  border: 2px solid rgb(250, 100, 130);
+  transform: translateY(-5px);
 }
 </style>
