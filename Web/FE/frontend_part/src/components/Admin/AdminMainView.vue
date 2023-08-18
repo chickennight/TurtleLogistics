@@ -1,15 +1,47 @@
 <template>
   <div class="SampleContainer">
+    <div id="LowerContainer">
+      <sample-CCTV class="BlueprintContainer" @click="moveCCTV" />
+      <div class="LogTableContainer" @click="moveMachine">
+        <img class="machineImg" :src="this.errorImg" />
+      </div>
+    </div>
     <div id="UpperContainer">
-      <sample-graph class="GraphContainer" />
-      <div class="ProductStatusContainer">
-        <v-table density="compact" theme="dark">
+      <sample-graph class="GraphContainer" @click="moveGraph" />
+      <div class="ProductStatusContainer" @click="moveProduct">
+        <v-table density="compact" theme="dark" class="main_table">
           <thead>
             <tr>
-              <th class="text-left" rowspan="2">번호</th>
-              <th class="text-left" rowspan="2">상품명</th>
-              <th class="text-left" rowspan="2">재고</th>
-              <th class="text-left" rowspan="2">이상</th>
+              <th rowspan="2" style="text-align: center" @click="sortTable('product_num', $event)">
+                번호
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
+              <th rowspan="2" style="text-align: center">상품명</th>
+
+              <th rowspan="2" style="text-align: center" @click="sortTable('stock', $event)">
+                재고
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
+              <th
+                rowspan="2"
+                style="text-align: center"
+                @click="sortTable('error_message', $event)"
+              >
+                이상
+                <font-awesome-icon
+                  :icon="['fas', 'sort']"
+                  style="color: #666a70"
+                  class="icon-padding-left"
+                />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -27,84 +59,83 @@
         </v-table>
       </div>
     </div>
-    <div id="LowerContainer">
-      <div class="LogTableContainer">
-        <v-table density="compact" theme="dark">
-          <thead>
-            <tr>
-              <th class="text-left">로그</th>
-              <th class="text-left">날짜</th>
-              <th class="text-left">메세지</th>
-              <th class="text-left">기계</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in machineStatus['로그']" :key="item.log_num">
-              <td>{{ item.log_num }}</td>
-              <td>{{ item.error_date }}</td>
-              <td>{{ item.error_message }}</td>
-              <td>{{ item.machine_id }}</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </div>
-      <sample-blue-print class="BlueprintContainer" />
-    </div>
   </div>
 </template>
 
 <script>
 import SampleGraph from "../graph/SampleGraph.vue";
-import SampleBluePrint from "../BluePrint/SampleBluePrint.vue";
+import SampleCCTV from "../Cctv/SampleCCTV.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "AdminMainView",
   components: {
-    SampleBluePrint,
     SampleGraph,
+    SampleCCTV,
   },
   created() {
     this.getMachineStatus();
     this.getlogisticAnalysis();
   },
-  mounted() {
-    // 컴포넌트가 마운트될 때 실행되는 로직
-    this.updateParentHeight();
-    window.addEventListener("resize", this.updateParentHeight);
-  },
-  beforeUnmount() {
-    // 컴포넌트가 언마운트(제거)되기 전 실행되는 로직
-    window.removeEventListener("resize", this.updateParentHeight);
+
+  data() {
+    return {
+      sortBy: null, // 현재 정렬 기준
+      sortOrder: true, // 정렬 순서 (true: 오름차순, false: 내림차순)
+    };
   },
   methods: {
     getMachineStatus() {
       this.$store.dispatch("machine/getMachineStatus");
     },
-    updateParentHeight() {
-      const container = this.$el.offsetHeight; // 자식 컴포넌트의 내용 높이
-      // App.vue로 이벤트를 발생시켜 자식 컴포넌트의 내용 높이를 전달
-      this.$emit("childContentHeightChanged", container);
-    },
+
     getlogisticAnalysis() {
       this.$store.dispatch("admin/getLogisticAnalysis");
     },
+    moveCCTV() {
+      this.$router.push({ name: "MainCctv" });
+    },
+    moveMachine() {
+      this.$router.push({ name: "MainMachine" });
+    },
+    moveGraph() {
+      this.$router.push({ name: "OrderByDate" });
+    },
+    moveProduct() {
+      this.$router.push({ name: "MainLogistics" });
+    },
+    //테이블 정렬 기능
+    sortTable(column) {
+      event.stopPropagation(); // 이벤트 전파 중지
+      // 선택된 칼럼이 현재 정렬 기준과 동일한 경우, 정렬 순서만 변경
+      if (this.sortBy === column) {
+        this.sortOrder = !this.sortOrder;
+      } else {
+        // 다른 칼럼을 선택한 경우, 해당 칼럼으로 정렬 기준을 변경하고 오름차순으로 초기화
+        this.sortBy = column;
+        this.sortOrder = true;
+      }
+    },
     sortedLogisticAnalysis() {
-      // Sort the array in such a way that items with 'error_message' are on top
       return this.logisticAnalysis.sort((a, b) => {
-        if (a.error_message !== "" && b.error_message === "") {
-          return -1; // 'a' has an error_message and should come before 'b'
-        } else if (a.error_message === "" && b.error_message !== "") {
-          return 1; // 'b' has an error_message and should come before 'a'
-        } else {
-          return 0; // Maintain the current order if both have an error_message or none
+        let result = 0;
+
+        if (this.sortBy === "stock") {
+          result = a.stock - b.stock;
+        } else if (this.sortBy === "error_message") {
+          result = a.error_message.localeCompare(b.error_message);
+        } else if (this.sortBy === "product_num") {
+          result = a.product_num - b.product_num;
         }
+
+        return this.sortOrder ? result : -result;
       });
     },
   },
   computed: {
     ...mapState("machine", ["machineStatus"]),
     ...mapState("admin", ["logisticAnalysis"]),
+    ...mapState(["errorImg"]),
   },
 };
 </script>
@@ -113,41 +144,82 @@ export default {
 .SampleContainer {
   display: flex;
   flex-direction: column;
+  height: 100%; /* 컨테이너를 부모 높이에 맞추기 위해 추가 */
 }
 #UpperContainer {
   height: 450px;
-  margin: 20px;
+  margin: 0px -25px 20px 20px;
+  padding-bottom: 3%;
   display: flex;
 }
 #LowerContainer {
   height: 450px;
-  margin: 20px;
+  margin: 20px -25px 20px 20px;
   display: flex;
 }
 .GraphContainer {
   padding: 20px;
-  width: 60%;
-  box-shadow: 2px 2px 3px 3px black;
+  width: 55%;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .ProductStatusContainer {
   padding: 20px;
-  box-shadow: 2px 2px 3px 3px black;
-  width: 35%;
-  margin-left: 30px;
+  width: 40%;
+  margin-left: 20px;
   overflow-y: auto;
+  scrollbar-width: 0px;
+  box-shadow: 0px 0px 6px -1px black;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
+}
+.ProductStatusContainer:hover,
+.LogTableContainer:hover,
+.BlueprintContainer:hover,
+.GraphContainer:hover {
+  transition: all 1s;
+  background-color: rgb(62, 62, 62);
+  transform: translateY(-5px);
+}
+.ProductStatusContainer::-webkit-scrollbar {
+  display: none;
 }
 .LogTableContainer {
-  padding: 10px;
-  box-shadow: 2px 2px 3px 3px black;
-  width: 40%;
+  padding: 20px;
+  box-shadow: 0px 0px 6px -1px black;
+  width: 55%;
   overflow-y: auto;
+  margin-left: 20px;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
+  overflow: hidden; /* 스크롤 숨기기 */
 }
 .BlueprintContainer {
-  box-shadow: 2px 2px 3px 3px black;
-  width: 55%;
-  margin-left: 30px;
+  box-shadow: 0px 0px 6px -1px black;
+  width: 40%;
+  background-color: rgb(55, 55, 55);
+  border-radius: 10px;
 }
 .red-text td {
-  color: red;
+  color: rgb(250, 100, 130);
+}
+.machineImg {
+  margin-top: 2%;
+  width: 100%;
+  height: 95%;
+  border-radius: 8px;
+  object-fit: contain; /*이미지 비율 유지하면서 컨테이너 안에 맞춤*/
+}
+
+.main_table th,
+.main_table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.icon-padding-left {
+  margin-left: 5px;
+  cursor: pointer;
 }
 </style>

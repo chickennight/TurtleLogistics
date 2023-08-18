@@ -14,7 +14,6 @@ const registerAdmin = async (adminDto) => {
 const login = async (adminLoginDto) => {
   try {
     const response = await publicApi.post("/admin/login", adminLoginDto);
-    console.log(response);
     return response;
   } catch (error) {
     throw new Error(`관리자 로그인 에러: ${error.message}`);
@@ -42,11 +41,9 @@ const refreshToken = async (refreshTokenDTO) => {
 };
 
 // 기기 이상 알림 메세지 전송
-const sendMessage = async (machineDetail) => {
+const sendMessage = async (logNum) => {
   try {
-    const response = await authorizedApi.get("/admin/msg", {
-      params: { machine_detail: machineDetail },
-    });
+    const response = await authorizedApi.post("/admin/msg", logNum);
     return response;
   } catch (error) {
     throw new Error(`기기 이상 알림 메세지 전송 에러: ${error.message}`);
@@ -63,6 +60,38 @@ const logisticAnalysis = async () => {
   }
 };
 
+//사진 저장
+const uploadImage = async (imageFile, logNum) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+    formData.append("log_num", logNum);
+
+    //이 요청만 헤더가 재정의되어서 보내짐
+    const response = await authorizedApi.post("/admin/image", formData, {
+      headers: {
+        //파일 업로드는 Content-Type을 multipart/form-data
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (error) {
+    throw new Error(`사진 저장 에러 : ${error.message}`);
+  }
+};
+
+//사진 조회
+const downloadImage = async (imageName) => {
+  try {
+    const response = await authorizedApi.get(`/admin/image/${imageName}`, {
+      responseType: "arraybuffer",
+    });
+    return response;
+  } catch (error) {
+    throw new Error(`사진 조회 에러 : ${error.message}`);
+  }
+};
+
 const adminApi = {
   registerAdmin,
   login,
@@ -70,6 +99,8 @@ const adminApi = {
   refreshToken,
   sendMessage,
   logisticAnalysis,
+  uploadImage,
+  downloadImage,
 };
 
 export default adminApi;

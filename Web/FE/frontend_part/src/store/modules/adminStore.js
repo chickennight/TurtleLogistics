@@ -5,6 +5,7 @@ const adminStore = {
   namespaced: true,
   state: {
     logisticAnalysis: [],
+    image: null,
   },
   getters: {},
   mutations: {
@@ -16,13 +17,21 @@ const adminStore = {
       state;
       localStorage.setItem("adminToken", data.accessToken);
       localStorage.setItem("adminRefreshToken", data.refreshToken);
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customerRefreshToken");
+      sessionStorage.setItem("selectedMenu", "AdminMainView");
     },
     LOGOUT() {
       localStorage.removeItem("adminToken");
       localStorage.removeItem("adminRefreshToken");
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customerRefreshToken");
     },
     GET_LOGISTIC_ANALYSIS(state, data) {
       state.logisticAnalysis = data;
+    },
+    GET_IMAGE(state, data) {
+      state.image = data;
     },
   },
   actions: {
@@ -60,6 +69,33 @@ const adminStore = {
       try {
         const response = await adminAPI.logisticAnalysis();
         commit("GET_LOGISTIC_ANALYSIS", response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async SendSMS(_, log_num) {
+      try {
+        await adminAPI.sendMessage(log_num);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    takeScreenshot(_, { image, log_num }) {
+      try {
+        adminAPI.uploadImage(image, log_num);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getImage({ commit }, log_num) {
+      try {
+        const response = await adminAPI.downloadImage(log_num);
+        const base64 = btoa(
+          new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), "")
+        );
+        const imageDataUrl = "data:" + response.headers["content-type"] + ";base64," + base64;
+
+        commit("GET_IMAGE", imageDataUrl);
       } catch (error) {
         console.log(error);
       }

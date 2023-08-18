@@ -31,9 +31,9 @@ const createLog = async (logAddDto) => {
 };
 
 // 기기 정보 업데이트
-const updateMachine = async (machineId, machineDto) => {
+const updateMachine = async (machineId, status) => {
   try {
-    const response = await publicApi.put(`/machine/${machineId}`, machineDto);
+    const response = await publicApi.put(`/machine/${machineId}`, status);
     return response;
   } catch (error) {
     throw new Error(`기기 정보 업데이트 에러: ${error.message}`);

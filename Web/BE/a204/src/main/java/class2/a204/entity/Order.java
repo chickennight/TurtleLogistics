@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -37,9 +36,6 @@ public class Order {
     @JoinColumn(name = "customer_num")
     @NotNull
     private Customer customer;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderDetail> orderDetails;
 
     public Order(Long orderNum, String detailAddress, Integer address, Customer customer) {
         this.orderNum = orderNum;
