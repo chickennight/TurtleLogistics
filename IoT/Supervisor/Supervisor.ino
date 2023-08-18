@@ -75,7 +75,7 @@ void loop()
     Serial.print("Humidity : ");
     Serial.println(humid);
 
-    supervisor.publish(TOPIC_WEB_LOG, "{\"dev\":\"Supervisor\",\"content\":\"Env Pub\"}");
+//    supervisor.publish(TOPIC_WEB_LOG, "{\"dev\":\"Supervisor\",\"content\":\"Env Pub\"}");
     char buf1[200];
     serializeJson(EnvData,buf1);
     supervisor.publish(TOPIC_ENV_INFO,buf1);
@@ -88,12 +88,13 @@ void GETorder(){
   {
     http.begin("https://i9A204.p.ssafy.io/turtle/order/start");
     int httpCode = http.GET();
-
+    Serial.println(httpCode);
     if (httpCode == 200) 
     {
       String response = http.getString();
       DynamicJsonDocument jsonDoc(8000);
       DeserializationError error = deserializeJson(jsonDoc, response);
+      Serial.println(response);
       if (error) 
       {
           supervisor.publish(TOPIC_WEB_LOG,error.c_str());
@@ -102,14 +103,15 @@ void GETorder(){
       {
         if (jsonDoc.is<JsonArray>())
         {
+            Serial.println("와 어레이다");
             JsonArray ordersArray = jsonDoc.as<JsonArray>();
             for(JsonObject order:ordersArray)
             {
               StaticJsonDocument<200> Data;
               Data["order_num"] = order["order_num"];
-              Data["ProductA"] = order["productA"];
-              Data["ProductB"] = order["productB"];
-              Data["ProductC"] = order["productC"];
+              Data["productA"] = order["productA"];
+              Data["productB"] = order["productB"];
+              Data["productC"] = order["productC"];
 
               char buf1[200];
               serializeJson(Data,buf1);
@@ -130,11 +132,12 @@ void GETorder(){
         }
         else
         {
+          Serial.println("아 어레이다....");
           StaticJsonDocument<200> Data;
           Data["order_num"] = jsonDoc["order_num"];
-          Data["ProductA"] = jsonDoc["ProductA"];
-          Data["ProductB"] = jsonDoc["ProductB"];
-          Data["ProductC"] = jsonDoc["ProductC"];
+          Data["productA"] = jsonDoc["ProductA"];
+          Data["productB"] = jsonDoc["ProductB"];
+          Data["productC"] = jsonDoc["ProductC"];
 
           char buf1[200];
           serializeJson(Data,buf1);
@@ -166,7 +169,7 @@ void GETorder(){
 void POSTres(const char* jsonData){
   http.begin("https://i9A204.p.ssafy.io/turtle/order/update");
   http.addHeader("Content-Type","application/json");
-
+  Serial.println(jsonData);
   int httpCode = http.PUT(jsonData);
   if(httpCode==200)
   {
