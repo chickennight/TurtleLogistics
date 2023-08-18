@@ -23,7 +23,7 @@ Servo divider;
 
 int wait_interval = 2700;
 int ir_interval = 1500;
-int angle = 65;
+int angle = 100;
 
 int verify();
 void moveservo();
