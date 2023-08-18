@@ -1,8 +1,10 @@
 <template>
   <div class="loginForm">
-    <div>
-      <img class="MainTurtle" src="./MainTurtle.png" />
-    </div>
+    <router-link to="/">
+      <div>
+        <img class="MainTurtle" src="./MainTurtle.png" />
+      </div>
+    </router-link>
     &nbsp;
     <v-sheet width="300" class="mx-auto">
       <h2>로그인</h2>
