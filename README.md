@@ -48,7 +48,7 @@
 - 채문희 (팀원) : 기구 개발
 - 서강운 (팀원) : IoT 개발
 
-| 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@john0513](https://github.com/john0513) | 권도현 [@yup8229](https://github.com/yup8229)          |
+| 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@chickennight](https://github.com/chickennight) | 권도현 [@yup8229](https://github.com/yup8229)          |
 | --------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------ |
 | <img width="200" src="ProfileImage/TalkMedia_i_04zl50.jpg.jpg"> | <img width="200" src="ProfileImage/사진.jpg">   | <img width="200" src="ProfileImage/Profile.jpg"> |
 
