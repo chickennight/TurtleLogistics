@@ -41,20 +41,12 @@
 
 ## 팀원 소개 및 담당 역할
 
-- 한장민 (팀장) : Frontend 메인, Backend 보조, 발표
-- 이종민 (팀원) : Backend 메인, Frontend 보조
-- 권도현 (팀원) : Backend 메인, Frontend 보조
-- 이승혁 (팀원) : IoT 개발
-- 채문희 (팀원) : 기구 개발
-- 서강운 (팀원) : IoT 개발
-
-| 한장민 [@HAANJM](https://github.com/HAANJM)                     | 이종민 [@chickennight](https://github.com/chickennight) | 권도현 [@yup8229](https://github.com/yup8229)          |
-| --------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------ |
-| <img width="200" src="ProfileImage/TalkMedia_i_04zl50.jpg.jpg"> | <img width="200" src="ProfileImage/사진.jpg">   | <img width="200" src="ProfileImage/Profile.jpg"> |
-
-| 이승혁 [@skymoon0228](https://github.com/skymoon0228)                                                  | 채문희 [@enduser0](https://github.com/enduser0)     | 서강운 [@sku379829](https://github.com/sku379829) |
-| ------------------------------------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------- |
-| <img width="200" src="ProfileImage/rn_image_picker_lib_temp_d1e9d437-9140-4a68-8f2c-e5deec619257.jpg"> | <img width="200" src="ProfileImage/반반무마니.png"> | <img width="200" src="ProfileImage/skate.jpg">    |
+- OOO (팀장) : Frontend 메인, Backend 보조, 발표
+- OOO (팀원) : Backend 메인, Frontend 보조
+- OOO (팀원) : Backend 메인, Frontend 보조
+- OOO (팀원) : IoT 개발
+- OOO (팀원) : 기구 개발
+- OOO (팀원) : IoT 개발
 
 <br>
 
