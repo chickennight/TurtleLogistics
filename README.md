@@ -42,7 +42,7 @@
 ## 팀원 소개 및 담당 역할
 
 - OOO (팀장) : Frontend 메인, Backend 보조, 발표
-- OOO (팀원) : Backend 메인, Frontend 보조
+- chickennight (팀원) : Backend 메인, Frontend 보조
 - OOO (팀원) : Backend 메인, Frontend 보조
 - OOO (팀원) : IoT 개발
 - OOO (팀원) : 기구 개발
